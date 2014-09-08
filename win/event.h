@@ -1,3 +1,10 @@
+/**
+ * (c) 2014 Vincenzo Cappello
+ * This projected is licensed under the terms of the MIT license, 
+ * refer to the file LICENSE.txt.
+ */
+
+ 
 #ifndef WIN_EVENT_H
 #define WIN_EVENT_H
 
@@ -8,6 +15,27 @@
 namespace win
 {
 
+/**
+ * Event delegate type, call all registered std::function when 
+ * the event is fired.
+ *
+ * For example you can declare an event with an integer argument:
+ *
+ *     // Declare an event with an integer argument 
+ *     Event<int> onIntEvent;
+ *
+ * Later you register an event handler, it can be a lambda:
+ *
+ *     // Handle integer event
+ *     onIntEvent.add([&](int arg){ 
+ *       std::cout << "The argument is: " << arg << std::endl;
+ *     });
+ *
+ * Later you can fire the event giving desired argument value:
+ *
+ *     // Fire the event with the integer value 5
+ *     onIntEvent.fire (5);
+ */
 template<typename...Arguments>
 class Event
 {

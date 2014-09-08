@@ -4,37 +4,32 @@
  * refer to the file LICENSE.txt.
  */
 
-#ifndef WIN_WINDOW_H
-#define WIN_WINDOW_H
+#ifndef WIN_CONTROL_H
+#define WIN_CONTROL_H
 
 #include <win/property.h>
-#include <win/control.h>
 
-#include <memory>
 #include <string>
-#include <utility>
 
 namespace win {
-
-class Window {
+	
+class Control {
 public:
-	explicit Window(const std::string& name) :
+	explicit Control(const std::string& name) :
 		name( name ) {
 	}
-	virtual ~Window() {
+	virtual ~Control() {
 	}
-		
+	
 public:
 	Property<std::string> name;
-	Property<std::string> title;
 	Property<int> top;
 	Property<int> left;
 	Property<int> width;
-	Property<int> height;
-	PropertyArray<std::shared_ptr<Control>> controls;
+	Property<int> height;	
 };
 
 }
 
-#endif // WIN_WINDOW_H
+#endif // WIN_CONTROL_H
 

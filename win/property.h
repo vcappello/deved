@@ -1,3 +1,9 @@
+/**
+ * (c) 2014 Vincenzo Cappello
+ * This projected is licensed under the terms of the MIT license, 
+ * refer to the file LICENSE.txt.
+ */
+
 #ifndef WIN_PROPERTY_H
 #define WIN_PROPERTY_H
 
@@ -7,6 +13,9 @@
 
 namespace win {
 
+/**
+ * A simple property, fire the onPropertyChanged event when the value change
+ */	
 template<class T>
 class Property {
 public:
@@ -19,15 +28,23 @@ public:
 	virtual ~Property() {
 	}
 	
+public:	
 	/**
-     * Getter
+     * Property getter
+	 * @return the property value
 	 */
     const T& operator()() const {
         return mValue;
     }
 
+    T& operator()() {
+        return mValue;
+    }
+	
 	/**
-     * Setter
+     * Property setter, if the value change the onPropertyChanged
+	 * is fired.
+	 * @param value the new property value
 	 */
     void operator()(const T& value) {
 		if (value != mValue) {
@@ -37,57 +54,58 @@ public:
     }
 	
 public:
+	/**
+	 * Event fired when the property value is changed
+	 */
 	Event<> onPropertyChanged;
 
 protected:
 	T mValue;
 };
 
+/**
+ * An array of properties with type T
+ */
 template<class T>
 class PropertyArray {
 public:
-	Property() {
+	PropertyArray() {
 	}
-	virtual ~Property() {
+	virtual ~PropertyArray() {
 	}
 	
 public:
-	typedef typename Property<T> child_property_t;
+	using childPropertyT = Property<T>;
 
-	child_property_t& operator[](std::size_t index) {
+	childPropertyT& operator[](std::size_t index) {
 		return mArray[index];
 	}
 
-	const child_property_t& operator[](std::size_t index) {
-		return mArray[index];
+	const childPropertyT& operator[](std::size_t index) const {
+		return const_cast<childPropertyT>(mArray[index]);
 	}
 	
 	void add(const T& value) {
-		child_property_t property;
+		childPropertyT property;
 		property() = value;
 		mArray.push_back (property);
-		property.onPropertyChanged.add (onChildPropertyChanged);
 		
-		onPropertyChanged.fire();
+		onPropertyAdded.fire (value);
 	}
 	
 	void remove(std::size_t index) {
-		mArray[index].remove (onChildPropertyChanged);
-		mArray.erase (index);
-		
-		onPropertyChanged.fire();
+		childPropertyT property = mArray[index];
+		onPropertyRemoved.fire (property());
+
+		mArray.erase (index);		
 	}
 	
 public:
-	Event<> onPropertyChanged;
-
-protected:
-	void onChildPropertyChanged() {
-		onPropertyChanged.fire();
-	}
+	Event<T> onPropertyAdded;
+	Event<T> onPropertyRemoved;
 	
 protected:
-	std::vector<child_property_t> mArray;
+	std::vector<childPropertyT> mArray;
 };
 
 }
