@@ -1,5 +1,6 @@
 # Sources
-SOURCES = deved.cpp
+SOURCES = deved.cpp \
+		  win/win32/create_window.cpp
 
 # Output directory
 OUT_DIR = bin
@@ -8,7 +9,7 @@ OUT_DIR = bin
 EXECUTABLE = $(OUT_DIR)/deved.exe
 
 # Compiler flags
-CFLAGS = -c -Wall -std=c++11 -I"C:\Program Files (x86)\Lua\5.1\include" -I.
+CFLAGS = -c -Wall -std=c++11 -I"C:\Program Files (x86)\Lua\5.1\include" -I. -DWIN32
 
 # Linker Flags
 LDFLAGS = -L"C:\Program Files (x86)\Lua\5.1\lib" -llua5.1
