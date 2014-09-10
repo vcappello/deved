@@ -20,6 +20,8 @@ public:
 	virtual ~Button() {
 	}
 	
+	virtual std::string getType() const { return "Button"; }
+	
 public:
 	Property<std::string> text;
 };

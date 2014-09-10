@@ -75,7 +75,10 @@ public:
 	}
 	
 public:
-	using childPropertyT = Property<T>;
+	typedef Property<T> childPropertyT;
+	typedef std::vector<childPropertyT> containerT;
+	typedef typename containerT::iterator iteratorT;
+	typedef typename containerT::const_iterator constIteratorT;
 
 	childPropertyT& operator[](std::size_t index) {
 		return mArray[index];
@@ -100,12 +103,28 @@ public:
 		mArray.erase (index);		
 	}
 	
+	iteratorT begin() {
+		return mArray.begin();
+	}
+
+	constIteratorT begin() const {
+		return mArray.begin();
+	}
+
+	iteratorT end() {
+		return mArray.end();
+	}
+
+	constIteratorT end() const {
+		return mArray.end();
+	}
+	
 public:
 	Event<T> onPropertyAdded;
 	Event<T> onPropertyRemoved;
 	
 protected:
-	std::vector<childPropertyT> mArray;
+	containerT mArray;
 };
 
 }

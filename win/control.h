@@ -21,12 +21,15 @@ public:
 	virtual ~Control() {
 	}
 	
+	virtual std::string getType() const = 0;
+
 public:
 	Property<std::string> name;
 	Property<int> top;
 	Property<int> left;
 	Property<int> width;
 	Property<int> height;	
+	Property<bool> visible;
 };
 
 }

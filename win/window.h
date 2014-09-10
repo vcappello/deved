@@ -23,7 +23,9 @@ public:
 	}
 	virtual ~Window() {
 	}
-		
+	
+	virtual std::string getType() const { return "Window"; }
+	
 public:
 	Property<std::string> name;
 	Property<std::string> title;
@@ -31,6 +33,7 @@ public:
 	Property<int> left;
 	Property<int> width;
 	Property<int> height;
+	Property<bool> visible;
 	PropertyArray<std::shared_ptr<Control>> controls;
 };
 

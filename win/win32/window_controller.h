@@ -4,19 +4,28 @@
  * refer to the file LICENSE.txt.
  */
 
-#ifndef WIN32_WIN_WINDOW_CONTROLLER_H
-#define WIN32_WIN_WINDOW_CONTROLLER_H
+#ifndef WIN_WIN32_WINDOW_CONTROLLER_H
+#define WIN_WIN32_WINDOW_CONTROLLER_H
+
+#include <win/window.h>
+
+#include <memory>
+#include <windows.h>
 
 namespace win {
 
 class WindowController {
 public:
-	WindowController() {
-	}
-	virtual ~WindowController() {
-	}
+	explicit WindowController(HWND hWnd, std::shared_ptr<Window> window);
+	virtual ~WindowController();
+	
+	LRESULT handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, bool& handled);
+
+protected:
+	HWND mHWnd;
+	std::shared_ptr<Window> mWindow;
 };
 
 }
 
-#endif // WIN32_WIN_WINDOW_CONTROLLER_H
+#endif // WIN_WIN32_WINDOW_CONTROLLER_H

@@ -18,6 +18,7 @@ int main() {
 	window->left(10);
 	window->width(300);
 	window->height(100);
+	window->visible(true);
 	
 	window->title.onPropertyChanged.add([&]{
 		std::cout << "Title changed" << std::endl;
@@ -35,15 +36,17 @@ int main() {
 	
 	std::shared_ptr<win::Button> button = std::make_shared<win::Button>("Button1");
 	
-	window->top(10);
-	window->left(10);
-	window->width(50);
-	window->height(30);
+	button->text("click me");
+	button->top(10);
+	button->left(10);
+	button->width(100);
+	button->height(30);
+	button->visible(true);
 	
 	window->controls.add (button);
 
 	win::createWindow (window);
-	// win::runWindow (window);
+	win::run();
 	
 	return 0;
 }

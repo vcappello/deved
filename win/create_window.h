@@ -7,9 +7,18 @@
 #ifndef WIN_CREATE_WINDOW_H
 #define WIN_CREATE_WINDOW_H
 
-#ifdef WIN32
-#include <win/win32/create_window.h>
-#endif
+#include <win/window.h>
+#include <win/error.h>
+
+#include <memory>
+
+namespace win {
+	
+void createWindow(std::shared_ptr<Window> window);
+	
+int run();
+	
+}
 
 #endif // WIN_CREATE_WINDOW_H
 

@@ -1,6 +1,5 @@
-# Sources
-SOURCES = deved.cpp \
-		  win/win32/create_window.cpp
+# Source directories
+SRC_DIRS = win win/win32
 
 # Output directory
 OUT_DIR = bin
@@ -16,7 +15,14 @@ LDFLAGS = -L"C:\Program Files (x86)\Lua\5.1\lib" -llua5.1
 
 CC = g++
 MD = mkdir
-RM = del /Q
+RM = rm -rf
+
+# Compute buil dirs (before modify SRC_DIRS)
+BUILD_DIRS = $(addprefix $(OUT_DIR)/,$(SRC_DIRS))
+
+# Sources
+SRC_DIRS += .
+SOURCES = $(foreach sdir,$(SRC_DIRS),$(wildcard $(sdir)/*.cpp))
 
 SRCOBJECTS = $(SOURCES:.cpp=.o)
 OBJECTS = $(patsubst %,$(OUT_DIR)/%,$(SRCOBJECTS))
@@ -25,11 +31,14 @@ OBJECTS = $(patsubst %,$(OUT_DIR)/%,$(SRCOBJECTS))
 all: directories $(SOURCES) $(EXECUTABLE)
 
 # Directories
-directories: $(OUT_DIR)
+directories: $(OUT_DIR) $(BUILD_DIRS)
 
 $(OUT_DIR):
 	$(MD) $(OUT_DIR)
 
+$(BUILD_DIRS):
+	$(MD) $@
+	
 # Link
 $(EXECUTABLE): $(OBJECTS) 
 	$(CC) $(OBJECTS) -o $@ $(LDFLAGS)
@@ -40,4 +49,4 @@ bin/%.o: %.cpp
 
 # Clean
 clean:
-	$(RM) $(OUT_DIR)
+	$(RM) $(OUT_DIR)/
