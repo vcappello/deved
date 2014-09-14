@@ -75,10 +75,10 @@ public:
 	}
 	
 public:
-	typedef Property<T> childPropertyT;
-	typedef std::vector<childPropertyT> containerT;
-	typedef typename containerT::iterator iteratorT;
-	typedef typename containerT::const_iterator constIteratorT;
+	using childPropertyT = Property<T>;
+	using containerT = std::vector<childPropertyT>;
+	using iteratorT = typename containerT::iterator;
+	using constIteratorT = typename containerT::const_iterator;
 
 	childPropertyT& operator[](std::size_t index) {
 		return mArray[index];

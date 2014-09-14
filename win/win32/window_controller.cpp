@@ -12,10 +12,13 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 WindowController::~WindowController() {
 }
 
-LRESULT WindowController::handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, bool& handled) {
-	std::cout << message << std::endl; 
-	handled = false;
-	return 0;
+bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
+	std::cout << "WindowController " << message << std::endl; 
+	if (message == WM_DESTROY) {
+		::PostQuitMessage(0);
+	}
+	
+	return false;
 }
 
 }

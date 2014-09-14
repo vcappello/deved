@@ -8,18 +8,24 @@
 #define WIN_WIN32_WINDOW_CONTROLLER_H
 
 #include <win/window.h>
+#include "i_messageable.h"
 
 #include <memory>
 #include <windows.h>
 
 namespace win {
 
-class WindowController {
+class WindowController : public IMessageable {
 public:
 	explicit WindowController(HWND hWnd, std::shared_ptr<Window> window);
 	virtual ~WindowController();
+
+	std::shared_ptr<Window> getWindow() { return mWindow; }
+
+	// IMessageable implementations
+	HWND getHWnd() { return mHWnd; }
 	
-	LRESULT handleMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam, bool& handled);
+	bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
 protected:
 	HWND mHWnd;

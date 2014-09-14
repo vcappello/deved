@@ -3,13 +3,13 @@
 
 #include "utils.h"
 #include "window_controller.h"
+#include "button_controller.h"
+#include "message_dispatcher.h"
 
 #include <map>
 
 namespace win {
 
-std::map<HWND, std::shared_ptr<WindowController>> gWindowControllers;
-	
 void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent);
 	
 int createControlId() {
@@ -17,25 +17,25 @@ int createControlId() {
 	return controlIdCounter++;
 }
 
-LRESULT CALLBACK UniqueWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+LRESULT CALLBACK uniqueWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	LRESULT result = 0;
 	switch (message)
     {
 		case WM_DESTROY:
-			gWindowControllers.erase (hWnd);
-			::PostQuitMessage(0);
+			result = MessageDispatcher::getInstance().dispatchMessage (hWnd, message, wParam, lParam);
+			MessageDispatcher::getInstance().unregisterControllerByHandle (hWnd);
+			break;
+		case WM_COMMAND:
+			MessageDispatcher::getInstance().dispatchMessage (hWnd, message, wParam, lParam);
+			result = MessageDispatcher::getInstance().dispatchCommand (wParam, lParam);
 			break;
 		default:
-			bool handled = false;
-			LRESULT res = gWindowControllers[hWnd]->handleMessage (hWnd, message, wParam, lParam, handled);
-			if (handled) {
-				return res;
-			}
-			return ::DefWindowProc(hWnd, message, wParam, lParam);
+			result = MessageDispatcher::getInstance().dispatchMessage (hWnd, message, wParam, lParam);
 			break;
     }
 	
-	return 0;
+	return result;
 }
 	
 void createWindow(std::shared_ptr<Window> window) {
@@ -45,13 +45,13 @@ void createWindow(std::shared_ptr<Window> window) {
 	WNDCLASSEX wcex;
 
 	wcex.cbSize 			= sizeof(WNDCLASSEX);
-	wcex.lpfnWndProc    	= UniqueWndProc;
+	wcex.lpfnWndProc    	= uniqueWndProc;
 	wcex.cbClsExtra     	= 0;
 	wcex.cbWndExtra     	= 0;
 	wcex.hInstance      	= hInstance;
 	wcex.hIcon          	= ::LoadIcon (hInstance, IDI_APPLICATION);
 	wcex.hCursor        	= ::LoadCursor (NULL, IDC_ARROW);
-	wcex.hbrBackground  	= (HBRUSH)(COLOR_WINDOW + 1);
+	wcex.hbrBackground  	= (HBRUSH)(COLOR_BTNFACE + 1);
 	wcex.lpszMenuName   	= NULL;
 	wcex.lpszClassName  	= window->name().c_str();
 	wcex.hIconSm        	= ::LoadIcon (hInstance, IDI_APPLICATION);
@@ -98,8 +98,7 @@ void createWindow(std::shared_ptr<Window> window) {
 	
 	// Create WindowController instance
 	auto controller = std::make_shared<WindowController>( hWnd, window );
-	
-	gWindowControllers.insert (std::make_pair (hWnd, controller));
+	MessageDispatcher::getInstance().registerController (controller);
 }
 
 void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent) {
@@ -111,6 +110,7 @@ void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent) {
 	if (button->visible())
 		window_style |= WS_VISIBLE;
 	
+	int controlId = createControlId();
 	HWND hWnd = CreateWindowEx (
 					window_style_ex,
 	                "BUTTON",
@@ -121,13 +121,17 @@ void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent) {
 					button->width(),
 					button->height(),
 	                hWndParent,
-	                (HMENU)createControlId(),
+	                (HMENU)controlId,
 	                hInstance,
 	                NULL);
 
 	if (!hWnd) {
 		throw Error( formatSystemMessage (::GetLastError()) );
 	}	
+	
+	// Create WindowController instance
+	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
+	MessageDispatcher::getInstance().registerController (controller);	
 }
 
 int run() {
