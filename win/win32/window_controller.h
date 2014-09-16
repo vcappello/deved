@@ -8,18 +8,19 @@
 #define WIN_WIN32_WINDOW_CONTROLLER_H
 
 #include <win/window.h>
-#include "i_messageable.h"
+#include "window_base.h"
 
 #include <memory>
 #include <windows.h>
 
 namespace win {
 
-class WindowController : public IMessageable {
+class WindowController : public WindowBase {
 public:
 	explicit WindowController(HWND hWnd, std::shared_ptr<Window> window);
 	virtual ~WindowController();
 
+public:
 	std::shared_ptr<Window> getWindow() { return mWindow; }
 
 	// IMessageable implementations
@@ -28,7 +29,6 @@ public:
 	bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
 protected:
-	HWND mHWnd;
 	std::shared_ptr<Window> mWindow;
 };
 

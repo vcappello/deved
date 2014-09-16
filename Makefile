@@ -19,7 +19,7 @@ RM = rm -rf
 CP = CP
 
 # Compute buil dirs (before modify SRC_DIRS)
-BUILD_DIRS = $(addprefix $(OUT_DIR)/,$(SRC_DIRS))
+BUILD_DIRS = $(addprefix $(OUT_DIR)\,$(SRC_DIRS))
 
 # Sources
 SRC_DIRS += .
