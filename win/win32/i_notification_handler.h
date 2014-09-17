@@ -11,12 +11,15 @@
 
 namespace win {
 
-class ICommandable
+/**
+ * Interface for controllers that can handle notifications
+ */
+class INotificationHandler
 {
 public:
-	ICommandable() {
+	INotificationHandler() {
 	}
-	virtual ~ICommandable() {
+	virtual ~INotificationHandler() {
 	}
 
 public:

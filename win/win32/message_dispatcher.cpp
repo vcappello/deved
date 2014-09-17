@@ -18,25 +18,25 @@ MessageDispatcher& MessageDispatcher::getInstance() {
 
 void MessageDispatcher::unregisterControllerByHandle(HWND hWnd)
 {
-	auto controller = controllerMap[hWnd];
+	auto controller = mMessageHandlers[hWnd];
 	
-	controllerMap.erase (hWnd);
+	mMessageHandlers.erase (hWnd);
 	
-	std::shared_ptr<ICommandable> commandable = std::dynamic_pointer_cast<ICommandable>(controller);
-	if (commandable) {
-		controllerCmdMap.erase (commandable->getCommandId());
+	std::shared_ptr<INotificationHandler> notificationHandler = std::dynamic_pointer_cast<INotificationHandler>(controller);
+	if (notificationHandler) {
+		mNotificationHandlers.erase (notificationHandler->getCommandId());
 	}
 }
 
 LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	try {
-		auto controllerItor = controllerMap.find (hWnd);
-		if (controllerItor == controllerMap.end()) {
+		auto controllerItor = mMessageHandlers.find (hWnd);
+		if (controllerItor == mMessageHandlers.end()) {
 			return ::DefWindowProc (hWnd, message, wParam, lParam);
 		}
 		
-		std::shared_ptr<IMessageable> controller = controllerItor->second;
+		auto controller = controllerItor->second;
 		LRESULT result = 0;
 		if (!controller->handleMessage (message, wParam, lParam, result)) {
 			return ::DefWindowProc (hWnd, message, wParam, lParam);
@@ -66,12 +66,12 @@ LRESULT MessageDispatcher::dispatchCommand(WPARAM wParam, LPARAM lParam)
 	try {
 		int commandId = LOWORD(wParam);
 		
-		auto controllerItor = controllerCmdMap.find (commandId);
-		if (controllerItor == controllerCmdMap.end()) {
+		auto controllerItor = mNotificationHandlers.find (commandId);
+		if (controllerItor == mNotificationHandlers.end()) {
 			return 0;
 		}
 
-		std::shared_ptr<ICommandable> controller = controllerItor->second;
+		auto controller = controllerItor->second;
 		controller->handleCommand (wParam, lParam);
 
 		return 0;

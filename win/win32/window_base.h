@@ -7,7 +7,7 @@
 #ifndef WIN_WIN32_WINDOW_BASE_H
 #define WIN_WIN32_WINDOW_BASE_H
 
-#include "i_messageable.h"
+#include "i_message_handler.h"
 #include <win/point.h>
 #include <win/size.h>
 
@@ -17,7 +17,7 @@
 
 namespace win {
 
-class WindowBase : public IMessageable {
+class WindowBase : public IMessageHandler {
 public:
 	explicit WindowBase(HWND hWnd);
 	virtual ~WindowBase();

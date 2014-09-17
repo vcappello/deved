@@ -8,8 +8,8 @@
 #define WIN_WIN32_MESSAGE_DISPATCHER_H
 
 #include <win/window.h>
-#include "i_messageable.h"
-#include "i_commandable.h"
+#include "i_message_handler.h"
+#include "i_notification_handler.h"
 
 #include <memory>
 #include <map>
@@ -30,14 +30,14 @@ public:
 
 	template<class T>
 	void registerController(std::shared_ptr<T> controller) {
-		std::shared_ptr<IMessageable> messageable = std::dynamic_pointer_cast<IMessageable>(controller);
-		if (messageable) {
-			controllerMap.insert (std::make_pair (messageable->getHWnd(), messageable));
+		std::shared_ptr<IMessageHandler> messageHandler = std::dynamic_pointer_cast<IMessageHandler>(controller);
+		if (messageHandler) {
+			mMessageHandlers.insert (std::make_pair (messageHandler->getHWnd(), messageHandler));
 		}
 		
-		std::shared_ptr<ICommandable> commandable = std::dynamic_pointer_cast<ICommandable>(controller);
-		if (commandable) {
-			controllerCmdMap.insert (std::make_pair (commandable->getCommandId(), commandable));
+		std::shared_ptr<INotificationHandler> notificationHandler = std::dynamic_pointer_cast<INotificationHandler>(controller);
+		if (notificationHandler) {
+			mNotificationHandlers.insert (std::make_pair (notificationHandler->getCommandId(), notificationHandler));
 		}		
 	}
 	
@@ -49,8 +49,8 @@ public:
 	LRESULT dispatchCommand(WPARAM wParam, LPARAM lParam);
 
 private:
-	std::map<HWND, std::shared_ptr<IMessageable>> controllerMap;
-	std::map<int, std::shared_ptr<ICommandable>> controllerCmdMap;
+	std::map<HWND, std::shared_ptr<IMessageHandler>> mMessageHandlers;
+	std::map<int, std::shared_ptr<INotificationHandler>> mNotificationHandlers;
 };
 
 }

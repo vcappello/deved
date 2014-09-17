@@ -11,12 +11,15 @@
 
 namespace win {
 
-class IMessageable
+/**
+ * Interface for controllers that can manage messages
+ */
+class IMessageHandler
 {
 public:
-	IMessageable() {
+	IMessageHandler() {
 	}
-	virtual ~IMessageable() {
+	virtual ~IMessageHandler() {
 	}
 
 public:

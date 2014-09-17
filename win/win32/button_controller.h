@@ -8,15 +8,15 @@
 #define WIN_WIN32_BUTTON_CONTROLLER_H
 
 #include <win/button.h>
-#include "i_messageable.h"
-#include "i_commandable.h"
+#include "i_message_handler.h"
+#include "i_notification_handler.h"
 
 #include <memory>
 #include <windows.h>
 
 namespace win {
 
-class ButtonController : public IMessageable, public ICommandable {
+class ButtonController : public IMessageHandler, public INotificationHandler {
 public:
 	explicit ButtonController(HWND hWnd, int commandId, std::shared_ptr<Button> button);
 	virtual ~ButtonController();

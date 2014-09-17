@@ -20,6 +20,9 @@
 *.out
 *.app
 
+# Directories
+bin/
+
 # =========================
 # Operating System Files
 # =========================
