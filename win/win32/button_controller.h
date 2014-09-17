@@ -8,7 +8,7 @@
 #define WIN_WIN32_BUTTON_CONTROLLER_H
 
 #include <win/button.h>
-#include "i_message_handler.h"
+#include "window_base.h"
 #include "i_notification_handler.h"
 
 #include <memory>
@@ -16,27 +16,32 @@
 
 namespace win {
 
-class ButtonController : public IMessageHandler, public INotificationHandler {
+class ButtonController : public WindowBase, 
+                         public INotificationHandler {
 public:
 	explicit ButtonController(HWND hWnd, int commandId, std::shared_ptr<Button> button);
 	virtual ~ButtonController();
 
 	std::shared_ptr<Button> getButton() { return mButton; }
 
-	// IMessageable implementations
-	HWND getHWnd() { return mHWnd; }
+	void subclass();
+	
+	// IMessageHandler implementations
+	// HWND getHWnd() { return mHWnd; } // Implemented on WindowBase
 	
 	bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
-	// ICommandable implementations
+	LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	
+	// INotificationHandler implementations
 	int getCommandId() const { return mCommandId; }
 	
 	void handleCommand(WPARAM wParam, LPARAM lParam);
 	
 protected:
-	HWND mHWnd;
 	int mCommandId;
 	std::shared_ptr<Button> mButton;
+	WNDPROC mOldWndProc;
 };
 
 }

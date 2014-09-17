@@ -23,11 +23,16 @@ public:
 public:
 	std::shared_ptr<Window> getWindow() { return mWindow; }
 
-	// IMessageable implementations
-	HWND getHWnd() { return mHWnd; }
+	// IMessageHandler implementations from WindowBase
+	// HWND getHWnd() { return mHWnd; } // Implemented on WindowBase
 	
 	bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
+	LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	
+	// Override WindowBase
+	Point getPosition();
+	
 protected:
 	std::shared_ptr<Window> mWindow;
 };

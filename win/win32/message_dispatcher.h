@@ -17,6 +17,9 @@
 
 namespace win {
 
+/**
+ * Send messages and notifications to the recipient controller
+ */
 class MessageDispatcher {
 private:
 	MessageDispatcher();
@@ -27,6 +30,8 @@ public:
 	virtual ~MessageDispatcher();
 	
 	static MessageDispatcher& getInstance();
+
+	static LRESULT CALLBACK uniqueWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 	template<class T>
 	void registerController(std::shared_ptr<T> controller) {
@@ -42,7 +47,8 @@ public:
 	}
 	
 	void unregisterControllerByHandle(HWND hWnd);
-	// TODO: need to implement void unregisterControllerById(int id);
+	
+	void unregisterControllerById(int id);
 	
 	LRESULT dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	

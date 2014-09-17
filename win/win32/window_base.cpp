@@ -10,15 +10,12 @@ WindowBase::~WindowBase() {
 }
 
 Point WindowBase::getPosition() {
-/*	HWND hWndParent = ::GetParent(mHWnd);
+	HWND hWndParent = ::GetParent(mHWnd);
 	POINT position = {0};
 
-	::MapWindowPoints(mHWnd, hWndParent, &position, 1); */
+	::MapWindowPoints(mHWnd, hWndParent, &position, 1);
 	
-	RECT rect;
-	::GetWindowRect (mHWnd, &rect);
-	
-	return Point( rect.left, rect.top );
+	return Point( position.x, position.y );	
 }
 
 void WindowBase::setPosition(const Point& value) {

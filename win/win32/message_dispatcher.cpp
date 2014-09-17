@@ -2,12 +2,10 @@
 
 namespace win {
 	
-MessageDispatcher::MessageDispatcher()
-{
+MessageDispatcher::MessageDispatcher() {
 }
 
-MessageDispatcher::~MessageDispatcher()
-{
+MessageDispatcher::~MessageDispatcher() {
 }
 
 MessageDispatcher& MessageDispatcher::getInstance() {
@@ -16,8 +14,28 @@ MessageDispatcher& MessageDispatcher::getInstance() {
 	return instance;
 }
 
-void MessageDispatcher::unregisterControllerByHandle(HWND hWnd)
+LRESULT CALLBACK MessageDispatcher::uniqueWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+	LRESULT result = 0;
+	switch (message)
+    {
+		case WM_DESTROY:
+			result = getInstance().dispatchMessage (hWnd, message, wParam, lParam);
+			getInstance().unregisterControllerByHandle (hWnd);
+			break;
+		case WM_COMMAND:
+			getInstance().dispatchMessage (hWnd, message, wParam, lParam);
+			result = getInstance().dispatchCommand (wParam, lParam);
+			break;
+		default:
+			result = getInstance().dispatchMessage (hWnd, message, wParam, lParam);
+			break;
+    }
+	
+	return result;
+}
+
+void MessageDispatcher::unregisterControllerByHandle(HWND hWnd) {
 	auto controller = mMessageHandlers[hWnd];
 	
 	mMessageHandlers.erase (hWnd);
@@ -28,23 +46,34 @@ void MessageDispatcher::unregisterControllerByHandle(HWND hWnd)
 	}
 }
 
-LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
+void MessageDispatcher::unregisterControllerById(int id) {
+	auto controller = mNotificationHandlers[id];
+	
+	mNotificationHandlers.erase (id);
+	
+	std::shared_ptr<IMessageHandler> messageHandler = std::dynamic_pointer_cast<IMessageHandler>(controller);
+	if (messageHandler) {
+		mMessageHandlers.erase (messageHandler->getHWnd());
+	}
+}
+
+LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	try {
 		auto controllerItor = mMessageHandlers.find (hWnd);
+		// If does not exist a registered controller call DefWindowProc
 		if (controllerItor == mMessageHandlers.end()) {
 			return ::DefWindowProc (hWnd, message, wParam, lParam);
 		}
 		
+		// Let the controller handle this message
 		auto controller = controllerItor->second;
 		LRESULT result = 0;
 		if (!controller->handleMessage (message, wParam, lParam, result)) {
-			return ::DefWindowProc (hWnd, message, wParam, lParam);
+			return controller->callDefWindowProc (hWnd, message, wParam, lParam);
 		}
 		
 		return result;
 	} catch (std::exception& e) {
-		
 		std::string error_message = "An unhandled exception occurred.\n";
 		error_message += e.what();
 		
@@ -61,8 +90,7 @@ LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wPara
 	}
 }
 
-LRESULT MessageDispatcher::dispatchCommand(WPARAM wParam, LPARAM lParam)
-{
+LRESULT MessageDispatcher::dispatchCommand(WPARAM wParam, LPARAM lParam) {
 	try {
 		int commandId = LOWORD(wParam);
 		

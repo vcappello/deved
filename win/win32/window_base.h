@@ -31,6 +31,13 @@ public:
 	std::string getText();
 	void setText(std::string& value);
 	
+	// IMessageHandler implementations
+	HWND getHWnd() { return mHWnd; }
+	
+	// bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult); // Abstract
+
+	// LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // Abstract
+	
 protected:
 	HWND mHWnd;
 };

@@ -26,6 +26,8 @@ public:
 	virtual HWND getHWnd() = 0;
 	
 	virtual bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) = 0;
+
+	virtual LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) = 0;
 };
 
 }

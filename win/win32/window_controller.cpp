@@ -50,6 +50,13 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 WindowController::~WindowController() {
 }
 
+Point WindowController::getPosition() {
+	RECT rect;
+	::GetWindowRect (mHWnd, &rect);
+	
+	return Point( rect.left, rect.top );
+}
+
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
 	
 	switch (message) {
@@ -80,6 +87,10 @@ bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 	}
 	
 	return false;
+}
+
+LRESULT WindowController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	return ::DefWindowProc (hWnd, message, wParam, lParam);
 }
 
 }

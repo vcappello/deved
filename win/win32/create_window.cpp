@@ -17,27 +17,6 @@ int createControlId() {
 	return controlIdCounter++;
 }
 
-LRESULT CALLBACK uniqueWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
-{
-	LRESULT result = 0;
-	switch (message)
-    {
-		case WM_DESTROY:
-			result = MessageDispatcher::getInstance().dispatchMessage (hWnd, message, wParam, lParam);
-			MessageDispatcher::getInstance().unregisterControllerByHandle (hWnd);
-			break;
-		case WM_COMMAND:
-			MessageDispatcher::getInstance().dispatchMessage (hWnd, message, wParam, lParam);
-			result = MessageDispatcher::getInstance().dispatchCommand (wParam, lParam);
-			break;
-		default:
-			result = MessageDispatcher::getInstance().dispatchMessage (hWnd, message, wParam, lParam);
-			break;
-    }
-	
-	return result;
-}
-	
 void createWindow(std::shared_ptr<Window> window) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 	
@@ -45,7 +24,7 @@ void createWindow(std::shared_ptr<Window> window) {
 	WNDCLASSEX wcex;
 
 	wcex.cbSize 			= sizeof(WNDCLASSEX);
-	wcex.lpfnWndProc    	= uniqueWndProc;
+	wcex.lpfnWndProc    	= MessageDispatcher::uniqueWndProc;
 	wcex.cbClsExtra     	= 0;
 	wcex.cbWndExtra     	= 0;
 	wcex.hInstance      	= hInstance;
@@ -129,9 +108,12 @@ void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent) {
 		throw Error( formatSystemMessage (::GetLastError()) );
 	}	
 	
-	// Create WindowController instance
+	// Create ButtonController instance
 	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
-	MessageDispatcher::getInstance().registerController (controller);	
+	MessageDispatcher::getInstance().registerController (controller);
+	
+	// Subclass window
+	controller->subclass();
 }
 
 int run() {
