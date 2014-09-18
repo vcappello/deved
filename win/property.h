@@ -14,7 +14,7 @@
 namespace win {
 
 /**
- * A simple property, fire the onPropertyChanged event when the value change
+ * A simple property, fire the changedEvent event when the value change
  */	
 template<class T>
 class Property {
@@ -42,14 +42,14 @@ public:
     }
 	
 	/**
-     * Property setter, if the value change the onPropertyChanged
+     * Property setter, if the value change the changedEvent
 	 * is fired.
 	 * @param value the new property value
 	 */
     void operator()(const T& value) {
 		if (value != mValue) {
 			mValue = value;
-			onPropertyChanged.fire();
+			changedEvent.fire();
 		}
     }
 	
@@ -57,7 +57,7 @@ public:
 	/**
 	 * Event fired when the property value is changed
 	 */
-	Event<> onPropertyChanged;
+	Event<> changedEvent;
 
 protected:
 	T mValue;
@@ -93,12 +93,12 @@ public:
 		property() = value;
 		mArray.push_back (property);
 		
-		onPropertyAdded.fire (value);
+		itemAddedEvent.fire (value);
 	}
 	
 	void remove(std::size_t index) {
 		childPropertyT property = mArray[index];
-		onPropertyRemoved.fire (property());
+		itemRemovedEvent.fire (property());
 
 		mArray.erase (index);		
 	}
@@ -120,8 +120,8 @@ public:
 	}
 	
 public:
-	Event<T> onPropertyAdded;
-	Event<T> onPropertyRemoved;
+	Event<T> itemAddedEvent;
+	Event<T> itemRemovedEvent;
 	
 protected:
 	containerT mArray;

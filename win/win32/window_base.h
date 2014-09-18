@@ -31,6 +31,9 @@ public:
 	std::string getText();
 	void setText(std::string& value);
 	
+	bool isVisible();
+	void setVisible(bool value);
+
 	// IMessageHandler implementations
 	HWND getHWnd() { return mHWnd; }
 	

@@ -49,5 +49,21 @@ void WindowBase::setText(std::string& value) {
 	::SetWindowText (mHWnd, value.c_str());
 }
 
+bool WindowBase::isVisible() {
+	return ::IsWindowVisible (mHWnd);
+}
+
+void WindowBase::setVisible(bool value) {
+	//DWORD style = ::GetWindowLong (mHWnd, GWL_STYLE);
+	if (value) {
+		//style |= WS_VISIBLE;
+		::ShowWindow (mHWnd, SW_SHOWNOACTIVATE);
+	} else {
+		//style &= !WS_VISIBLE;
+		::ShowWindow (mHWnd, SW_HIDE);
+	}
+	//::SetWindowLong (mHWnd, GWL_STYLE, style);
+}
+
 }
 

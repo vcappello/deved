@@ -8,13 +8,13 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 	mCommandId( commandId ),
 	mButton( button ),
 	mOldWndProc( NULL )	{
-	mButton->text.onPropertyChanged.add([&]{
+	mButton->text.changedEvent.add([&]{
 		if (getText() != mButton->text()) {
 			setText (mButton->text());
 		}
 	});
 	
-	mButton->left.onPropertyChanged.add([&]{
+	mButton->left.changedEvent.add([&]{
 		Point point = getPosition();
 		if (point.x != mButton->left()) {
 			point.x = mButton->left();
@@ -22,7 +22,7 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 		}
 	});	
 	
-	mButton->top.onPropertyChanged.add([&]{
+	mButton->top.changedEvent.add([&]{
 		Point point = getPosition();
 		if (point.y != mButton->top()) {
 			point.y = mButton->top();
@@ -30,7 +30,7 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 		}
 	});	
 		
-	mButton->width.onPropertyChanged.add([&]{
+	mButton->width.changedEvent.add([&]{
 		Size size = getSize();
 		if (size.width != mButton->width()) {
 			size.width = mButton->width();
@@ -38,13 +38,19 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 		}
 	});		
 	
-	mButton->height.onPropertyChanged.add([&]{
+	mButton->height.changedEvent.add([&]{
 		Size size = getSize();
 		if (size.height != mButton->height()) {
 			size.height = mButton->height();
 			setSize (size);
 		}
-	});				
+	});	
+
+	mButton->visible.changedEvent.add([&] {
+		if (isVisible() != mButton->visible()) {
+			setVisible (mButton->visible());
+		}
+	});	
 }
 
 ButtonController::~ButtonController() {
@@ -78,6 +84,13 @@ bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 			}
 			break;
 		}
+		case WM_STYLECHANGED:
+		{
+			STYLESTRUCT* styleStruct = (STYLESTRUCT*)lParam;
+			if ((styleStruct->styleOld & WS_VISIBLE) != (styleStruct->styleNew & WS_VISIBLE)) {
+				mButton->visible (styleStruct->styleNew & WS_VISIBLE);
+			}
+		}		
 	}
 	return false;
 }
@@ -87,6 +100,13 @@ LRESULT ButtonController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wPar
 }
 
 void ButtonController::handleCommand(WPARAM wParam, LPARAM lParam) {
+	int notification = HIWORD(wParam);
+	switch (notification) {
+		case BN_CLICKED:
+		{
+			mButton->clickedEvent.fire();
+		}
+	}
 }
 
 }

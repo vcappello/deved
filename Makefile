@@ -13,7 +13,7 @@ CFLAGS = -c -Wall -std=c++11 -I"C:\Program Files (x86)\Lua\5.1\include" -I. -DWI
 # Linker Flags
 LDFLAGS = -L"C:\Program Files (x86)\Lua\5.1\lib" -llua5.1 -lcomctl32
 
-CC = g++
+CC = clang
 MD = mkdir
 RM = rm -rf
 CP = CP

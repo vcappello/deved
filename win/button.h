@@ -24,6 +24,8 @@ public:
 	
 public:
 	Property<std::string> text;
+
+	Event<> clickedEvent;
 };
 
 }

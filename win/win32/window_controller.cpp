@@ -8,13 +8,13 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 	WindowBase( hWnd ),
 	mWindow( window ) {
 		
-	mWindow->title.onPropertyChanged.add([&]{
+	mWindow->title.changedEvent.add([&]{
 		if (getText() != mWindow->title()) {
 			setText (mWindow->title());
 		}
 	});
 	
-	mWindow->left.onPropertyChanged.add([&]{
+	mWindow->left.changedEvent.add([&]{
 		Point point = getPosition();
 		if (point.x != mWindow->left()) {
 			point.x = mWindow->left();
@@ -22,7 +22,7 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 		}
 	});	
 	
-	mWindow->top.onPropertyChanged.add([&]{
+	mWindow->top.changedEvent.add([&]{
 		Point point = getPosition();
 		if (point.y != mWindow->top()) {
 			point.y = mWindow->top();
@@ -30,7 +30,7 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 		}
 	});	
 		
-	mWindow->width.onPropertyChanged.add([&]{
+	mWindow->width.changedEvent.add([&]{
 		Size size = getSize();
 		if (size.width != mWindow->width()) {
 			size.width = mWindow->width();
@@ -38,13 +38,19 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 		}
 	});		
 	
-	mWindow->height.onPropertyChanged.add([&]{
+	mWindow->height.changedEvent.add([&]{
 		Size size = getSize();
 		if (size.height != mWindow->height()) {
 			size.height = mWindow->height();
 			setSize (size);
 		}
-	});		
+	});
+	
+	mWindow->visible.changedEvent.add([&] {
+		if (isVisible() != mWindow->visible()) {
+			setVisible (mWindow->visible());
+		}
+	});
 }
 
 WindowController::~WindowController() {
@@ -56,7 +62,6 @@ Point WindowController::getPosition() {
 	
 	return Point( rect.left, rect.top );
 }
-
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
 	
 	switch (message) {
@@ -78,6 +83,13 @@ bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 				mWindow->top (windowPos->y);
 			}
 			break;
+		}
+		case WM_STYLECHANGED:
+		{
+			STYLESTRUCT* styleStruct = (STYLESTRUCT*)lParam;
+			if ((styleStruct->styleOld & WS_VISIBLE) != (styleStruct->styleNew & WS_VISIBLE)) {
+				mWindow->visible (styleStruct->styleNew & WS_VISIBLE);
+			}
 		}
 		case WM_DESTROY:
 		{
