@@ -7,6 +7,7 @@
 #ifndef WIN_WINDOW_H
 #define WIN_WINDOW_H
 
+#include <win/control.h>
 #include <win/property.h>
 #include <win/control.h>
 
@@ -16,18 +17,18 @@
 
 namespace win {
 
-class Window {
+class Window : public Control {
 public:
 	explicit Window(const std::string& name) :
-		name( name ) {
+		Control( name ) {
 	}
 	virtual ~Window() {
 	}
 	
+	// Control implementations
 	virtual std::string getType() const { return "Window"; }
 	
 public:
-	Property<std::string> name;
 	Property<std::string> title;
 	Property<int> top;
 	Property<int> left;

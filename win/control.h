@@ -13,6 +13,9 @@
 
 namespace win {
 	
+/**
+ * Base class for all controls
+ */
 class Control {
 public:
 	explicit Control(const std::string& name) :
@@ -25,11 +28,6 @@ public:
 
 public:
 	Property<std::string> name;
-	Property<int> top;
-	Property<int> left;
-	Property<int> width;
-	Property<int> height;	
-	Property<bool> visible;
 };
 
 }

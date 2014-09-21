@@ -43,7 +43,7 @@ int main() {
 	button1->clickedEvent.add([&] {
 		std::cout << "Ouch!" << std::endl;
 		button2->visible (!button2->visible());
-		button2->text ("Count:" + std::to_string (counter));
+		button2->text ("Count:" + std::to_string (++counter));
 	});
 	
 	win::createWindow (window);

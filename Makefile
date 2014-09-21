@@ -11,12 +11,12 @@ EXECUTABLE = $(OUT_DIR)/deved.exe
 CFLAGS = -c -Wall -std=c++11 -I"C:\Program Files (x86)\Lua\5.1\include" -I. -DWIN32 -mwindows
 
 # Linker Flags
-LDFLAGS = -L"C:\Program Files (x86)\Lua\5.1\lib" -llua5.1 -lcomctl32
+LDFLAGS = -llua52 -lcomctl32
 
-CC = clang
+CC = g++
 MD = mkdir
-RM = rm -rf
-CP = CP
+RM = rmdir /S /Q
+CP = copy /Y 
 
 # Compute buil dirs (before modify SRC_DIRS)
 BUILD_DIRS = $(addprefix $(OUT_DIR)\,$(SRC_DIRS))
@@ -29,7 +29,7 @@ SRCOBJECTS = $(SOURCES:.cpp=.o)
 OBJECTS = $(patsubst %,$(OUT_DIR)/%,$(SRCOBJECTS))
 
 # Make
-all: directories $(SOURCES) $(EXECUTABLE) $(OUT_DIR)/deved.exe.manifest
+all: directories $(SOURCES) $(EXECUTABLE) $(OUT_DIR)\deved.exe.manifest
 
 # Directories
 directories: $(OUT_DIR) $(BUILD_DIRS)
@@ -41,8 +41,8 @@ $(BUILD_DIRS):
 	$(MD) $@
 	
 # Manifest
-$(OUT_DIR)/deved.exe.manifest: deved.exe.manifest
-	$(CP) deved.exe.manifest $(OUT_DIR)/deved.exe.manifest
+$(OUT_DIR)\deved.exe.manifest: deved.exe.manifest
+	$(CP) deved.exe.manifest $(OUT_DIR)\deved.exe.manifest
 
 # Link
 $(EXECUTABLE): $(OBJECTS) 
@@ -54,4 +54,4 @@ bin/%.o: %.cpp
 
 # Clean
 clean:
-	$(RM) $(OUT_DIR)/
+	$(RM) $(OUT_DIR)\

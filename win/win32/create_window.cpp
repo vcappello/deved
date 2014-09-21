@@ -4,6 +4,7 @@
 #include "utils.h"
 #include "window_controller.h"
 #include "button_controller.h"
+#include "menu_bar_controller.h"
 #include "message_dispatcher.h"
 
 #include <map>
@@ -11,6 +12,7 @@
 namespace win {
 
 void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent);
+void createMenuBarControl(std::shared_ptr<MenuBar> menuBar, HWND hWndParent);
 	
 int createControlId() {
 	static int controlIdCounter = 100;
@@ -72,6 +74,12 @@ void createWindow(std::shared_ptr<Window> window) {
 			} catch (std::exception& execpt) {
 				throw Error( "Can not convert control to 'Button'" );
 			}
+		} else if (control()->getType() == "MenuBar") {
+			try {
+				createMenuBarControl (std::dynamic_pointer_cast<MenuBar>(control()), hWnd);
+			} catch (std::exception& execpt) {
+				throw Error( "Can not convert control to 'MenuBar'" );
+			}
 		}
 	}
 	
@@ -114,6 +122,16 @@ void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent) {
 	
 	// Subclass window
 	controller->subclass();
+}
+
+void createMenuBarControl(std::shared_ptr<MenuBar> menuBar, HWND hWndParent) {
+	auto controller = std::make_shared<MenuBarController>( menuBar );
+}
+
+void createCommandMenuItem(HMENU hMenuParent, std::shared_ptr<CommanMenuItem> commandMenuItem) {
+}
+
+void createSubMenuItem(HMENU hMenuParent, std::shared_ptr<SubMenuItem> subMenuItem) {
 }
 
 int run() {
