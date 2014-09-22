@@ -7,9 +7,10 @@
 #ifndef WIN_PROPERTY_H
 #define WIN_PROPERTY_H
 
-#include <vector>
-
 #include <win/event.h>
+
+#include <vector>
+#include <algorithm>
 
 namespace win {
 
@@ -69,17 +70,23 @@ protected:
 template<class T>
 class PropertyArray {
 public:
-	PropertyArray() {
-	}
-	virtual ~PropertyArray() {
-	}
-	
-public:
 	using childPropertyT = Property<T>;
 	using containerT = std::vector<childPropertyT>;
 	using iteratorT = typename containerT::iterator;
 	using constIteratorT = typename containerT::const_iterator;
 
+public:
+	PropertyArray() {
+	}
+	PropertyArray(std::initializer_list<T> initList) {
+		for (auto item : initList) {
+			add (item);
+		}
+	}
+	virtual ~PropertyArray() {
+	}
+	
+public:
 	childPropertyT& operator[](std::size_t index) {
 		return mArray[index];
 	}

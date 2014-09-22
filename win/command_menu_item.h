@@ -4,11 +4,13 @@
  * refer to the file LICENSE.txt.
  */
  
-#include <win/menu_item.h>
-
 #ifndef WIN_COMMAND_MENU_ITEM_H
 #define WIN_COMMAND_MENU_ITEM_H
- 
+
+#include <win/menu_item.h>
+
+#include <string>
+
 namespace win {
 
 class CommandMenuItem : public MenuItem {

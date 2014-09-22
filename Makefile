@@ -19,7 +19,8 @@ RM = rmdir /S /Q
 CP = copy /Y 
 
 # Compute buil dirs (before modify SRC_DIRS)
-BUILD_DIRS = $(addprefix $(OUT_DIR)\,$(SRC_DIRS))
+BUILD_DIRS_0 = $(addprefix $(OUT_DIR)\,$(SRC_DIRS))
+BUILD_DIRS = $(subst /,\,$(BUILD_DIRS_0))
 
 # Sources
 SRC_DIRS += .
