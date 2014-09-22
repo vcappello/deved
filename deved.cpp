@@ -21,7 +21,7 @@ int main() {
 	window->left (10);
 	window->top (10);
 	window->width (300);
-	window->height (100);
+	window->height (200);
 	window->visible (true);
 	
 	auto button1 = std::make_shared<win::Button>("Button1");
