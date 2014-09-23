@@ -6,6 +6,13 @@ CommandMenuItemController::CommandMenuItemController(HMENU hMenuParent, int comm
 	mHMenuParent( hMenuParent ),
 	mCommandId( commandId ),
 	mCommandMenuItem( commandMenuItem ) {
+/*		
+	mButton->text.changedEvent.add([&]{
+		if (getText() != mButton->text()) {
+			setText (mButton->text());
+		}
+	});
+*/		
 }
 
 CommandMenuItemController::~CommandMenuItemController() {

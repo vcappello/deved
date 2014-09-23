@@ -8,9 +8,8 @@ MenuBarController::MenuBarController(std::shared_ptr<MenuBar> menuBar) :
 }
 
 MenuBarController::~MenuBarController() {
-	// TODO: restore
-	//::DestroyMenu (mHMenu);
+	DestroyMenu (mHMenu);
 }
-	
+
 }
 

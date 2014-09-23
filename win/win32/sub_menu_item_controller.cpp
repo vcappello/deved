@@ -2,15 +2,15 @@
 
 namespace win {
 	
-SubMenuItemController::SubMenuItemController(HMENU hMenuParent, std::shared_ptr<SubMenuItem> subMenuItem) :
+SubMenuItemController::SubMenuItemController(HMENU hMenuParent, int commandId, std::shared_ptr<SubMenuItem> subMenuItem) :
 	mHMenuParent( hMenuParent ),
+	mCommandId( commandId ),	
 	mSubMenuItem( subMenuItem ) {
 	mHMenu = ::CreatePopupMenu();
 }
 
 SubMenuItemController::~SubMenuItemController() {
-	// TODO: restore
-	//::DestroyMenu (mHMenu);
+	::DestroyMenu (mHMenu);
 }
 	
 }

@@ -56,12 +56,18 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 WindowController::~WindowController() {
 }
 
+void WindowController::setMenuBarController(std::shared_ptr<MenuBarController> menuBarController) {
+	mMenuBarController = menuBarController;
+	::SetMenu (mHWnd, mMenuBarController->getHMenu());
+}
+
 Point WindowController::getPosition() {
 	RECT rect;
 	::GetWindowRect (mHWnd, &rect);
 	
 	return Point( rect.left, rect.top );
 }
+
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
 	
 	switch (message) {

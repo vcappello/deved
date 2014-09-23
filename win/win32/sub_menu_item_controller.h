@@ -7,6 +7,8 @@
 #ifndef WIN_WIN32_SUB_MENU_ITEM_CONTROLLER_H
 #define WIN_WIN32_SUB_MENU_ITEM_CONTROLLER_H
 
+#include "menu_item_controller_container.h"
+#include "menu_item_controller_base.h"
 #include <win/sub_menu_item.h>
 
 #include <memory>
@@ -14,15 +16,20 @@
 
 namespace win {
 
-class SubMenuItemController {
+class SubMenuItemController : public MenuItemControllerContainer,
+							  public MenuItemControllerBase {
 public:
-	SubMenuItemController(HMENU hMenuParent, std::shared_ptr<SubMenuItem> subMenuItem);
+	SubMenuItemController(HMENU hMenuParent, int commandId, std::shared_ptr<SubMenuItem> subMenuItem);
 	virtual ~SubMenuItemController();
 	
 	HMENU getHMenu() { return mHMenu; }
 	
+	// IMenuItemController implementations
+	std::shared_ptr<MenuItem> getMenuItem() { return mSubMenuItem; }
+	
 public:
 	HMENU mHMenuParent;
+	int mCommandId;
 	std::shared_ptr<SubMenuItem> mSubMenuItem;
 	HMENU mHMenu;
 };

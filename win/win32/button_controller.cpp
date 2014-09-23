@@ -8,6 +8,7 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 	mCommandId( commandId ),
 	mButton( button ),
 	mOldWndProc( NULL )	{
+		
 	mButton->text.changedEvent.add([&]{
 		if (getText() != mButton->text()) {
 			setText (mButton->text());

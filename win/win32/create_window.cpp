@@ -17,9 +17,9 @@
 namespace win {
 
 void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent);
-void createMenuBarControl(std::shared_ptr<MenuBar> menuBar, HWND hWndParent);
-void createCommandMenuItem(HMENU hMenuParent, std::shared_ptr<CommandMenuItem> commandMenuItem);
-void createSubMenuItem(HMENU hMenuParent, std::shared_ptr<SubMenuItem> subMenuItem);
+void createMenuBarControl(std::shared_ptr<MenuBar> menuBar, std::shared_ptr<WindowController> windowController);
+void createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
+void createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
 	
 int createControlId() {
 	static int controlIdCounter = 100;
@@ -74,6 +74,10 @@ void createWindow(std::shared_ptr<Window> window) {
 		throw Error( formatSystemMessage (::GetLastError()) );
 	}
 	
+	// Create WindowController instance
+	auto controller = std::make_shared<WindowController>( hWnd, window );
+	
+	// Add owned controls
 	for (auto control : window->controls) {
 		if (control()->getType() == "Button") {
 			auto buttonControl = std::dynamic_pointer_cast<Button>(control());
@@ -86,12 +90,11 @@ void createWindow(std::shared_ptr<Window> window) {
 			if (!menuBarControl) {
 				throw Error( "Can not convert control to 'MenuBar'" );
 			}
-			createMenuBarControl (menuBarControl, hWnd);
+			createMenuBarControl (menuBarControl, controller);
 		}
 	}
 	
-	// Create WindowController instance
-	auto controller = std::make_shared<WindowController>( hWnd, window );
+	// Register the window controller
 	MessageDispatcher::getInstance().registerController (controller);
 }
 
@@ -131,59 +134,72 @@ void createButtonControl(std::shared_ptr<Button> button, HWND hWndParent) {
 	controller->subclass();
 }
 
-void createMenuBarControl(std::shared_ptr<MenuBar> menuBar, HWND hWndParent) {
+void createMenuBarControl(std::shared_ptr<MenuBar> menuBar, std::shared_ptr<WindowController> windowController) {
 	auto controller = std::make_shared<MenuBarController>( menuBar );
 	
+	// Create children menu items	
 	for (auto menuItem : menuBar->menuItems) {
 		if (menuItem()->getType() == "CommandMenuItem") {
 			auto commandMenuItem = std::dynamic_pointer_cast<CommandMenuItem>(menuItem());
 			if (!commandMenuItem) {
 				throw Error( "Can not convert control to 'CommandMenuItem'" );
 			}			
-			createCommandMenuItem (controller->getHMenu(), commandMenuItem);
+			createCommandMenuItem (controller, commandMenuItem);
 		} else if (menuItem()->getType() == "SubMenuItem") {
 			auto subMenuItem = std::dynamic_pointer_cast<SubMenuItem>(menuItem());
 			if (!subMenuItem) {
 				throw Error( "Can not convert control to 'SubMenuItem'" );
 			}				
-			createSubMenuItem (controller->getHMenu(), subMenuItem);
+			createSubMenuItem (controller, subMenuItem);
 		}
 	}
 	
-	::SetMenu (hWndParent, controller->getHMenu());
+	windowController->setMenuBarController (controller);
 }
 
-void createCommandMenuItem(HMENU hMenuParent, std::shared_ptr<CommandMenuItem> commandMenuItem) {
+void createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
+	// Get a new control ID for the menu item
+	int controlId = createControlId();
+	
+	
+	// Fill MENUITEMINFO structure
 	MENUITEMINFO mii = {0};
 	mii.cbSize = sizeof(MENUITEMINFO);
 
-	int controlId = createControlId();
-	
 	mii.fMask = MIIM_STRING | MIIM_ID | MIIM_FTYPE; 
     mii.fType = MFT_STRING;
 	mii.wID = controlId;
     mii.dwTypeData = (LPSTR)commandMenuItem->text().c_str();
 	mii.cch = commandMenuItem->text().size();
 	
-	int position = ::GetMenuItemCount(hMenuParent);
-	BOOL res = ::InsertMenuItem(hMenuParent, position, TRUE, &mii); 	
+	// Insert the new item as last item of the parent container	
+	int position = ::GetMenuItemCount(menuItemControllerContainer->getHMenu());
+	BOOL res = ::InsertMenuItem(menuItemControllerContainer->getHMenu(), position, TRUE, &mii); 	
 	
 	if (!res) {
 		throw Error( formatSystemMessage (::GetLastError()) );
 	}
+
+	auto controller = std::make_shared<CommandMenuItemController>( menuItemControllerContainer->getHMenu(), controlId, commandMenuItem );
 	
-	auto controller = std::make_shared<CommandMenuItemController>( hMenuParent, controlId, commandMenuItem );
+	// Add menu item to the parent container
+	menuItemControllerContainer->addMenuItemController (controller);
+
+	// Register the controller for notifications handling
 	MessageDispatcher::getInstance().registerController (controller);
 }
 
-void createSubMenuItem(HMENU hMenuParent, std::shared_ptr<SubMenuItem> subMenuItem) {
+void createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem) {
+	// Get a new control ID for the menu item
+	int controlId = createControlId();
+
+	// First create the controller since we need an HMENU
+	auto controller = std::make_shared<SubMenuItemController>( menuItemControllerContainer->getHMenu(), controlId, subMenuItem );
+
+	// Fill MENUITEMINFO structure
 	MENUITEMINFO mii = {0};
 	mii.cbSize = sizeof(MENUITEMINFO);
 
-	auto controller = std::make_shared<SubMenuItemController>( hMenuParent, subMenuItem );
-	
-	int controlId = createControlId();
-	
 	mii.fMask = MIIM_STRING | MIIM_ID | MIIM_FTYPE | MIIM_SUBMENU; 
     mii.fType = MFT_STRING;
 	mii.wID = controlId;
@@ -191,26 +207,31 @@ void createSubMenuItem(HMENU hMenuParent, std::shared_ptr<SubMenuItem> subMenuIt
 	mii.cch = subMenuItem->text().size();
 	mii.hSubMenu = controller->getHMenu();
 	
-	int position = ::GetMenuItemCount(hMenuParent);
-	BOOL res = ::InsertMenuItem(hMenuParent, position, TRUE, &mii); 	
+	// Insert the new item as last item of the parent container
+	int position = ::GetMenuItemCount(menuItemControllerContainer->getHMenu());
+	BOOL res = ::InsertMenuItem(menuItemControllerContainer->getHMenu(), position, TRUE, &mii); 	
 	
 	if (!res) {
 		throw Error( formatSystemMessage (::GetLastError()) );
 	}
 	
+	// Add menu item to the parent container
+	menuItemControllerContainer->addMenuItemController (controller);
+	
+	// Create children menu items
 	for (auto menuItem : subMenuItem->menuItems) {
 		if (menuItem()->getType() == "CommandMenuItem") {
 			auto commandMenuItem = std::dynamic_pointer_cast<CommandMenuItem>(menuItem());
 			if (!commandMenuItem) {
 				throw Error( "Can not convert control to 'CommandMenuItem'" );
 			}			
-			createCommandMenuItem (controller->getHMenu(), commandMenuItem);
+			createCommandMenuItem (controller, commandMenuItem);
 		} else if (menuItem()->getType() == "SubMenuItem") {
 			auto subMenuItem = std::dynamic_pointer_cast<SubMenuItem>(menuItem());
 			if (!subMenuItem) {
 				throw Error( "Can not convert control to 'SubMenuItem'" );
 			}				
-			createSubMenuItem (controller->getHMenu(), subMenuItem);
+			createSubMenuItem (controller, subMenuItem);
 		}
 	}	
 }

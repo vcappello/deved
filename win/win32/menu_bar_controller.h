@@ -7,14 +7,15 @@
 #ifndef WIN_WIN32_MENU_BAR_CONTROLLER_H
 #define WIN_WIN32_MENU_BAR_CONTROLLER_H
 
+#include "menu_item_controller_container.h"
+
 #include <win/menu_bar.h>
 
-#include <memory>
 #include <windows.h>
 
 namespace win {
 
-class MenuBarController {
+class MenuBarController : public MenuItemControllerContainer {
 public:
 	MenuBarController(std::shared_ptr<MenuBar> menuBar);
 	virtual ~MenuBarController();

@@ -9,6 +9,7 @@
 
 #include <win/window.h>
 #include "window_base.h"
+#include "menu_bar_controller.h"
 
 #include <memory>
 #include <windows.h>
@@ -23,6 +24,8 @@ public:
 public:
 	std::shared_ptr<Window> getWindow() { return mWindow; }
 
+	void setMenuBarController(std::shared_ptr<MenuBarController> menuBarController);
+	
 	// IMessageHandler implementations from WindowBase
 	// HWND getHWnd() { return mHWnd; } // Implemented on WindowBase
 	
@@ -35,6 +38,7 @@ public:
 	
 protected:
 	std::shared_ptr<Window> mWindow;
+	std::shared_ptr<MenuBarController> mMenuBarController;
 };
 
 }
