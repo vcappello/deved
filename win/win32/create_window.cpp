@@ -172,6 +172,11 @@ void createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItem
     mii.dwTypeData = (LPSTR)commandMenuItem->text().c_str();
 	mii.cch = commandMenuItem->text().size();
 	
+	if (!commandMenuItem->enabled()) {
+		mii.fState = MFS_DISABLED;
+		mii.fMask |= MIIM_STATE;
+	}
+	
 	// Insert the new item as last item of the parent container	
 	int position = ::GetMenuItemCount(menuItemControllerContainer->getHMenu());
 	BOOL res = ::InsertMenuItem(menuItemControllerContainer->getHMenu(), position, TRUE, &mii); 	

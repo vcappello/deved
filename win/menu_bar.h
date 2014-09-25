@@ -20,6 +20,11 @@ public:
 	explicit MenuBar(const std::string& name) :
 		Control( name ) {
 	}
+	MenuBar(const std::string& name, std::initializer_list<std::shared_ptr<MenuItem>> initList) :
+		Control( name ),
+		menuItems( initList ) {
+		
+	}	
 	virtual ~MenuBar() {
 	}
 	

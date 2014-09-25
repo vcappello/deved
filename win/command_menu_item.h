@@ -16,8 +16,14 @@ namespace win {
 class CommandMenuItem : public MenuItem {
 public:
 	explicit CommandMenuItem(const std::string& name) :
-		MenuItem( name ) {
+		MenuItem( name ),
+		enabled( true ) {
 	}
+	CommandMenuItem(const std::string& name, const std::string& text) :
+		MenuItem( name ),
+		text( text ),
+		enabled( true ) {
+	}	
 	virtual ~CommandMenuItem() {
 	}
 	
@@ -25,7 +31,8 @@ public:
 	virtual std::string getType() const { return "CommandMenuItem"; } 
 	
 public:
-	Property<std::string> text;	
+	Property<std::string> text;
+	Property<bool> enabled;
 };
 
 }

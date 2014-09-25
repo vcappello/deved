@@ -3,10 +3,16 @@
 namespace win {
 	
 SubMenuItemController::SubMenuItemController(HMENU hMenuParent, int commandId, std::shared_ptr<SubMenuItem> subMenuItem) :
-	mHMenuParent( hMenuParent ),
-	mCommandId( commandId ),	
+	MenuItemControllerBase( hMenuParent, commandId ),	
 	mSubMenuItem( subMenuItem ) {
+		
 	mHMenu = ::CreatePopupMenu();
+		
+	mSubMenuItem->text.changedEvent.add([&]{
+		if (getText() != mSubMenuItem->text()) {
+			setText (mSubMenuItem->text());
+		}
+	});
 }
 
 SubMenuItemController::~SubMenuItemController() {

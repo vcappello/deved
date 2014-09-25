@@ -3,16 +3,15 @@
 namespace win {
 	
 CommandMenuItemController::CommandMenuItemController(HMENU hMenuParent, int commandId, std::shared_ptr<CommandMenuItem> commandMenuItem) :
-	mHMenuParent( hMenuParent ),
-	mCommandId( commandId ),
+	MenuItemControllerBase( hMenuParent, commandId ),
 	mCommandMenuItem( commandMenuItem ) {
-/*		
-	mButton->text.changedEvent.add([&]{
-		if (getText() != mButton->text()) {
-			setText (mButton->text());
+		
+	mCommandMenuItem->text.changedEvent.add([&]{
+		if (getText() != mCommandMenuItem->text()) {
+			setText (mCommandMenuItem->text());
 		}
 	});
-*/		
+		
 }
 
 CommandMenuItemController::~CommandMenuItemController() {

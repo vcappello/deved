@@ -18,6 +18,19 @@ public:
 	explicit SubMenuItem(const std::string& name) :
 		MenuItem( name ) {
 	}
+	SubMenuItem(const std::string& name, std::initializer_list<std::shared_ptr<MenuItem>> initList) :
+		MenuItem( name ),
+		menuItems( initList ) {
+	}	
+	SubMenuItem(const std::string& name, const std::string& text) :
+		MenuItem( name ),
+		text( text ) {
+	}
+	SubMenuItem(const std::string& name, const std::string& text, std::initializer_list<std::shared_ptr<MenuItem>> initList) :
+		MenuItem( name ),
+		text( text ),
+		menuItems( initList ) {
+	}	
 	virtual ~SubMenuItem() {
 	}
 	

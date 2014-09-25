@@ -28,8 +28,6 @@ public:
 	std::shared_ptr<MenuItem> getMenuItem() { return mSubMenuItem; }
 	
 public:
-	HMENU mHMenuParent;
-	int mCommandId;
 	std::shared_ptr<SubMenuItem> mSubMenuItem;
 	HMENU mHMenu;
 };

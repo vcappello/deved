@@ -15,8 +15,18 @@ namespace win {
 class Button : public Control {
 public:
 	explicit Button(const std::string& name) :
-		Control( name ) {
+		Control( name ),
+		visible( true ) {
 	}
+	Button(const std::string& name, const std::string& text, int left, int top, int width, int height) :
+		Control( name ),
+		text( text ),
+		left( left ),
+		top( top ),
+		width( width ),
+		height( height ),
+		visible( true ) {
+	}		
 	virtual ~Button() {
 	}
 	
@@ -24,12 +34,12 @@ public:
 	virtual std::string getType() const { return "Button"; }
 	
 public:
-	Property<int> top;
+	Property<std::string> text;
 	Property<int> left;
+	Property<int> top;
 	Property<int> width;
 	Property<int> height;	
 	Property<bool> visible;	
-	Property<std::string> text;
 
 	Event<> clickedEvent;
 };

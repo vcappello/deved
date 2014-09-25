@@ -16,12 +16,17 @@ namespace win {
 
 class MenuItemControllerBase {
 public:
-	MenuItemControllerBase();
+	MenuItemControllerBase(HMENU hMenuParent, int commandId);
 	virtual ~MenuItemControllerBase();
 	
 	virtual std::shared_ptr<MenuItem> getMenuItem() = 0;
 
+	std::string getText();
+	void setText(const std::string& value);
+
 public:
+	HMENU mHMenuParent;	
+	int mCommandId;	
 };
 
 }
