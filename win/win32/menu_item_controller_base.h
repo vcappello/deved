@@ -8,6 +8,8 @@
 #define WIN_WIN32_MENU_ITEM_CONTROLLER_BASE_H
 
 #include <win/menu_item.h>
+#include <win/error.h>
+#include "utils.h"
 
 #include <memory>
 #include <windows.h>
@@ -23,6 +25,9 @@ public:
 
 	std::string getText();
 	void setText(const std::string& value);
+
+	bool isEnabled();
+	void setEnabled(bool value);
 
 public:
 	HMENU mHMenuParent;	

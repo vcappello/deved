@@ -11,7 +11,12 @@ CommandMenuItemController::CommandMenuItemController(HMENU hMenuParent, int comm
 			setText (mCommandMenuItem->text());
 		}
 	});
-		
+
+	mCommandMenuItem->enabled.changedEvent.add([&]{
+		if (isEnabled() != mCommandMenuItem->enabled()) {
+			setEnabled (mCommandMenuItem->enabled());
+		}
+	});	
 }
 
 CommandMenuItemController::~CommandMenuItemController() {

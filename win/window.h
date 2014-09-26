@@ -31,7 +31,17 @@ public:
 		width( width ),
 		height( height ),
 		visible( true ) {
-	}	
+	}
+	Window(const std::string& name, const std::string& title, int left, int top, int width, int height, std::initializer_list<std::shared_ptr<Control>> initList) :
+		Control( name ),
+		title( title ),
+		left( left ),
+		top( top ),
+		width( width ),
+		height( height ),
+		visible( true ),
+		controls( initList ) {
+	}		
 	virtual ~Window() {
 	}
 	
