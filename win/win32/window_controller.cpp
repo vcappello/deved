@@ -1,5 +1,7 @@
 #include "window_controller.h"
 
+#include "control_factory.h"
+
 #include <iostream>
 
 namespace win {
@@ -51,6 +53,13 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 			setVisible (mWindow->visible());
 		}
 	});
+	
+	mWindow->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
+		createControl (shared_from_this(), control);
+	});
+	
+	mWindow->controls.itemRemovedEvent.add([&] (std::shared_ptr<Control> control) {
+	});	
 }
 
 WindowController::~WindowController() {

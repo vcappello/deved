@@ -36,12 +36,17 @@ int main() {
 	}));
 	
 	int counter = 0;
+	int top = 50;
 	button1->clickedEvent.add([&] {
 		std::cout << "Ouch!" << std::endl;
 		button2->visible (!button2->visible());
 		button2->text ("Count:" + std::to_string (++counter));
 		commandMenuItem3->text ("Count:" + std::to_string (counter));
 		commandMenuItem3->enabled (!commandMenuItem3->enabled());
+		
+		auto newButton = std::make_shared<win::Button>("Button" + std::to_string (counter), "Button " + std::to_string (counter), 150, top, 100, 30);
+		window->controls.add (newButton);
+		top += 40;
 	});
 	
 	win::createWindow (window);

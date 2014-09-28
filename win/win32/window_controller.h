@@ -16,7 +16,8 @@
 
 namespace win {
 
-class WindowController : public WindowBase {
+class WindowController : public WindowBase,
+                         public std::enable_shared_from_this<WindowController> {
 public:
 	explicit WindowController(HWND hWnd, std::shared_ptr<Window> window);
 	virtual ~WindowController();
@@ -40,6 +41,9 @@ protected:
 	std::shared_ptr<Window> mWindow;
 	std::shared_ptr<MenuBarController> mMenuBarController;
 };
+
+// Forward declaration
+void createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
 
 }
 

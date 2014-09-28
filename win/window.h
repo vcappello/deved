@@ -9,7 +9,6 @@
 
 #include <win/control.h>
 #include <win/property.h>
-#include <win/control.h>
 
 #include <memory>
 #include <string>
