@@ -18,6 +18,7 @@ int main() {
 	std::shared_ptr<win::Button> button1;
 	std::shared_ptr<win::Button> button2;
 	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
+	std::shared_ptr<win::SubMenuItem> subMenuItem3;
 	auto window = std::shared_ptr<win::Window>( new win::Window( "Window1", "My window", 10, 10, 300, 200, {
 		std::shared_ptr<win::MenuBar>( new win::MenuBar( "MenuBar1", { 
 				std::shared_ptr<win::SubMenuItem>( new win::SubMenuItem( "SubMenuItem1", "File", {
@@ -28,7 +29,8 @@ int main() {
 				std::shared_ptr<win::SubMenuItem>( new win::SubMenuItem( "SubMenuItem2", "Edit", { 
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem4", "Cut" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem5", "Copy" ),
-					std::make_shared<win::CommandMenuItem>( "CommandMenuItem6", "Paste" )
+					std::make_shared<win::CommandMenuItem>( "CommandMenuItem6", "Paste" ),
+					subMenuItem3 = std::make_shared<win::SubMenuItem>( "SubMenuItem3", "SubMenu" )
 				}))
 		})),
 		button1 = std::make_shared<win::Button>("Button1", "click me", 10, 10, 100, 30),
@@ -39,14 +41,19 @@ int main() {
 	int top = 50;
 	button1->clickedEvent.add([&] {
 		std::cout << "Ouch!" << std::endl;
+		
 		button2->visible (!button2->visible());
 		button2->text ("Count:" + std::to_string (++counter));
+		
 		commandMenuItem3->text ("Count:" + std::to_string (counter));
 		commandMenuItem3->enabled (!commandMenuItem3->enabled());
 		
-		auto newButton = std::make_shared<win::Button>("Button" + std::to_string (counter), "Button " + std::to_string (counter), 150, top, 100, 30);
+		auto newButton = std::make_shared<win::Button>("NewButton" + std::to_string (counter), "Button " + std::to_string (counter), 150, top, 100, 30);
 		window->controls.add (newButton);
 		top += 40;
+		
+		auto newMenuItem = std::make_shared<win::CommandMenuItem>( "NewCommandMenuItem"  + std::to_string (counter), "MenuItem "  + std::to_string (counter));
+		subMenuItem3->menuItems.add (newMenuItem);
 	});
 	
 	win::createWindow (window);

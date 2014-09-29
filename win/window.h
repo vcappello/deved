@@ -44,7 +44,7 @@ public:
 	virtual ~Window() {
 	}
 	
-	// Control implementations
+	// Entity implementations
 	virtual std::string getType() const { return "Window"; }
 	
 public:
@@ -54,7 +54,7 @@ public:
 	Property<int> width;
 	Property<int> height;
 	Property<bool> visible;
-	PropertyArray<std::shared_ptr<Control>> controls;
+	EntityMap<Control> controls;
 };
 
 }

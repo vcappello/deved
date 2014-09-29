@@ -13,6 +13,14 @@ SubMenuItemController::SubMenuItemController(HMENU hMenuParent, int commandId, s
 			setText (mSubMenuItem->text());
 		}
 	});
+	
+	mSubMenuItem->menuItems.itemAddedEvent.add([&] (std::shared_ptr<MenuItem> menuItem) {
+		createMenuItem (shared_from_this(), menuItem);
+	});
+	
+	mSubMenuItem->menuItems.itemRemovedEvent.add([&] (std::shared_ptr<MenuItem> menuItem) {
+		// TODO: implement this for remove item
+	});		
 }
 
 SubMenuItemController::~SubMenuItemController() {

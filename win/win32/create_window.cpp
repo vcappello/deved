@@ -61,7 +61,7 @@ void createWindow(std::shared_ptr<Window> window) {
 	
 	// Add owned controls
 	for (auto control : window->controls) {
-		createControl (controller, control());
+		createControl (controller, control.second);
 	}
 	
 	// Register the window controller

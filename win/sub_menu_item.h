@@ -39,7 +39,7 @@ public:
 	
 public:
 	Property<std::string> text;	
-	PropertyArray<std::shared_ptr<MenuItem>> menuItems;	
+	EntityMap<MenuItem> menuItems;	
 };
 
 }

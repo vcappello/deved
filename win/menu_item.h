@@ -7,25 +7,28 @@
 #ifndef WIN_MENU_ITEM_H
 #define WIN_MENU_ITEM_H
 
-#include <win/control.h>
+#include <win/entity.h>
 #include <win/property.h>
 
 #include <string>
 
 namespace win {
 
-class MenuItem : public Control {
+class MenuItem : public Entity {
 public:
 	explicit MenuItem(const std::string& name) :
-		Control( name ) {
+		name( name ) {
 	}
 	virtual ~MenuItem() {
 	}
 	
-	// Control implementations	
+	// Entity implementations
+	virtual std::string getName() const { return name(); }
+	
 	// virtual std::string getType() const { return "Menu"; } // Not implemented
 	
 public:
+	Property<std::string> name;	
 };
 
 }

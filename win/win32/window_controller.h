@@ -10,6 +10,7 @@
 #include <win/window.h>
 #include "window_base.h"
 #include "menu_bar_controller.h"
+#include "control_factory.h"
 
 #include <memory>
 #include <windows.h>
@@ -41,9 +42,6 @@ protected:
 	std::shared_ptr<Window> mWindow;
 	std::shared_ptr<MenuBarController> mMenuBarController;
 };
-
-// Forward declaration
-void createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
 
 }
 

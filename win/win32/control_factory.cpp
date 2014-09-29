@@ -1,5 +1,12 @@
 #include "control_factory.h"
 
+#include "window_controller.h"
+#include "button_controller.h"
+#include "menu_bar_controller.h"
+#include "command_menu_item_controller.h"
+#include "sub_menu_item_controller.h"
+#include "message_dispatcher.h"
+
 namespace win {
 
 int createControlId() {
@@ -64,22 +71,30 @@ void createMenuBarControl(std::shared_ptr<WindowController> windowController, st
 	
 	// Create children menu items	
 	for (auto menuItem : menuBar->menuItems) {
-		if (menuItem()->getType() == "CommandMenuItem") {
-			auto commandMenuItem = std::dynamic_pointer_cast<CommandMenuItem>(menuItem());
-			if (!commandMenuItem) {
-				throw Error( "Can not convert control to 'CommandMenuItem'" );
-			}			
-			createCommandMenuItem (controller, commandMenuItem);
-		} else if (menuItem()->getType() == "SubMenuItem") {
-			auto subMenuItem = std::dynamic_pointer_cast<SubMenuItem>(menuItem());
-			if (!subMenuItem) {
-				throw Error( "Can not convert control to 'SubMenuItem'" );
-			}				
-			createSubMenuItem (controller, subMenuItem);
-		}
+		createMenuItem (controller, menuItem.second);
 	}
 	
 	windowController->setMenuBarController (controller);
+}
+
+void createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem) {
+	if (menuItem->getType() == "CommandMenuItem") {
+		
+		auto commandMenuItem = std::dynamic_pointer_cast<CommandMenuItem>(menuItem);
+		if (!commandMenuItem) {
+			throw Error( "Can not convert control to 'CommandMenuItem'" );
+		}			
+		createCommandMenuItem (menuItemControllerContainer, commandMenuItem);
+		
+	} else if (menuItem->getType() == "SubMenuItem") {
+		
+		auto subMenuItem = std::dynamic_pointer_cast<SubMenuItem>(menuItem);
+		if (!subMenuItem) {
+			throw Error( "Can not convert control to 'SubMenuItem'" );
+		}				
+		createSubMenuItem (menuItemControllerContainer, subMenuItem);
+		
+	}	
 }
 
 void createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
@@ -150,19 +165,7 @@ void createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemCont
 	
 	// Create children menu items
 	for (auto menuItem : subMenuItem->menuItems) {
-		if (menuItem()->getType() == "CommandMenuItem") {
-			auto commandMenuItem = std::dynamic_pointer_cast<CommandMenuItem>(menuItem());
-			if (!commandMenuItem) {
-				throw Error( "Can not convert control to 'CommandMenuItem'" );
-			}			
-			createCommandMenuItem (controller, commandMenuItem);
-		} else if (menuItem()->getType() == "SubMenuItem") {
-			auto subMenuItem = std::dynamic_pointer_cast<SubMenuItem>(menuItem());
-			if (!subMenuItem) {
-				throw Error( "Can not convert control to 'SubMenuItem'" );
-			}				
-			createSubMenuItem (controller, subMenuItem);
-		}
+		createMenuItem (controller, menuItem.second);
 	}	
 }
 

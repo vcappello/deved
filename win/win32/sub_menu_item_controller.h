@@ -10,6 +10,7 @@
 #include "menu_item_controller_container.h"
 #include "menu_item_controller_base.h"
 #include <win/sub_menu_item.h>
+#include "control_factory.h"
 
 #include <memory>
 #include <windows.h>
@@ -17,7 +18,8 @@
 namespace win {
 
 class SubMenuItemController : public MenuItemControllerContainer,
-							  public MenuItemControllerBase {
+                              public MenuItemControllerBase,
+                              public std::enable_shared_from_this<SubMenuItemController> {
 public:
 	SubMenuItemController(HMENU hMenuParent, int commandId, std::shared_ptr<SubMenuItem> subMenuItem);
 	virtual ~SubMenuItemController();

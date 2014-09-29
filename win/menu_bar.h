@@ -9,6 +9,7 @@
 
 #include <win/control.h>
 #include <win/property.h>
+#include <win/entity.h>
 #include <win/menu_item.h>
 
 #include <memory>
@@ -32,7 +33,7 @@ public:
 	virtual std::string getType() const { return "MenuBar"; }
 	
 public:
-	PropertyArray<std::shared_ptr<MenuItem>> menuItems;
+	EntityMap<MenuItem> menuItems;
 };
 
 }
