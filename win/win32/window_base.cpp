@@ -1,5 +1,7 @@
 #include "window_base.h"
 
+#include <iostream>
+
 namespace win {
 
 WindowBase::WindowBase(HWND hWnd) :
@@ -54,15 +56,15 @@ bool WindowBase::isVisible() {
 }
 
 void WindowBase::setVisible(bool value) {
-	//DWORD style = ::GetWindowLong (mHWnd, GWL_STYLE);
 	if (value) {
-		//style |= WS_VISIBLE;
 		::ShowWindow (mHWnd, SW_SHOWNOACTIVATE);
 	} else {
-		//style &= !WS_VISIBLE;
 		::ShowWindow (mHWnd, SW_HIDE);
 	}
-	//::SetWindowLong (mHWnd, GWL_STYLE, style);
+}
+
+void WindowBase::destroy() {
+	::DestroyWindow (mHWnd);
 }
 
 }

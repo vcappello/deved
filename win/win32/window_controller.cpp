@@ -53,11 +53,14 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 	});
 	
 	mWindow->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
-		createControl (shared_from_this(), control);
+		auto controller = createControl (shared_from_this(), control);
+		mChildrenObjects.insert (std::make_pair (control->getName(), controller));
 	});
 	
 	mWindow->controls.itemRemovedEvent.add([&] (std::shared_ptr<Control> control) {
-		// TODO: implement this for remove item
+		auto object = mChildrenObjects[control->getName()];
+		mChildrenObjects.erase (control->getName());
+		object->destroy();
 	});	
 }
 

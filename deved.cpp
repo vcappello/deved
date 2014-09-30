@@ -56,6 +56,10 @@ int main() {
 		subMenuItem3->menuItems.add (newMenuItem);
 	});
 	
+	commandMenuItem3->clickedEvent.add([&] {
+		std::cout << "Hey!" << std::endl;
+	});
+	
 	win::createWindow (window);
 	win::run();
 	

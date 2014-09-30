@@ -8,6 +8,7 @@
 #define WIN_WIN32_WINDOW_BASE_H
 
 #include "i_message_handler.h"
+#include "i_windows_object.h"
 #include <win/point.h>
 #include <win/size.h>
 
@@ -17,7 +18,8 @@
 
 namespace win {
 
-class WindowBase : public IMessageHandler {
+class WindowBase : public IMessageHandler,
+                   public IWindowsObject {
 public:
 	explicit WindowBase(HWND hWnd);
 	virtual ~WindowBase();
@@ -33,6 +35,9 @@ public:
 	
 	bool isVisible();
 	void setVisible(bool value);
+
+	// IWindowsObject implementations
+	void destroy();
 
 	// IMessageHandler implementations
 	HWND getHWnd() { return mHWnd; }

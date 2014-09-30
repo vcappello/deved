@@ -18,20 +18,26 @@
 
 namespace win {
 
+class IWindowsObject; // Forward declaration
 class WindowController; // Forward declaration
+class ButtonController; // Forward declaration
+class MenuBarController; // Forward declaration
 class MenuItemControllerContainer; // Forward declaration
+class MenuItemControllerBase; // Forward declaration
+class CommandMenuItemController; // Forward declaration
+class SubMenuItemController; // Forward declaration
 	
-void createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
+std::shared_ptr<IWindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
 
-void createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button);
+std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button);
 
-void createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar);
+std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar);
 
-void createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem);
+std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem);
 
-void createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
+std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
 
-void createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
+std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
 
 }
 

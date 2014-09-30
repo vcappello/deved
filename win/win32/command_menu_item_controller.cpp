@@ -23,6 +23,7 @@ CommandMenuItemController::~CommandMenuItemController() {
 }
 
 void CommandMenuItemController::handleCommand(WPARAM wParam, LPARAM lParam) {
+	mCommandMenuItem->clickedEvent.fire();
 }
 
 }

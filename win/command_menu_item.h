@@ -33,6 +33,8 @@ public:
 public:
 	Property<std::string> text;
 	Property<bool> enabled;
+
+	Event<> clickedEvent;
 };
 
 }

@@ -14,23 +14,25 @@ int createControlId() {
 	return controlIdCounter++;
 }
 	
-void createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control) {
+std::shared_ptr<IWindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control) {
+	std::shared_ptr<IWindowsObject> object;
 	if (control->getType() == "Button") {
 		auto buttonControl = std::dynamic_pointer_cast<Button>(control);
 		if (!buttonControl) {
 			throw Error( "Can not convert control to 'Button'" );
 		}
-		createButtonControl (windowController, buttonControl);
+		object = createButtonControl (windowController, buttonControl);
 	} else if (control->getType() == "MenuBar") {
 		auto menuBarControl = std::dynamic_pointer_cast<MenuBar>(control);
 		if (!menuBarControl) {
 			throw Error( "Can not convert control to 'MenuBar'" );
 		}
-		createMenuBarControl (windowController, menuBarControl);
-	}	
+		object = createMenuBarControl (windowController, menuBarControl);
+	}
+	return object;
 }
 
-void createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button) {
+std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
@@ -64,9 +66,11 @@ void createButtonControl(std::shared_ptr<WindowController> windowController, std
 	
 	// Subclass window
 	controller->subclass();
+	
+	return controller;
 }
 
-void createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar) {
+std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar) {
 	auto controller = std::make_shared<MenuBarController>( menuBar );
 	
 	// Create children menu items	
@@ -75,16 +79,19 @@ void createMenuBarControl(std::shared_ptr<WindowController> windowController, st
 	}
 	
 	windowController->setMenuBarController (controller);
+	
+	return controller;
 }
 
-void createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem) {
+std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem) {
+	std::shared_ptr<MenuItemControllerBase> menuItemControllerBase;
 	if (menuItem->getType() == "CommandMenuItem") {
 		
 		auto commandMenuItem = std::dynamic_pointer_cast<CommandMenuItem>(menuItem);
 		if (!commandMenuItem) {
 			throw Error( "Can not convert control to 'CommandMenuItem'" );
 		}			
-		createCommandMenuItem (menuItemControllerContainer, commandMenuItem);
+		menuItemControllerBase = createCommandMenuItem (menuItemControllerContainer, commandMenuItem);
 		
 	} else if (menuItem->getType() == "SubMenuItem") {
 		
@@ -92,15 +99,16 @@ void createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControl
 		if (!subMenuItem) {
 			throw Error( "Can not convert control to 'SubMenuItem'" );
 		}				
-		createSubMenuItem (menuItemControllerContainer, subMenuItem);
+		menuItemControllerBase = createSubMenuItem (menuItemControllerContainer, subMenuItem);
 		
-	}	
+	}
+	
+	return menuItemControllerBase;
 }
 
-void createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
+std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
 	// Get a new control ID for the menu item
 	int controlId = createControlId();
-	
 	
 	// Fill MENUITEMINFO structure
 	MENUITEMINFO mii = {0};
@@ -132,9 +140,11 @@ void createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItem
 
 	// Register the controller for notifications handling
 	MessageDispatcher::getInstance().registerController (controller);
+	
+	return controller;
 }
 
-void createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem) {
+std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem) {
 	// Get a new control ID for the menu item
 	int controlId = createControlId();
 
@@ -166,7 +176,9 @@ void createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemCont
 	// Create children menu items
 	for (auto menuItem : subMenuItem->menuItems) {
 		createMenuItem (controller, menuItem.second);
-	}	
+	}
+	
+	return controller;
 }
 
 }
