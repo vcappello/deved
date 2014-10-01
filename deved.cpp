@@ -17,6 +17,7 @@
 int main() {
 	std::shared_ptr<win::Button> button1;
 	std::shared_ptr<win::Button> button2;
+	std::shared_ptr<win::Button> button3;
 	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
 	std::shared_ptr<win::SubMenuItem> subMenuItem3;
 	auto window = std::shared_ptr<win::Window>( new win::Window( "Window1", "My window", 10, 10, 300, 200, {
@@ -30,34 +31,38 @@ int main() {
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem4", "Cut" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem5", "Copy" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem6", "Paste" ),
-					subMenuItem3 = std::make_shared<win::SubMenuItem>( "SubMenuItem3", "SubMenu" )
+					subMenuItem3 = std::make_shared<win::SubMenuItem>( "SubMenuItem3", "Dynamic items" )
 				}))
 		})),
-		button1 = std::make_shared<win::Button>("Button1", "click me", 10, 10, 100, 30),
-		button2 = std::make_shared<win::Button>("Button2", "Test", 150, 10, 100, 30)
+		button1 = std::make_shared<win::Button>("Button1", "Add menu item", 10, 10, 200, 30),
+		button2 = std::make_shared<win::Button>("Button2", "Delete menu item", 10, 40, 200, 30),
+		button3 = std::make_shared<win::Button>("Button3", "Disable menu item", 10, 70, 200, 30)
 	}));
-	
+
 	int counter = 0;
-	int top = 50;
 	button1->clickedEvent.add([&] {
-		std::cout << "Ouch!" << std::endl;
-		
-		button2->visible (!button2->visible());
-		button2->text ("Count:" + std::to_string (++counter));
-		
-		commandMenuItem3->text ("Count:" + std::to_string (counter));
-		commandMenuItem3->enabled (!commandMenuItem3->enabled());
-		
-		auto newButton = std::make_shared<win::Button>("NewButton" + std::to_string (counter), "Button " + std::to_string (counter), 150, top, 100, 30);
-		window->controls.add (newButton);
-		top += 40;
-		
-		auto newMenuItem = std::make_shared<win::CommandMenuItem>( "NewCommandMenuItem"  + std::to_string (counter), "MenuItem "  + std::to_string (counter));
+		counter++;
+		std::string name = "NewCommandMenuItem"  + std::to_string (counter);
+		auto newMenuItem = std::make_shared<win::CommandMenuItem>( 
+			name, 
+			"MenuItem "  + std::to_string (counter));
 		subMenuItem3->menuItems.add (newMenuItem);
 	});
 	
-	commandMenuItem3->clickedEvent.add([&] {
-		std::cout << "Hey!" << std::endl;
+	button2->clickedEvent.add([&] {
+		if (counter > 0) {
+			std::string name = "NewCommandMenuItem"  + std::to_string (counter);
+			subMenuItem3->menuItems.remove (name);
+			counter--;
+		}
+	});
+
+	button3->clickedEvent.add([&] {
+		if (counter > 0) {
+			std::string name = "NewCommandMenuItem"  + std::to_string (counter);
+			auto item = std::dynamic_pointer_cast<win::CommandMenuItem>( subMenuItem3->menuItems[name] );
+			item->enabled (!item->enabled());
+		}
 	});
 	
 	win::createWindow (window);

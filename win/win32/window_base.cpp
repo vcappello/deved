@@ -1,7 +1,5 @@
 #include "window_base.h"
 
-#include <iostream>
-
 namespace win {
 
 WindowBase::WindowBase(HWND hWnd) :
@@ -64,6 +62,7 @@ void WindowBase::setVisible(bool value) {
 }
 
 void WindowBase::destroy() {
+	MessageDispatcher::getInstance().unregisterControllerByHandle (mHWnd);
 	::DestroyWindow (mHWnd);
 }
 

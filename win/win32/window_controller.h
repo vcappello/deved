@@ -30,15 +30,23 @@ public:
 
 	void setMenuBarController(std::shared_ptr<MenuBarController> menuBarController);
 	
-	// IMessageHandler implementations from WindowBase
+	/** @name IMessageHandler implementations
+	 */
+	///@{ 
 	// HWND getHWnd() { return mHWnd; } // Implemented on WindowBase
 	
 	bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
 	LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	///@}
 	
-	// Override WindowBase
+	/** @name Override WindowBase
+	 */	
+	///@{ 
 	Point getPosition();
+	
+	void destroy();
+	///@}
 	
 protected:
 	std::shared_ptr<Window> mWindow;

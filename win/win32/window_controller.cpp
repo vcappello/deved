@@ -72,13 +72,6 @@ void WindowController::setMenuBarController(std::shared_ptr<MenuBarController> m
 	::SetMenu (mHWnd, mMenuBarController->getHMenu());
 }
 
-Point WindowController::getPosition() {
-	RECT rect;
-	::GetWindowRect (mHWnd, &rect);
-	
-	return Point( rect.left, rect.top );
-}
-
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
 	
 	switch (message) {
@@ -110,6 +103,10 @@ bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 		}
 		case WM_DESTROY:
 		{
+			// Destroy all children
+			for (auto obj : mChildrenObjects) {
+				obj.second->destroy();
+			};			
 			::PostQuitMessage(0);
 			break;
 		}
@@ -120,6 +117,22 @@ bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 
 LRESULT WindowController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	return ::DefWindowProc (hWnd, message, wParam, lParam);
+}
+
+Point WindowController::getPosition() {
+	RECT rect;
+	::GetWindowRect (mHWnd, &rect);
+	
+	return Point( rect.left, rect.top );
+}
+
+void WindowController::destroy() {
+	// Destroy all children
+	for (auto obj : mChildrenObjects) {
+		obj.second->destroy();
+	};
+	
+	WindowBase::destroy();
 }
 
 }

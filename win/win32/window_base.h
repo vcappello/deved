@@ -9,6 +9,7 @@
 
 #include "i_message_handler.h"
 #include "i_windows_object.h"
+#include "message_dispatcher.h"
 #include <win/point.h>
 #include <win/size.h>
 
@@ -36,15 +37,21 @@ public:
 	bool isVisible();
 	void setVisible(bool value);
 
-	// IWindowsObject implementations
-	void destroy();
-
-	// IMessageHandler implementations
+	/** @name IMessageHandler implementations
+	 */
+	///@{ 
 	HWND getHWnd() { return mHWnd; }
 	
 	// bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult); // Abstract
 
 	// LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // Abstract
+	///@}
+	
+	/** @name IWindowsObject implementations
+	 */
+	///@{ 
+	void destroy();
+	///@}
 	
 protected:
 	HWND mHWnd;

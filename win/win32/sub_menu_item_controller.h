@@ -26,12 +26,22 @@ public:
 	
 	HMENU getHMenu() { return mHMenu; }
 	
-	// IMenuItemController implementations
+	/** @name MenuItemControllerBase implementations
+	 */
+	///@{ 	
 	std::shared_ptr<MenuItem> getMenuItem() { return mSubMenuItem; }
+	///@}
+	
+	/** @name IWindowsObject implementations
+	 */
+	///@{ 
+	void destroy();
+	///@}
 	
 public:
 	std::shared_ptr<SubMenuItem> mSubMenuItem;
 	HMENU mHMenu;
+	std::map<std::string, std::shared_ptr<IWindowsObject>> mChildrenObjects;
 };
 
 }

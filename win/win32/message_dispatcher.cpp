@@ -19,10 +19,6 @@ LRESULT CALLBACK MessageDispatcher::uniqueWndProc(HWND hWnd, UINT message, WPARA
 	LRESULT result = 0;
 	switch (message)
     {
-		case WM_DESTROY:
-			result = getInstance().dispatchMessage (hWnd, message, wParam, lParam);
-			getInstance().unregisterControllerByHandle (hWnd);
-			break;
 		case WM_COMMAND:
 			getInstance().dispatchMessage (hWnd, message, wParam, lParam);
 			result = getInstance().dispatchCommand (wParam, lParam);

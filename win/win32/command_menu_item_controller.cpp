@@ -26,5 +26,12 @@ void CommandMenuItemController::handleCommand(WPARAM wParam, LPARAM lParam) {
 	mCommandMenuItem->clickedEvent.fire();
 }
 
+void CommandMenuItemController::destroy() {
+	// Detach menu item from parent menu
+	::RemoveMenu (mHMenuParent, mCommandId, MF_BYCOMMAND);
+	// Unregister from MessageDispatcher
+	MessageDispatcher::getInstance().unregisterControllerById (mCommandId);
+}
+
 }
 
