@@ -65,6 +65,13 @@ int main() {
 		}
 	});
 	
+	auto font = win::getSystemFont();
+	std::cout << font->fontName() << std::endl;
+	std::cout << font->size() << std::endl;
+	std::cout << font->bold() << std::endl;
+	std::cout << font->italic() << std::endl;
+	std::cout << font->underline() << std::endl;
+	
 	win::createWindow (window);
 	win::run();
 	

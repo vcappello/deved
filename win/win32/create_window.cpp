@@ -6,6 +6,8 @@
 #include "window_controller.h"
 #include "message_dispatcher.h"
 
+#include <windows.h>
+
 namespace win {
 
 void createWindow(std::shared_ptr<Window> window) {
@@ -78,6 +80,25 @@ int run() {
     }
 
     return (int)msg.wParam;	
+}
+
+std::shared_ptr<Font> getSystemFont() {
+	NONCLIENTMETRICS ncm;
+	ncm.cbSize = sizeof(NONCLIENTMETRICS);
+	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &ncm, 0);
+	
+	HDC hDC = ::GetDC(0);
+	
+	int size = -MulDiv(72, ncm.lfMessageFont.lfHeight, ::GetDeviceCaps(hDC, LOGPIXELSY));
+	
+	bool bold = (ncm.lfMessageFont.lfWeight > FW_NORMAL);
+	bool italic = (ncm.lfMessageFont.lfItalic != false);
+	bool underline = (ncm.lfMessageFont.lfUnderline != false);
+
+	auto font = std::make_shared<Font>( "System", 
+		ncm.lfMessageFont.lfFaceName, size, bold, italic, underline );
+	
+	return font;
 }
 
 }

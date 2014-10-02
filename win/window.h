@@ -44,8 +44,11 @@ public:
 	virtual ~Window() {
 	}
 	
-	// Entity implementations
+	/** @name Entity implementations
+	 */
+	///@{ 	
 	virtual std::string getType() const { return "Window"; }
+	///@}
 	
 public:
 	Property<std::string> title;

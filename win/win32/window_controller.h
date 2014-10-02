@@ -44,14 +44,11 @@ public:
 	 */	
 	///@{ 
 	Point getPosition();
-	
-	void destroy();
 	///@}
 	
 protected:
 	std::shared_ptr<Window> mWindow;
 	std::shared_ptr<MenuBarController> mMenuBarController;
-	std::map<std::string, std::shared_ptr<IWindowsObject>> mChildrenObjects;
 };
 
 }

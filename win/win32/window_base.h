@@ -8,7 +8,7 @@
 #define WIN_WIN32_WINDOW_BASE_H
 
 #include "i_message_handler.h"
-#include "i_windows_object.h"
+#include "windows_object.h"
 #include "message_dispatcher.h"
 #include <win/point.h>
 #include <win/size.h>
@@ -20,7 +20,7 @@
 namespace win {
 
 class WindowBase : public IMessageHandler,
-                   public IWindowsObject {
+                   public WindowsObject {
 public:
 	explicit WindowBase(HWND hWnd);
 	virtual ~WindowBase();
@@ -47,7 +47,7 @@ public:
 	// LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam); // Abstract
 	///@}
 	
-	/** @name IWindowsObject implementations
+	/** @name WindowsObject overrides
 	 */
 	///@{ 
 	void destroy();

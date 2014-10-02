@@ -18,7 +18,7 @@
 
 namespace win {
 
-class IWindowsObject; // Forward declaration
+class WindowsObject; // Forward declaration
 class WindowController; // Forward declaration
 class ButtonController; // Forward declaration
 class MenuBarController; // Forward declaration
@@ -27,7 +27,7 @@ class MenuItemControllerBase; // Forward declaration
 class CommandMenuItemController; // Forward declaration
 class SubMenuItemController; // Forward declaration
 	
-std::shared_ptr<IWindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
+std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
 
 std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button);
 

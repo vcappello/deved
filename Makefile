@@ -11,7 +11,7 @@ EXECUTABLE = $(OUT_DIR)/deved.exe
 CFLAGS = -c -Wall -std=c++11 -I"C:\Program Files (x86)\Lua\5.1\include" -I. -DWIN32 -mwindows
 
 # Linker Flags
-LDFLAGS = -llua52 -lcomctl32
+LDFLAGS = -llua52 -lcomctl32 -lgdi32
 
 CC = g++
 MD = mkdir

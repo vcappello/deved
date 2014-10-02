@@ -6,6 +6,7 @@
  
 #include <win/control.h>
 #include <win/property.h>
+#include <win/font.h>
 
 #ifndef WIN_BUTTON_H
 #define WIN_BUTTON_H
@@ -40,6 +41,7 @@ public:
 	Property<int> width;
 	Property<int> height;	
 	Property<bool> visible;	
+	Property<std::shared_ptr<Font>> font;
 
 	Event<> clickedEvent;
 };

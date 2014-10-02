@@ -20,6 +20,8 @@ CommandMenuItemController::CommandMenuItemController(HMENU hMenuParent, int comm
 }
 
 CommandMenuItemController::~CommandMenuItemController() {
+	// Detach menu item from parent menu
+	::RemoveMenu (mHMenuParent, mCommandId, MF_BYCOMMAND);
 }
 
 void CommandMenuItemController::handleCommand(WPARAM wParam, LPARAM lParam) {
@@ -27,8 +29,7 @@ void CommandMenuItemController::handleCommand(WPARAM wParam, LPARAM lParam) {
 }
 
 void CommandMenuItemController::destroy() {
-	// Detach menu item from parent menu
-	::RemoveMenu (mHMenuParent, mCommandId, MF_BYCOMMAND);
+	WindowsObject::destroy();
 	// Unregister from MessageDispatcher
 	MessageDispatcher::getInstance().unregisterControllerById (mCommandId);
 }

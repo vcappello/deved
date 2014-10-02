@@ -7,6 +7,7 @@ WindowBase::WindowBase(HWND hWnd) :
 }
 
 WindowBase::~WindowBase() {
+	::DestroyWindow (mHWnd);
 }
 
 Point WindowBase::getPosition() {
@@ -63,7 +64,7 @@ void WindowBase::setVisible(bool value) {
 
 void WindowBase::destroy() {
 	MessageDispatcher::getInstance().unregisterControllerByHandle (mHWnd);
-	::DestroyWindow (mHWnd);
+	WindowsObject::destroy();
 }
 
 }

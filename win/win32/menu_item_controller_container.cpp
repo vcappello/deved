@@ -8,9 +8,5 @@ MenuItemControllerContainer::MenuItemControllerContainer() {
 MenuItemControllerContainer::~MenuItemControllerContainer() {
 }
 
-void MenuItemControllerContainer::addMenuItemController(std::shared_ptr<MenuItemControllerBase> menuItem) {
-	mMenuItemControllers.push_back (menuItem);	
-}
-	
 }
 

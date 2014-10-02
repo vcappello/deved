@@ -7,7 +7,7 @@
 #ifndef WIN_WIN32_MENU_ITEM_CONTROLLER_BASE_H
 #define WIN_WIN32_MENU_ITEM_CONTROLLER_BASE_H
 
-#include "i_windows_object.h"
+#include "windows_object.h"
 #include <win/menu_item.h>
 #include <win/error.h>
 #include "utils.h"
@@ -17,7 +17,7 @@
 
 namespace win {
 
-class MenuItemControllerBase : public IWindowsObject {
+class MenuItemControllerBase : public WindowsObject {
 public:
 	MenuItemControllerBase(HMENU hMenuParent, int commandId);
 	virtual ~MenuItemControllerBase();

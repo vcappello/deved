@@ -14,8 +14,8 @@ int createControlId() {
 	return controlIdCounter++;
 }
 	
-std::shared_ptr<IWindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control) {
-	std::shared_ptr<IWindowsObject> object;
+std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control) {
+	std::shared_ptr<WindowsObject> object;
 	if (control->getType() == "Button") {
 		auto buttonControl = std::dynamic_pointer_cast<Button>(control);
 		if (!buttonControl) {
@@ -136,7 +136,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr
 	auto controller = std::make_shared<CommandMenuItemController>( menuItemControllerContainer->getHMenu(), controlId, commandMenuItem );
 	
 	// Add menu item to the parent container
-	menuItemControllerContainer->addMenuItemController (controller);
+	menuItemControllerContainer->addResource (commandMenuItem->name(), controller);
 
 	// Register the controller for notifications handling
 	MessageDispatcher::getInstance().registerController (controller);
@@ -171,7 +171,7 @@ std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<MenuIte
 	}
 	
 	// Add menu item to the parent container
-	menuItemControllerContainer->addMenuItemController (controller);
+	menuItemControllerContainer->addResource (subMenuItem->name(), controller);
 	
 	// Create children menu items
 	for (auto menuItem : subMenuItem->menuItems) {

@@ -26,17 +26,23 @@ public:
 
 	void subclass();
 	
-	// IMessageHandler implementations
+	/** @name IMessageHandler implementations
+	 */
+	///@{ 	
 	// HWND getHWnd() { return mHWnd; } // Implemented on WindowBase
 	
 	bool handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 
 	LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
+	///@}
 	
-	// INotificationHandler implementations
+	/** @name INotificationHandler implementations
+	 */
+	///@{ 	
 	int getCommandId() const { return mCommandId; }
 	
 	void handleCommand(WPARAM wParam, LPARAM lParam);
+	///@}
 	
 protected:
 	int mCommandId;

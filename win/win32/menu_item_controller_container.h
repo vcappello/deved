@@ -7,6 +7,7 @@
 #ifndef WIN_WIN32_MENU_ITEM_CONTROLLER_CONTAINER_H
 #define WIN_WIN32_MENU_ITEM_CONTROLLER_CONTAINER_H
 
+#include "windows_object.h"
 #include "menu_item_controller_base.h"
 
 #include <vector>
@@ -15,17 +16,14 @@
 
 namespace win {
 
-class MenuItemControllerContainer {
+class MenuItemControllerContainer : public WindowsObject {
 public:
 	MenuItemControllerContainer();
 	virtual ~MenuItemControllerContainer();
 	
 	virtual HMENU getHMenu() = 0;
 
-	void addMenuItemController(std::shared_ptr<MenuItemControllerBase> menuItem);
-		
 public:
-	std::vector<std::shared_ptr<MenuItemControllerBase>> mMenuItemControllers;	
 };
 
 }

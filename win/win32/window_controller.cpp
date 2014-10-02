@@ -54,12 +54,12 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 	
 	mWindow->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
 		auto controller = createControl (shared_from_this(), control);
-		mChildrenObjects.insert (std::make_pair (control->getName(), controller));
+		mResources.insert (std::make_pair (control->getName(), controller));
 	});
 	
 	mWindow->controls.itemRemovedEvent.add([&] (std::shared_ptr<Control> control) {
-		auto object = mChildrenObjects[control->getName()];
-		mChildrenObjects.erase (control->getName());
+		auto object = mResources[control->getName()];
+		mResources.erase (control->getName());
 		object->destroy();
 	});	
 }
@@ -103,10 +103,7 @@ bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 		}
 		case WM_DESTROY:
 		{
-			// Destroy all children
-			for (auto obj : mChildrenObjects) {
-				obj.second->destroy();
-			};			
+			WindowBase::destroy();		
 			::PostQuitMessage(0);
 			break;
 		}
@@ -124,15 +121,6 @@ Point WindowController::getPosition() {
 	::GetWindowRect (mHWnd, &rect);
 	
 	return Point( rect.left, rect.top );
-}
-
-void WindowController::destroy() {
-	// Destroy all children
-	for (auto obj : mChildrenObjects) {
-		obj.second->destroy();
-	};
-	
-	WindowBase::destroy();
 }
 
 }

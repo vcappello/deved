@@ -9,6 +9,7 @@
 
 #include <win/window.h>
 #include <win/error.h>
+#include <win/font.h>
 
 #include <memory>
 
@@ -17,7 +18,9 @@ namespace win {
 void createWindow(std::shared_ptr<Window> window);
 	
 int run();
-	
+
+std::shared_ptr<Font> getSystemFont();
+		
 }
 
 #endif // WIN_CREATE_WINDOW_H
