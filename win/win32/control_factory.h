@@ -22,7 +22,7 @@ class WindowsObject; // Forward declaration
 class WindowController; // Forward declaration
 class ButtonController; // Forward declaration
 class MenuBarController; // Forward declaration
-class MenuItemControllerContainer; // Forward declaration
+class IMenuItemControllerContainer; // Forward declaration
 class MenuItemControllerBase; // Forward declaration
 class CommandMenuItemController; // Forward declaration
 class SubMenuItemController; // Forward declaration
@@ -33,11 +33,11 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 
 std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar);
 
-std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem);
+std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem);
 
-std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
+std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
 
-std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
+std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
 
 }
 

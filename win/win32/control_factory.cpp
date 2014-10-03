@@ -83,7 +83,7 @@ std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowCo
 	return controller;
 }
 
-std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem) {
+std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem) {
 	std::shared_ptr<MenuItemControllerBase> menuItemControllerBase;
 	if (menuItem->getType() == "CommandMenuItem") {
 		
@@ -106,7 +106,7 @@ std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<MenuItemC
 	return menuItemControllerBase;
 }
 
-std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
+std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
 	// Get a new control ID for the menu item
 	int controlId = createControlId();
 	
@@ -136,7 +136,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr
 	auto controller = std::make_shared<CommandMenuItemController>( menuItemControllerContainer->getHMenu(), controlId, commandMenuItem );
 	
 	// Add menu item to the parent container
-	menuItemControllerContainer->addResource (commandMenuItem->name(), controller);
+	menuItemControllerContainer->addMenuItem (commandMenuItem->name(), controller);
 
 	// Register the controller for notifications handling
 	MessageDispatcher::getInstance().registerController (controller);
@@ -144,7 +144,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr
 	return controller;
 }
 
-std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<MenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem) {
+std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem) {
 	// Get a new control ID for the menu item
 	int controlId = createControlId();
 
@@ -171,7 +171,7 @@ std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<MenuIte
 	}
 	
 	// Add menu item to the parent container
-	menuItemControllerContainer->addResource (subMenuItem->name(), controller);
+	menuItemControllerContainer->addMenuItem (subMenuItem->name(), controller);
 	
 	// Create children menu items
 	for (auto menuItem : subMenuItem->menuItems) {

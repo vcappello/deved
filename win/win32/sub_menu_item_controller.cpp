@@ -33,5 +33,9 @@ SubMenuItemController::~SubMenuItemController() {
 	::DestroyMenu (mHMenu);
 }
 
+void SubMenuItemController::addMenuItem(const std::string& name, std::shared_ptr<MenuItemControllerBase> menuItem) {
+	mResources.insert (std::make_pair (name, menuItem));
+}
+
 }
 
