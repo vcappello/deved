@@ -65,6 +65,8 @@ int main() {
 		}
 	});
 	
+	button1->font (win::getSystemFont());
+	
 	auto font = win::getSystemFont();
 	std::cout << font->fontName() << std::endl;
 	std::cout << font->size() << std::endl;

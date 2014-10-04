@@ -6,6 +6,7 @@
 #include "command_menu_item_controller.h"
 #include "sub_menu_item_controller.h"
 #include "message_dispatcher.h"
+#include "font_resource.h"
 
 namespace win {
 
@@ -63,6 +64,11 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	// Create ButtonController instance
 	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
 	MessageDispatcher::getInstance().registerController (controller);
+	
+	if (button->font()) {
+		auto fontResource = createFontResource (button->font());
+		controller->setFont (fontResource);
+	}
 	
 	// Subclass window
 	controller->subclass();
@@ -179,6 +185,29 @@ std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuIt
 	}
 	
 	return controller;
+}
+
+std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font) {
+	LOGFONT logFont;
+	logFont = {0};
+	
+	std::copy (font->fontName().begin(), font->fontName().end(), logFont.lfFaceName);
+	
+	HDC hDC = ::GetDC(0);
+	logFont.lfHeight = -MulDiv(font->size(), ::GetDeviceCaps(hDC, LOGPIXELSY), 72);
+	
+	logFont.lfWeight = font->bold() ? FW_BOLD : FW_NORMAL;
+	logFont.lfItalic = font->italic() ? TRUE : FALSE;
+	logFont.lfUnderline = font->underline() ? TRUE : FALSE;
+	
+	HFONT hFont = ::CreateFontIndirect (&logFont);
+	if (!hFont) {
+		throw Error( "Error creating font" );
+	}
+	
+	auto fontResource = std::make_shared<FontResource>( hFont, font );
+	
+	return fontResource;
 }
 
 }

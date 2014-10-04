@@ -62,6 +62,11 @@ void WindowBase::setVisible(bool value) {
 	}
 }
 
+void WindowBase::setFont(std::shared_ptr<FontResource> fontResource) {
+	addResource (fontResource->getFont()->name(), fontResource);
+	::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(fontResource->getHFont()), TRUE);
+}
+
 void WindowBase::destroy() {
 	MessageDispatcher::getInstance().unregisterControllerByHandle (mHWnd);
 	WindowsObject::destroy();

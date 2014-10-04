@@ -8,6 +8,7 @@
 #define WIN_WIN32_FONT_RESOURCE_H
 
 #include "windows_object.h"
+#include <win/font.h>
 
 #include <windows.h>
 
@@ -15,11 +16,16 @@ namespace win {
 	
 class FontResource : public WindowsObject {
 public:
-	FontResource(HFONT hFont);
+	FontResource(HFONT hFont, std::shared_ptr<Font> font);
 	virtual ~FontResource();
 
+	HFONT getHFont() { return mHFont; }
+	
+	std::shared_ptr<Font> getFont() { return mFont; }
+	
 protected:
 	HFONT mHFont;
+	std::shared_ptr<Font> mFont;
 };
 
 }

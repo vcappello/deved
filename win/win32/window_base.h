@@ -10,6 +10,7 @@
 #include "i_message_handler.h"
 #include "windows_object.h"
 #include "message_dispatcher.h"
+#include "font_resource.h"
 #include <win/point.h>
 #include <win/size.h>
 
@@ -36,6 +37,8 @@ public:
 	
 	bool isVisible();
 	void setVisible(bool value);
+
+	void setFont(std::shared_ptr<FontResource> fontResource);
 
 	/** @name IMessageHandler implementations
 	 */

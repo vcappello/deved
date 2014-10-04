@@ -12,6 +12,7 @@
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>
+#include <win/font.h>
 
 #include <memory>
 #include <windows.h>
@@ -26,6 +27,7 @@ class IMenuItemControllerContainer; // Forward declaration
 class MenuItemControllerBase; // Forward declaration
 class CommandMenuItemController; // Forward declaration
 class SubMenuItemController; // Forward declaration
+class FontResource; // Forward declaration
 	
 std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
 
@@ -38,6 +40,8 @@ std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItem
 std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
 
 std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
+
+std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font);
 
 }
 
