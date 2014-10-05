@@ -1,5 +1,7 @@
 #include "window_base.h"
 
+#include "control_factory.h"
+
 namespace win {
 
 WindowBase::WindowBase(HWND hWnd) :
@@ -63,8 +65,15 @@ void WindowBase::setVisible(bool value) {
 }
 
 void WindowBase::setFont(std::shared_ptr<FontResource> fontResource) {
+	// TODO: remove previous resource
 	addResource (fontResource->getFont()->name(), fontResource);
 	::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(fontResource->getHFont()), TRUE);
+	
+	// TODO: remove revious event handler
+	fontResource->changedEvent.add([&]{ 
+		auto newFontResource = createFontResource (fontResource->getFont());
+		setFont (newFontResource);
+	});
 }
 
 void WindowBase::destroy() {

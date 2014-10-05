@@ -63,6 +63,7 @@ int main() {
 			auto item = std::dynamic_pointer_cast<win::CommandMenuItem>( subMenuItem3->menuItems[name] );
 			item->enabled (!item->enabled());
 		}
+		button1->font()->bold (!button1->font()->bold());
 	});
 	
 	button1->font (win::getSystemFont());

@@ -9,6 +9,7 @@
 
 #include "windows_object.h"
 #include <win/font.h>
+#include <win/event.h>
 
 #include <windows.h>
 
@@ -22,6 +23,8 @@ public:
 	HFONT getHFont() { return mHFont; }
 	
 	std::shared_ptr<Font> getFont() { return mFont; }
+	
+	Event<> changedEvent;
 	
 protected:
 	HFONT mHFont;
