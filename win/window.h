@@ -9,6 +9,7 @@
 
 #include <win/control.h>
 #include <win/property.h>
+#include <win/font.h>
 
 #include <memory>
 #include <string>
@@ -57,6 +58,7 @@ public:
 	Property<int> width;
 	Property<int> height;
 	Property<bool> visible;
+	Property<std::shared_ptr<Font>> font;
 	EntityMap<Control> controls;
 };
 

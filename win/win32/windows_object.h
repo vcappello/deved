@@ -19,6 +19,8 @@ public:
 	virtual ~WindowsObject();
 	
 	virtual void addResource(const std::string& name, std::shared_ptr<WindowsObject> object);
+	virtual bool resourceExist(const std::string& name) const;
+	virtual std::shared_ptr<WindowsObject> getResource(const std::string& name);
 
 	virtual void destroy();
 

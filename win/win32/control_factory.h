@@ -13,6 +13,7 @@
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>
 #include <win/font.h>
+#include <win/create_window.h>
 
 #include <memory>
 #include <windows.h>
@@ -41,6 +42,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr
 
 std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
 
+HFONT createHFont(std::shared_ptr<Font> font);
 std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font);
 
 }

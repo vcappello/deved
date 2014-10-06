@@ -29,6 +29,9 @@ public:
 protected:
 	HFONT mHFont;
 	std::shared_ptr<Font> mFont;
+
+protected:
+	void regenerateHFont();
 };
 
 }

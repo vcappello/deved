@@ -3,13 +3,13 @@
  * This projected is licensed under the terms of the MIT license, 
  * refer to the file LICENSE.txt.
  */
+
+#ifndef WIN_BUTTON_H
+#define WIN_BUTTON_H
  
 #include <win/control.h>
 #include <win/property.h>
 #include <win/font.h>
-
-#ifndef WIN_BUTTON_H
-#define WIN_BUTTON_H
 
 namespace win {
 

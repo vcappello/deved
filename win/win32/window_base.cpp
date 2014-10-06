@@ -65,15 +65,19 @@ void WindowBase::setVisible(bool value) {
 }
 
 void WindowBase::setFont(std::shared_ptr<FontResource> fontResource) {
-	// TODO: remove previous resource
-	addResource (fontResource->getFont()->name(), fontResource);
 	::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(fontResource->getHFont()), TRUE);
-	
-	// TODO: remove revious event handler
-	fontResource->changedEvent.add([&]{ 
-		auto newFontResource = createFontResource (fontResource->getFont());
-		setFont (newFontResource);
-	});
+
+	if (!resourceExist (fontResource->getFont()->name())) {
+		mCurrentFontResourceName = fontResource->getFont()->name();
+		addResource (mCurrentFontResourceName, fontResource);
+		
+		fontResource->changedEvent.add([&]{ 
+			auto resource = std::dynamic_pointer_cast<FontResource>(mResources[mCurrentFontResourceName]);
+			if (resource) {
+				::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(resource->getHFont()), TRUE);
+			}
+		});
+	}
 }
 
 void WindowBase::destroy() {

@@ -61,6 +61,15 @@ void createWindow(std::shared_ptr<Window> window) {
 	// Create WindowController instance
 	auto controller = std::make_shared<WindowController>( hWnd, window );
 	
+	// Initialize font
+	std::shared_ptr<FontResource> fontResource;
+	if (window->font()) {
+		fontResource = createFontResource (window->font());
+	} else {
+		fontResource = createFontResource (getSystemFont());
+	}
+	controller->setFont (fontResource);
+	
 	// Add owned controls
 	for (auto control : window->controls) {
 		createControl (controller, control.second);

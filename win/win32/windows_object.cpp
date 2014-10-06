@@ -11,8 +11,16 @@ void WindowsObject::addResource(const std::string& name, std::shared_ptr<Windows
 	mResources.insert (std::make_pair( name, object ));
 }
 
+bool WindowsObject::resourceExist(const std::string& name) const {
+	return mResources.find (name) != mResources.end();
+}
+
+std::shared_ptr<WindowsObject> WindowsObject::getResource(const std::string& name) {
+	return mResources[name];
+}
+
 void WindowsObject::destroy() {
-	// Destroy all children
+	// Destroy all resources
 	for (auto obj : mResources) {
 		obj.second->destroy();
 	};	

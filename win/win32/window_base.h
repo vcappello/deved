@@ -58,6 +58,7 @@ public:
 	
 protected:
 	HWND mHWnd;
+	std::string mCurrentFontResourceName;
 };
 
 }

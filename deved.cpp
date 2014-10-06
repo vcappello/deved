@@ -66,14 +66,7 @@ int main() {
 		button1->font()->bold (!button1->font()->bold());
 	});
 	
-	button1->font (win::getSystemFont());
-	
-	auto font = win::getSystemFont();
-	std::cout << font->fontName() << std::endl;
-	std::cout << font->size() << std::endl;
-	std::cout << font->bold() << std::endl;
-	std::cout << font->italic() << std::endl;
-	std::cout << font->underline() << std::endl;
+	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));
 	
 	win::createWindow (window);
 	win::run();

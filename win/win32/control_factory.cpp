@@ -65,10 +65,14 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
 	MessageDispatcher::getInstance().registerController (controller);
 	
+	// Initialize font
+	std::shared_ptr<FontResource> fontResource;
 	if (button->font()) {
-		auto fontResource = createFontResource (button->font());
-		controller->setFont (fontResource);
+		fontResource = createFontResource (button->font());
+	} else {
+		fontResource = createFontResource (getSystemFont());
 	}
+	controller->setFont (fontResource);
 	
 	// Subclass window
 	controller->subclass();
@@ -187,7 +191,7 @@ std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuIt
 	return controller;
 }
 
-std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font) {
+HFONT createHFont(std::shared_ptr<Font> font) {
 	LOGFONT logFont;
 	logFont = {0};
 	
@@ -204,6 +208,12 @@ std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font) {
 	if (!hFont) {
 		throw Error( "Error creating font" );
 	}
+
+	return hFont;
+}
+
+std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font) {
+	HFONT hFont = createHFont (font);
 	
 	auto fontResource = std::make_shared<FontResource>( hFont, font );
 	
