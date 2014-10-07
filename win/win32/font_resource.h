@@ -24,6 +24,8 @@ public:
 	
 	std::shared_ptr<Font> getFont() { return mFont; }
 	
+	void updateModelFromLogFont(const LOGFONT& logFont);
+	
 	Event<> changedEvent;
 	
 protected:

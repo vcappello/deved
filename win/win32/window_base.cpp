@@ -64,7 +64,11 @@ void WindowBase::setVisible(bool value) {
 	}
 }
 
-void WindowBase::setFont(std::shared_ptr<FontResource> fontResource) {
+std::shared_ptr<FontResource> WindowBase::getFontResource() {
+	return std::dynamic_pointer_cast<FontResource>(mResources[mCurrentFontResourceName]);
+}
+
+void WindowBase::setFontResource(std::shared_ptr<FontResource> fontResource) {
 	::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(fontResource->getHFont()), TRUE);
 
 	if (!resourceExist (fontResource->getFont()->name())) {
@@ -72,7 +76,7 @@ void WindowBase::setFont(std::shared_ptr<FontResource> fontResource) {
 		addResource (mCurrentFontResourceName, fontResource);
 		
 		fontResource->changedEvent.add([&]{ 
-			auto resource = std::dynamic_pointer_cast<FontResource>(mResources[mCurrentFontResourceName]);
+			auto resource = getFontResource();
 			if (resource) {
 				::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(resource->getHFont()), TRUE);
 			}

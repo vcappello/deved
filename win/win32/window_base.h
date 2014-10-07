@@ -38,7 +38,8 @@ public:
 	bool isVisible();
 	void setVisible(bool value);
 
-	void setFont(std::shared_ptr<FontResource> fontResource);
+	std::shared_ptr<FontResource> getFontResource();
+	void setFontResource(std::shared_ptr<FontResource> fontResource);
 
 	/** @name IMessageHandler implementations
 	 */

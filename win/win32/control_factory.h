@@ -43,6 +43,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr
 std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
 
 HFONT createHFont(std::shared_ptr<Font> font);
+std::shared_ptr<Font> createFont(const LOGFONT& logFont);
 std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font);
 
 }

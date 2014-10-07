@@ -68,7 +68,7 @@ void createWindow(std::shared_ptr<Window> window) {
 	} else {
 		fontResource = createFontResource (getSystemFont());
 	}
-	controller->setFont (fontResource);
+	controller->setFontResource (fontResource);
 	
 	// Add owned controls
 	for (auto control : window->controls) {
@@ -96,16 +96,7 @@ std::shared_ptr<Font> getSystemFont() {
 	ncm.cbSize = sizeof(NONCLIENTMETRICS);
 	::SystemParametersInfo(SPI_GETNONCLIENTMETRICS, sizeof(NONCLIENTMETRICS), &ncm, 0);
 	
-	HDC hDC = ::GetDC(0);
-	
-	int size = -MulDiv(72, ncm.lfMessageFont.lfHeight, ::GetDeviceCaps(hDC, LOGPIXELSY));
-	
-	bool bold = (ncm.lfMessageFont.lfWeight > FW_NORMAL);
-	bool italic = (ncm.lfMessageFont.lfItalic != false);
-	bool underline = (ncm.lfMessageFont.lfUnderline != false);
-
-	auto font = std::make_shared<Font>( "System", 
-		ncm.lfMessageFont.lfFaceName, size, bold, italic, underline );
+	auto font = createFont (ncm.lfMessageFont);
 	
 	return font;
 }

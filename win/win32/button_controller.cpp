@@ -56,25 +56,35 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 
 ButtonController::~ButtonController() {
 	if (mOldWndProc) {
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, (LONG_PTR)mOldWndProc);
+		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( mOldWndProc ));
 	}
 }
 
 void ButtonController::subclass() {
-	mOldWndProc = (WNDPROC)SetWindowLongPtr (mHWnd, GWLP_WNDPROC, (LONG_PTR)MessageDispatcher::uniqueWndProc);
+	mOldWndProc = (WNDPROC)SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( MessageDispatcher::uniqueWndProc ));
 }
 
 bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
 	switch (message) {
 		case WM_SETTEXT:
 		{
-			std::string text( (LPCTSTR)lParam );
+			std::string text( reinterpret_cast<LPCTSTR>( lParam ));
 			mButton->text(text);
+			break;
+		}
+		case WM_SETFONT:
+		{
+			HFONT hFont = reinterpret_cast<HFONT>( wParam );
+			if (hFont != getFontResource()->getHFont()) {
+				LOGFONT logFont;
+				::GetObject (hFont, sizeof(logFont), &logFont);
+				getFontResource()->updateModelFromLogFont (logFont);
+			}
 			break;
 		}
 		case WM_WINDOWPOSCHANGED:
 		{
-			WINDOWPOS* windowPos = (WINDOWPOS*)lParam;
+			WINDOWPOS* windowPos = reinterpret_cast<WINDOWPOS*>( lParam );
 			if (!(windowPos->flags & SWP_NOSIZE)) {
 				mButton->width (windowPos->cx);
 				mButton->height (windowPos->cy);
@@ -87,7 +97,7 @@ bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 		}
 		case WM_STYLECHANGED:
 		{
-			STYLESTRUCT* styleStruct = (STYLESTRUCT*)lParam;
+			STYLESTRUCT* styleStruct = reinterpret_cast<STYLESTRUCT*>( lParam );
 			if ((styleStruct->styleOld & WS_VISIBLE) != (styleStruct->styleNew & WS_VISIBLE)) {
 				mButton->visible (styleStruct->styleNew & WS_VISIBLE);
 			}

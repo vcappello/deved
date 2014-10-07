@@ -72,7 +72,7 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	} else {
 		fontResource = createFontResource (getSystemFont());
 	}
-	controller->setFont (fontResource);
+	controller->setFontResource (fontResource);
 	
 	// Subclass window
 	controller->subclass();
@@ -210,6 +210,21 @@ HFONT createHFont(std::shared_ptr<Font> font) {
 	}
 
 	return hFont;
+}
+
+std::shared_ptr<Font> createFont(const LOGFONT& logFont) {
+	HDC hDC = ::GetDC(0);
+	
+	int size = -MulDiv(72, logFont.lfHeight, ::GetDeviceCaps(hDC, LOGPIXELSY));
+	
+	bool bold = (logFont.lfWeight > FW_NORMAL);
+	bool italic = (logFont.lfItalic != false);
+	bool underline = (logFont.lfUnderline != false);
+
+	auto font = std::make_shared<Font>( "System", 
+		logFont.lfFaceName, size, bold, italic, underline );
+	
+	return font;	
 }
 
 std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font) {

@@ -19,6 +19,15 @@ FontResource::~FontResource() {
 	::DeleteObject (mHFont);
 }
 
+void FontResource::updateModelFromLogFont(const LOGFONT& logFont) {
+	auto newFont = createFont (logFont);
+	mFont->fontName (newFont->fontName());
+	mFont->size (newFont->size());
+	mFont->bold (newFont->bold());
+	mFont->italic (newFont->italic());
+	mFont->underline (newFont->underline());
+}
+
 void FontResource::regenerateHFont() {
 	HFONT oldHFont = mHFont;
 	
