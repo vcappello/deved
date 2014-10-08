@@ -1,5 +1,8 @@
 #include "message_dispatcher.h"
 
+#include "window_controller.h"
+#include "message_dispatcher.h"
+
 namespace win {
 	
 MessageDispatcher::MessageDispatcher() {
@@ -19,13 +22,26 @@ LRESULT CALLBACK MessageDispatcher::uniqueWndProc(HWND hWnd, UINT message, WPARA
 	LRESULT result = 0;
 	switch (message)
     {
+		case WM_NCCREATE:
+		{
+			if (reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams != 0) {
+				auto window = reinterpret_cast<std::shared_ptr<Window>*>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
+				auto controller = createWindowController (hWnd, *window);
+			}
+			result = getInstance().dispatchMessage (hWnd, message, wParam, lParam);
+			break;
+		}
 		case WM_COMMAND:
+		{
 			getInstance().dispatchMessage (hWnd, message, wParam, lParam);
 			result = getInstance().dispatchCommand (wParam, lParam);
 			break;
+		}
 		default:
+		{
 			result = getInstance().dispatchMessage (hWnd, message, wParam, lParam);
 			break;
+		}
     }
 	
 	return result;

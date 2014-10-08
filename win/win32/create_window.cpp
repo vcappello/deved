@@ -5,6 +5,7 @@
 #include "utils.h"
 #include "window_controller.h"
 #include "message_dispatcher.h"
+#include "message_loop.h"
 
 #include <windows.h>
 
@@ -52,43 +53,18 @@ void createWindow(std::shared_ptr<Window> window) {
 	                NULL,
 	                NULL,
 	                hInstance,
-	                NULL);
+	                reinterpret_cast<void*>( &window ));
 
 	if (!hWnd) {
 		throw Error( formatSystemMessage (::GetLastError()) );
 	}
-	
-	// Create WindowController instance
-	auto controller = std::make_shared<WindowController>( hWnd, window );
-	
-	// Initialize font
-	std::shared_ptr<FontResource> fontResource;
-	if (window->font()) {
-		fontResource = createFontResource (window->font());
-	} else {
-		fontResource = createFontResource (getSystemFont());
-	}
-	controller->setFontResource (fontResource);
-	
-	// Add owned controls
-	for (auto control : window->controls) {
-		createControl (controller, control.second);
-	}
-	
-	// Register the window controller
-	MessageDispatcher::getInstance().registerController (controller);
+
+	// The WindowController is created when the message WM_NCCREATE is notified
+	// to the MessageDispatcher
 }
 
 int run() {
-    // Main message loop:
-    MSG msg;
-    while (::GetMessage (&msg, NULL, 0, 0))
-    {
-        ::TranslateMessage (&msg);
-        ::DispatchMessage (&msg);
-    }
-
-    return (int)msg.wParam;	
+    return MessageLoop::getInstance().start();
 }
 
 std::shared_ptr<Font> getSystemFont() {

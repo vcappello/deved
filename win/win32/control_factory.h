@@ -7,6 +7,7 @@
 #ifndef WIN_CONTROL_FACTORY_H
 #define WIN_CONTROL_FACTORY_H
 
+#include <win/window.h>
 #include <win/control.h>
 #include <win/button.h>
 #include <win/menu_bar.h>
@@ -29,7 +30,8 @@ class MenuItemControllerBase; // Forward declaration
 class CommandMenuItemController; // Forward declaration
 class SubMenuItemController; // Forward declaration
 class FontResource; // Forward declaration
-	
+
+// TODO: need to refactor, rename this functions *Controller	
 std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
 
 std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button);
@@ -41,6 +43,8 @@ std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItem
 std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
 
 std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
+
+std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_ptr<Window> window);
 
 HFONT createHFont(std::shared_ptr<Font> font);
 std::shared_ptr<Font> createFont(const LOGFONT& logFont);

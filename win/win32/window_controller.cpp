@@ -75,6 +75,15 @@ void WindowController::setMenuBarController(std::shared_ptr<MenuBarController> m
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
 	
 	switch (message) {
+		case WM_ACTIVATE:
+		{
+			if (wParam == 0) {
+				MessageLoop::getInstance().setActiveWindowHWnd (NULL);
+			} else {
+				MessageLoop::getInstance().setActiveWindowHWnd (mHWnd);
+			}
+			break;
+		}
 		case WM_SETTEXT:
 		{
 			std::string text( (LPCTSTR)lParam );

@@ -11,6 +11,7 @@
 #include "window_base.h"
 #include "menu_bar_controller.h"
 #include "control_factory.h"
+#include "message_loop.h"
 
 #include <memory>
 #include <map>
