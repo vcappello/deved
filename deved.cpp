@@ -67,6 +67,8 @@ int main() {
 	});
 	
 	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));
+	button2->defaultEnter (true); // TODO: need to test this, need an edit control
+	button2->enabled (false);
 	
 	win::createWindow (window);
 	win::run();

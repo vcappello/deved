@@ -39,8 +39,15 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	DWORD window_style_ex = 0;
 	DWORD window_style = WS_TABSTOP | WS_CHILD;
 	
-	if (button->visible())
+	if (button->defaultEnter()) {
+		window_style |= BS_DEFPUSHBUTTON;
+	}
+	if (!button->enabled()) {
+		window_style |= WS_DISABLED;
+	}
+	if (button->visible()) {
 		window_style |= WS_VISIBLE;
+	}
 	
 	int controlId = createControlId();
 	HWND hWnd = CreateWindowEx (

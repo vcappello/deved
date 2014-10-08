@@ -17,7 +17,9 @@ class Button : public Control {
 public:
 	explicit Button(const std::string& name) :
 		Control( name ),
-		visible( true ) {
+		visible( true ),
+		enabled( true ),
+		defaultEnter( false ) {
 	}
 	Button(const std::string& name, const std::string& text, int left, int top, int width, int height) :
 		Control( name ),
@@ -26,7 +28,9 @@ public:
 		top( top ),
 		width( width ),
 		height( height ),
-		visible( true ) {
+		visible( true ),
+		enabled( true ),
+		defaultEnter( false ) {
 	}		
 	virtual ~Button() {
 	}
@@ -40,7 +44,9 @@ public:
 	Property<int> top;
 	Property<int> width;
 	Property<int> height;	
-	Property<bool> visible;	
+	Property<bool> visible;
+	Property<bool> enabled;
+	Property<bool> defaultEnter;
 	Property<std::shared_ptr<Font>> font;
 
 	Event<> clickedEvent;

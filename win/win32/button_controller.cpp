@@ -98,6 +98,12 @@ bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 		case WM_STYLECHANGED:
 		{
 			STYLESTRUCT* styleStruct = reinterpret_cast<STYLESTRUCT*>( lParam );
+			if ((styleStruct->styleOld & BS_DEFPUSHBUTTON) != (styleStruct->styleNew & BS_DEFPUSHBUTTON)) {
+				mButton->defaultEnter (styleStruct->styleNew & BS_DEFPUSHBUTTON);
+			}
+			if ((styleStruct->styleOld & WS_DISABLED) != (styleStruct->styleNew & WS_DISABLED)) {
+				mButton->enabled (!(styleStruct->styleNew & WS_DISABLED));
+			}
 			if ((styleStruct->styleOld & WS_VISIBLE) != (styleStruct->styleNew & WS_VISIBLE)) {
 				mButton->visible (styleStruct->styleNew & WS_VISIBLE);
 			}
