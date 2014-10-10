@@ -72,6 +72,14 @@ void WindowBase::setEnabled(bool value) {
 	::EnableWindow (mHWnd, value);
 }
 
+bool WindowBase::hasBorder() {
+	return getExStyleBit (WS_EX_CLIENTEDGE);
+}
+
+void WindowBase::setBorder(bool value) {
+	setExStyleBit (WS_EX_CLIENTEDGE, value);
+}
+
 std::shared_ptr<FontResource> WindowBase::getFontResource() {
 	return std::dynamic_pointer_cast<FontResource>(mResources[mCurrentFontResourceName]);
 }
@@ -120,6 +128,24 @@ void WindowBase::setStyleBit(DWORD flag, bool value) {
 	}
 	
 	::SetWindowLong (mHWnd, GWL_STYLE, style);
+}
+
+bool WindowBase::getExStyleBit(DWORD flag) {
+	LONG style = ::GetWindowLong (mHWnd, GWL_EXSTYLE);
+	
+	return style & flag;
+}
+
+void WindowBase::setExStyleBit(DWORD flag, bool value) {
+	LONG style = ::GetWindowLong (mHWnd, GWL_EXSTYLE);
+	
+	if (value) {
+		style |= flag;
+	} else {
+		style &= (!flag);
+	}
+	
+	::SetWindowLong (mHWnd, GWL_EXSTYLE, style);
 }
 
 HWND WindowBase::getTopLevelHWnd() {

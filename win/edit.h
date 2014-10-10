@@ -19,7 +19,8 @@ public:
 		Control( name ),
 		visible( true ),
 		enabled( true ),
-		multiLine( false ) {
+		multiline( false ),
+		border( true ) {
 	}
 	Edit(const std::string& name, const std::string& text, int left, int top, int width, int height) :
 		Control( name ),
@@ -30,7 +31,8 @@ public:
 		height( height ),
 		visible( true ),
 		enabled( true ),
-		multiLine( false ) {
+		multiline( false ),
+		border( true ) {
 	}		
 	virtual ~Edit() {
 	}
@@ -52,7 +54,8 @@ public:
 	Property<int> height;	
 	Property<bool> visible;
 	Property<bool> enabled;
-	Property<bool> multiLine;
+	Property<bool> multiline;
+	Property<bool> border;
 	Property<std::shared_ptr<Font>> font;
 	///@}
 };

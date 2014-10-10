@@ -2,6 +2,7 @@
 
 #include "window_controller.h"
 #include "button_controller.h"
+#include "edit_controller.h"
 #include "menu_bar_controller.h"
 #include "command_menu_item_controller.h"
 #include "sub_menu_item_controller.h"
@@ -23,6 +24,12 @@ std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowController> w
 			throw Error( "Can not convert control to 'Button'" );
 		}
 		object = createButtonControl (windowController, buttonControl);
+	} else if (control->getType() == "Edit") {
+		auto editControl = std::dynamic_pointer_cast<Edit>(control);
+		if (!editControl) {
+			throw Error( "Can not convert control to 'Edit'" );
+		}
+		object = createEditControl (windowController, editControl);
 	} else if (control->getType() == "MenuBar") {
 		auto menuBarControl = std::dynamic_pointer_cast<MenuBar>(control);
 		if (!menuBarControl) {
@@ -72,6 +79,7 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
 	MessageDispatcher::getInstance().registerController (controller);
 
+	// Set the default ID on the WindowController
 	if (button->defaultEnter()) {
 		windowController->setDefaultId (controlId);
 	}
@@ -89,6 +97,63 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	controller->subclass();
 	
 	return controller;
+}
+
+std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Edit> edit) {
+	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+
+	DWORD window_style_ex = 0;
+	DWORD window_style = WS_TABSTOP | WS_CHILD;
+	
+	if (edit->multiline()) {
+		window_style |= ES_MULTILINE;
+	}
+	if (!edit->enabled()) {
+		window_style |= WS_DISABLED;
+	}
+	if (edit->visible()) {
+		window_style |= WS_VISIBLE;
+	}
+	if (edit->border()) {
+		window_style_ex |= WS_EX_CLIENTEDGE;
+	}
+	
+	int controlId = createControlId();
+	HWND hWnd = CreateWindowEx (
+					window_style_ex,
+	                "EDIT",
+	                edit->text().c_str(),
+	                window_style,
+					edit->left(),
+					edit->top(),
+					edit->width(),
+					edit->height(),
+	                windowController->getHWnd(),
+	                (HMENU)(intptr_t)controlId,
+	                hInstance,
+	                NULL);
+
+	if (!hWnd) {
+		throw Error( formatSystemMessage (::GetLastError()) );
+	}	
+	
+	// Create EditController instance
+	auto controller = std::make_shared<EditController>( hWnd, controlId, edit );
+	MessageDispatcher::getInstance().registerController (controller);
+	
+	// Initialize font
+	std::shared_ptr<FontResource> fontResource;
+	if (edit->font()) {
+		fontResource = createFontResource (edit->font());
+	} else {
+		fontResource = createFontResource (getSystemFont());
+	}
+	controller->setFontResource (fontResource);
+	
+	// Subclass window
+	controller->subclass();
+	
+	return controller;	
 }
 
 std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar) {

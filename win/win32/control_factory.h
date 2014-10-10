@@ -10,6 +10,7 @@
 #include <win/window.h>
 #include <win/control.h>
 #include <win/button.h>
+#include <win/edit.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>
@@ -21,20 +22,27 @@
 
 namespace win {
 
-class WindowsObject; // Forward declaration
-class WindowController; // Forward declaration
-class ButtonController; // Forward declaration
-class MenuBarController; // Forward declaration
-class IMenuItemControllerContainer; // Forward declaration
-class MenuItemControllerBase; // Forward declaration
-class CommandMenuItemController; // Forward declaration
-class SubMenuItemController; // Forward declaration
-class FontResource; // Forward declaration
+/** @name Forward declarations
+ */
+///@{ 
+class WindowsObject; 
+class WindowController; 
+class ButtonController; 
+class EditController;
+class MenuBarController; 
+class IMenuItemControllerContainer; 
+class MenuItemControllerBase; 
+class CommandMenuItemController; 
+class SubMenuItemController; 
+class FontResource; 
+///@}
 
 // TODO: need to refactor, rename this functions *Controller	
 std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control);
 
 std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button);
+
+std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Edit> edit);
 
 std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar);
 

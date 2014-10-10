@@ -9,6 +9,7 @@
 
 #include <win/window.h>
 #include <win/button.h>
+#include <win/edit.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>
@@ -18,6 +19,7 @@ int main() {
 	std::shared_ptr<win::Button> button1;
 	std::shared_ptr<win::Button> button2;
 	std::shared_ptr<win::Button> button3;
+	std::shared_ptr<win::Edit> edit1;
 	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
 	std::shared_ptr<win::SubMenuItem> subMenuItem3;
 	auto window = std::shared_ptr<win::Window>( new win::Window( "Window1", "My window", 10, 10, 300, 200, {
@@ -36,7 +38,8 @@ int main() {
 		})),
 		button1 = std::make_shared<win::Button>("Button1", "Add menu item", 10, 10, 200, 30),
 		button2 = std::make_shared<win::Button>("Button2", "Delete menu item", 10, 40, 200, 30),
-		button3 = std::make_shared<win::Button>("Button3", "Disable menu item", 10, 70, 200, 30)
+		button3 = std::make_shared<win::Button>("Button3", "Disable menu item", 10, 70, 200, 30),
+		edit1 = std::make_shared<win::Edit>("Edit1", "Type some text", 10, 100, 200, 30)
 	}));
 
 	int counter = 0;
@@ -69,7 +72,7 @@ int main() {
 	
 	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));
 	button2->enabled (false);
-	button3->defaultEnter (true);
+	button3->defaultEnter (true); // TODO: test this after Edit control
 	
 	win::createWindow (window);
 	win::run();

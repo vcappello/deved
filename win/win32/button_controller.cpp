@@ -67,6 +67,7 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 }
 
 ButtonController::~ButtonController() {
+	// Remove subclassing
 	if (mOldWndProc) {
 		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( mOldWndProc ));
 	}
@@ -85,7 +86,9 @@ void ButtonController::setDefault(bool value) {
 }
 
 void ButtonController::subclass() {
-	mOldWndProc = (WNDPROC)SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( MessageDispatcher::uniqueWndProc ));
+	mOldWndProc = reinterpret_cast<WNDPROC>( 
+		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( 
+			MessageDispatcher::uniqueWndProc )) );
 }
 
 bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {

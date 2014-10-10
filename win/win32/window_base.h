@@ -41,6 +41,9 @@ public:
 	bool isEnabled();
 	void setEnabled(bool value);
 
+	bool hasBorder();
+	void setBorder(bool value);
+
 	std::shared_ptr<FontResource> getFontResource();
 	void setFontResource(std::shared_ptr<FontResource> fontResource);
 
@@ -49,6 +52,9 @@ public:
 	
 	bool getStyleBit(DWORD flag);
 	void setStyleBit(DWORD flag, bool value);
+
+	bool getExStyleBit(DWORD flag);
+	void setExStyleBit(DWORD flag, bool value);
 	
 	HWND getTopLevelHWnd();
 	
