@@ -64,6 +64,14 @@ void WindowBase::setVisible(bool value) {
 	}
 }
 
+bool WindowBase::isEnabled() {
+	return ::IsWindowEnabled (mHWnd);
+}
+
+void WindowBase::setEnabled(bool value) {
+	::EnableWindow (mHWnd, value);
+}
+
 std::shared_ptr<FontResource> WindowBase::getFontResource() {
 	return std::dynamic_pointer_cast<FontResource>(mResources[mCurrentFontResourceName]);
 }
@@ -82,6 +90,40 @@ void WindowBase::setFontResource(std::shared_ptr<FontResource> fontResource) {
 			}
 		});
 	}
+}
+
+int WindowBase::getDefaultId() {
+	DWORD defId = ::SendMessage (mHWnd, DM_GETDEFID, 0, 0);
+	if (HIWORD(defId) == DC_HASDEFID) {
+		return LOWORD(defId);
+	}
+	return -1;
+}
+
+void WindowBase::setDefaultId(int id) {
+	::SendMessage (mHWnd, DM_SETDEFID, id, 0);
+}
+
+bool WindowBase::getStyleBit(DWORD flag) {
+	LONG style = ::GetWindowLong (mHWnd, GWL_STYLE);
+	
+	return style & flag;
+}
+
+void WindowBase::setStyleBit(DWORD flag, bool value) {
+	LONG style = ::GetWindowLong (mHWnd, GWL_STYLE);
+	
+	if (value) {
+		style |= flag;
+	} else {
+		style &= (!flag);
+	}
+	
+	::SetWindowLong (mHWnd, GWL_STYLE, style);
+}
+
+HWND WindowBase::getTopLevelHWnd() {
+	return ::GetAncestor (mHWnd, GA_ROOT);
 }
 
 void WindowBase::destroy() {

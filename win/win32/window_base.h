@@ -38,9 +38,20 @@ public:
 	bool isVisible();
 	void setVisible(bool value);
 
+	bool isEnabled();
+	void setEnabled(bool value);
+
 	std::shared_ptr<FontResource> getFontResource();
 	void setFontResource(std::shared_ptr<FontResource> fontResource);
 
+	int getDefaultId();
+	void setDefaultId(int id);
+	
+	bool getStyleBit(DWORD flag);
+	void setStyleBit(DWORD flag, bool value);
+	
+	HWND getTopLevelHWnd();
+	
 	/** @name IMessageHandler implementations
 	 */
 	///@{ 

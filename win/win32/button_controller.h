@@ -24,6 +24,9 @@ public:
 
 	std::shared_ptr<Button> getButton() { return mButton; }
 
+	bool isDefault();
+	void setDefault(bool value);
+	
 	void subclass();
 	
 	/** @name IMessageHandler implementations

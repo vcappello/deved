@@ -52,11 +52,35 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 			setVisible (mButton->visible());
 		}
 	});	
+
+	mButton->enabled.changedEvent.add([&] {
+		if (isEnabled() != mButton->enabled()) {
+			setEnabled (mButton->enabled());
+		}
+	});		
+
+	mButton->defaultEnter.changedEvent.add([&] {
+		if (isDefault() != mButton->defaultEnter()) {
+			setDefault (mButton->defaultEnter());
+		}
+	});
 }
 
 ButtonController::~ButtonController() {
 	if (mOldWndProc) {
 		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( mOldWndProc ));
+	}
+}
+
+bool ButtonController::isDefault() {
+	return getStyleBit (BS_DEFPUSHBUTTON);
+}
+
+void ButtonController::setDefault(bool value) {
+	setStyleBit (BS_DEFPUSHBUTTON, value);
+	HWND hWndTopLevel = getTopLevelHWnd();
+	if (hWndTopLevel) {
+		::SendMessage (hWndTopLevel, DM_SETDEFID, mCommandId, 0);
 	}
 }
 

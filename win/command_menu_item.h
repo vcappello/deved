@@ -27,14 +27,25 @@ public:
 	virtual ~CommandMenuItem() {
 	}
 	
-	// Control implementations	
+	/** @name Entity implementations
+	 */
+	///@{ 
 	virtual std::string getType() const { return "CommandMenuItem"; } 
+	///@}
 	
 public:
+	/** @name Properties
+	 */
+	///@{
 	Property<std::string> text;
 	Property<bool> enabled;
+	///@}
 
+	/** @name Events
+	 */
+	///@{ 
 	Event<> clickedEvent;
+	///@}
 };
 
 }

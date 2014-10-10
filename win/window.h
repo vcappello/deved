@@ -52,6 +52,9 @@ public:
 	///@}
 	
 public:
+	/** @name Properties
+	 */
+	///@{ 	
 	Property<std::string> title;
 	Property<int> left;
 	Property<int> top;
@@ -60,6 +63,8 @@ public:
 	Property<bool> visible;
 	Property<std::shared_ptr<Font>> font;
 	EntityMap<Control> controls;
+	///@}
+
 };
 
 }

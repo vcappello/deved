@@ -29,11 +29,18 @@ public:
 	virtual ~MenuBar() {
 	}
 	
-	// Control implementations	
+	/** @name Entity implementations
+	 */
+	///@{ 	
 	virtual std::string getType() const { return "MenuBar"; }
+	///@}
 	
 public:
+	/** @name Properties
+	 */
+	///@{ 	
 	EntityMap<MenuItem> menuItems;
+	///@}
 };
 
 }

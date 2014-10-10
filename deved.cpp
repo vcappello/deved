@@ -64,14 +64,15 @@ int main() {
 			item->enabled (!item->enabled());
 		}
 		button1->font()->bold (!button1->font()->bold());
+		button2->enabled (!button2->enabled());
 	});
 	
 	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));
-	button2->defaultEnter (true); // TODO: need to test this, need an edit control
 	button2->enabled (false);
+	button3->defaultEnter (true);
 	
 	win::createWindow (window);
 	win::run();
-	
+
 	return 0;
 }

@@ -47,7 +47,9 @@ std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuIt
 std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_ptr<Window> window);
 
 HFONT createHFont(std::shared_ptr<Font> font);
+
 std::shared_ptr<Font> createFont(const LOGFONT& logFont);
+
 std::shared_ptr<FontResource> createFontResource(std::shared_ptr<Font> font);
 
 }

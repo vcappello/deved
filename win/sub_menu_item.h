@@ -34,12 +34,19 @@ public:
 	virtual ~SubMenuItem() {
 	}
 	
-	// Control implementations	
+	/** @name Entity implementations
+	 */
+	///@{ 
 	virtual std::string getType() const { return "SubMenuItem"; } 
+	///@}
 	
 public:
+	/** @name Properties
+	 */
+	///@{
 	Property<std::string> text;	
 	EntityMap<MenuItem> menuItems;	
+	///@}
 };
 
 }

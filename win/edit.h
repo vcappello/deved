@@ -4,8 +4,8 @@
  * refer to the file LICENSE.txt.
  */
 
-#ifndef WIN_BUTTON_H
-#define WIN_BUTTON_H
+#ifndef WIN_EDIT_H
+#define WIN_EDIT_H
  
 #include <win/control.h>
 #include <win/property.h>
@@ -13,15 +13,15 @@
 
 namespace win {
 
-class Button : public Control {
+class Edit : public Control {
 public:
-	explicit Button(const std::string& name) :
+	explicit Edit(const std::string& name) :
 		Control( name ),
 		visible( true ),
 		enabled( true ),
-		defaultEnter( false ) {
+		multiLine( false ) {
 	}
-	Button(const std::string& name, const std::string& text, int left, int top, int width, int height) :
+	Edit(const std::string& name, const std::string& text, int left, int top, int width, int height) :
 		Control( name ),
 		text( text ),
 		left( left ),
@@ -30,15 +30,15 @@ public:
 		height( height ),
 		visible( true ),
 		enabled( true ),
-		defaultEnter( false ) {
+		multiLine( false ) {
 	}		
-	virtual ~Button() {
+	virtual ~Edit() {
 	}
 	
 	/** @name Entity implementations
 	 */
 	///@{ 
-	virtual std::string getType() const { return "Button"; }
+	virtual std::string getType() const { return "Edit"; }
 	///@}
 	
 public:
@@ -52,19 +52,13 @@ public:
 	Property<int> height;	
 	Property<bool> visible;
 	Property<bool> enabled;
-	Property<bool> defaultEnter;
+	Property<bool> multiLine;
 	Property<std::shared_ptr<Font>> font;
-	///@}
-
-	/** @name Events
-	 */
-	///@{ 
-	Event<> clickedEvent;
 	///@}
 };
 
 }
  
-#endif //  WIN_BUTTON_H
+#endif //  WIN_EDIT_H
  
  

@@ -71,6 +71,10 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	// Create ButtonController instance
 	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
 	MessageDispatcher::getInstance().registerController (controller);
+
+	if (button->defaultEnter()) {
+		windowController->setDefaultId (controlId);
+	}
 	
 	// Initialize font
 	std::shared_ptr<FontResource> fontResource;

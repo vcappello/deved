@@ -22,13 +22,20 @@ public:
 	virtual ~MenuItem() {
 	}
 	
-	// Entity implementations
+	/** @name Entity implementations
+	 */
+	///@{
 	virtual std::string getName() const { return name(); }
 	
 	// virtual std::string getType() const { return "Menu"; } // Not implemented
+	///@}
 	
 public:
+	/** @name Properties
+	 */
+	///@{
 	Property<std::string> name;	
+	///@}
 };
 
 }
