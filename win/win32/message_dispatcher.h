@@ -50,9 +50,11 @@ public:
 	
 	void unregisterControllerById(int id);
 	
+	std::shared_ptr<IMessageHandler> getControllerByHandle(HWND hWnd);
+	
 	LRESULT dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	
-	LRESULT dispatchCommand(WPARAM wParam, LPARAM lParam);
+	LRESULT dispatchCommand(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 private:
 	std::map<HWND, std::shared_ptr<IMessageHandler>> mMessageHandlers;

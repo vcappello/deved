@@ -23,13 +23,16 @@ namespace win {
 class WindowController : public WindowBase,
                          public std::enable_shared_from_this<WindowController> {
 public:
-	explicit WindowController(HWND hWnd, std::shared_ptr<Window> window);
+	WindowController(HWND hWnd, std::shared_ptr<Window> window);
 	virtual ~WindowController();
 
 public:
 	std::shared_ptr<Window> getWindow() { return mWindow; }
 
 	void setMenuBarController(std::shared_ptr<MenuBarController> menuBarController);
+	
+	int getDefaultId() const;
+	void setDefaultId(int value);
 	
 	/** @name IMessageHandler implementations
 	 */
@@ -50,6 +53,8 @@ public:
 protected:
 	std::shared_ptr<Window> mWindow;
 	std::shared_ptr<MenuBarController> mMenuBarController;
+	int mDefaultId;
+
 };
 
 }

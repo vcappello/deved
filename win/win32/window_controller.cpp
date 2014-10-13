@@ -1,12 +1,11 @@
 #include "window_controller.h"
 
-#include <iostream>
-
 namespace win {
 	
 WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 	WindowBase( hWnd ),
-	mWindow( window ) {
+	mWindow( window ),
+	mDefaultId( -1 ) {
 		
 	mWindow->title.changedEvent.add([&]{
 		if (getText() != mWindow->title()) {
@@ -70,6 +69,16 @@ WindowController::~WindowController() {
 void WindowController::setMenuBarController(std::shared_ptr<MenuBarController> menuBarController) {
 	mMenuBarController = menuBarController;
 	::SetMenu (mHWnd, mMenuBarController->getHMenu());
+}
+
+int WindowController::getDefaultId() const {
+	return mDefaultId;
+}
+
+void WindowController::setDefaultId(int value) {
+	mDefaultId = value;
+	// Redraw window
+	::InvalidateRect (mHWnd, NULL, TRUE);
 }
 
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {

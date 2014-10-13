@@ -8,9 +8,9 @@
 #ifndef WIN_EVENT_H
 #define WIN_EVENT_H
 
-#include <iostream>
 #include <list>
 #include <functional>
+#include <algorithm>
 
 namespace win
 {

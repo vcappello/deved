@@ -34,7 +34,7 @@ LRESULT CALLBACK MessageDispatcher::uniqueWndProc(HWND hWnd, UINT message, WPARA
 		case WM_COMMAND:
 		{
 			getInstance().dispatchMessage (hWnd, message, wParam, lParam);
-			result = getInstance().dispatchCommand (wParam, lParam);
+			result = getInstance().dispatchCommand (hWnd, message, wParam, lParam);
 			break;
 		}
 		default:
@@ -67,6 +67,10 @@ void MessageDispatcher::unregisterControllerById(int id) {
 	if (messageHandler) {
 		mMessageHandlers.erase (messageHandler->getHWnd());
 	}
+}
+
+std::shared_ptr<IMessageHandler> MessageDispatcher::getControllerByHandle(HWND hWnd) {
+	return mMessageHandlers[hWnd];
 }
 
 LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
@@ -102,10 +106,24 @@ LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wPara
 	}
 }
 
-LRESULT MessageDispatcher::dispatchCommand(WPARAM wParam, LPARAM lParam) {
+LRESULT MessageDispatcher::dispatchCommand(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	try {
 		int commandId = LOWORD(wParam);
 		
+		if (commandId == IDOK) {
+			// Only windows can handle default command
+			auto windowControllerItor = mMessageHandlers.find (hWnd);
+			// If does not exist a registered controller call DefWindowProc
+			if (windowControllerItor == mMessageHandlers.end()) {
+				return ::DefWindowProc (hWnd, message, wParam, lParam);
+			}
+			// Let the controller handle this message
+			auto windowController = std::dynamic_pointer_cast<WindowController>( windowControllerItor->second );
+			if (windowController) {
+				// The WindowController defaultId become the commandId
+				commandId = windowController->getDefaultId();
+			}
+		} 
 		auto controllerItor = mNotificationHandlers.find (commandId);
 		if (controllerItor == mNotificationHandlers.end()) {
 			return 0;
@@ -113,7 +131,7 @@ LRESULT MessageDispatcher::dispatchCommand(WPARAM wParam, LPARAM lParam) {
 
 		auto controller = controllerItor->second;
 		controller->handleCommand (wParam, lParam);
-
+	
 		return 0;
 	} catch (std::exception& e) {
 		

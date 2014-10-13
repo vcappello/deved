@@ -1,6 +1,8 @@
 #include "button_controller.h"
 #include "message_dispatcher.h"
 
+#include "window_controller.h"
+
 namespace win {
 	
 ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<Button> button) :
@@ -79,9 +81,21 @@ bool ButtonController::isDefault() {
 
 void ButtonController::setDefault(bool value) {
 	setStyleBit (BS_DEFPUSHBUTTON, value);
-	HWND hWndTopLevel = getTopLevelHWnd();
-	if (hWndTopLevel) {
-		::SendMessage (hWndTopLevel, DM_SETDEFID, mCommandId, 0);
+
+	HWND hWndRoot = ::GetAncestor (mHWnd, GA_ROOT);
+	if (!hWndRoot) {
+		return;
+	}
+	
+	auto rootWindowController = std::dynamic_pointer_cast<WindowController>( 
+		MessageDispatcher::getInstance().getControllerByHandle (hWndRoot) );
+	
+	if (rootWindowController) {
+		if (value) {
+			rootWindowController->setDefaultId (mCommandId);
+		} else {
+			rootWindowController->setDefaultId (-1);
+		}
 	}
 }
 

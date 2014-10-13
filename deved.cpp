@@ -68,6 +68,8 @@ int main() {
 		}
 		button1->font()->bold (!button1->font()->bold());
 		button2->enabled (!button2->enabled());
+		button3->defaultEnter (false);
+		button2->defaultEnter (true);
 	});
 	
 	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));

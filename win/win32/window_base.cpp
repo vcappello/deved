@@ -100,18 +100,6 @@ void WindowBase::setFontResource(std::shared_ptr<FontResource> fontResource) {
 	}
 }
 
-int WindowBase::getDefaultId() {
-	DWORD defId = ::SendMessage (mHWnd, DM_GETDEFID, 0, 0);
-	if (HIWORD(defId) == DC_HASDEFID) {
-		return LOWORD(defId);
-	}
-	return -1;
-}
-
-void WindowBase::setDefaultId(int id) {
-	::SendMessage (mHWnd, DM_SETDEFID, id, 0);
-}
-
 bool WindowBase::getStyleBit(DWORD flag) {
 	LONG style = ::GetWindowLong (mHWnd, GWL_STYLE);
 	
@@ -124,7 +112,7 @@ void WindowBase::setStyleBit(DWORD flag, bool value) {
 	if (value) {
 		style |= flag;
 	} else {
-		style &= (!flag);
+		style &= ~flag;
 	}
 	
 	::SetWindowLong (mHWnd, GWL_STYLE, style);
@@ -142,7 +130,7 @@ void WindowBase::setExStyleBit(DWORD flag, bool value) {
 	if (value) {
 		style |= flag;
 	} else {
-		style &= (!flag);
+		style &= (~flag);
 	}
 	
 	::SetWindowLong (mHWnd, GWL_EXSTYLE, style);
