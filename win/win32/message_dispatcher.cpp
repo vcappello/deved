@@ -73,6 +73,10 @@ std::shared_ptr<IMessageHandler> MessageDispatcher::getControllerByHandle(HWND h
 	return mMessageHandlers[hWnd];
 }
 
+std::shared_ptr<INotificationHandler> MessageDispatcher::getControllerById(int id) {
+	return mNotificationHandlers[id];
+}
+
 LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	try {
 		auto controllerItor = mMessageHandlers.find (hWnd);
@@ -121,7 +125,7 @@ LRESULT MessageDispatcher::dispatchCommand(HWND hWnd, UINT message, WPARAM wPara
 			auto windowController = std::dynamic_pointer_cast<WindowController>( windowControllerItor->second );
 			if (windowController) {
 				// The WindowController defaultId become the commandId
-				commandId = windowController->getDefaultId();
+				commandId = windowController->getDefaultButtonId();
 			}
 		} 
 		auto controllerItor = mNotificationHandlers.find (commandId);

@@ -1,6 +1,7 @@
 #include "button_controller.h"
 #include "message_dispatcher.h"
 
+// TODO: can remove this?
 #include "window_controller.h"
 
 namespace win {
@@ -60,12 +61,6 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 			setEnabled (mButton->enabled());
 		}
 	});		
-
-	mButton->defaultEnter.changedEvent.add([&] {
-		if (isDefault() != mButton->defaultEnter()) {
-			setDefault (mButton->defaultEnter());
-		}
-	});
 }
 
 ButtonController::~ButtonController() {
@@ -81,22 +76,6 @@ bool ButtonController::isDefault() {
 
 void ButtonController::setDefault(bool value) {
 	setStyleBit (BS_DEFPUSHBUTTON, value);
-
-	HWND hWndRoot = ::GetAncestor (mHWnd, GA_ROOT);
-	if (!hWndRoot) {
-		return;
-	}
-	
-	auto rootWindowController = std::dynamic_pointer_cast<WindowController>( 
-		MessageDispatcher::getInstance().getControllerByHandle (hWndRoot) );
-	
-	if (rootWindowController) {
-		if (value) {
-			rootWindowController->setDefaultId (mCommandId);
-		} else {
-			rootWindowController->setDefaultId (-1);
-		}
-	}
 }
 
 void ButtonController::subclass() {
@@ -139,9 +118,6 @@ bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 		case WM_STYLECHANGED:
 		{
 			STYLESTRUCT* styleStruct = reinterpret_cast<STYLESTRUCT*>( lParam );
-			if ((styleStruct->styleOld & BS_DEFPUSHBUTTON) != (styleStruct->styleNew & BS_DEFPUSHBUTTON)) {
-				mButton->defaultEnter (styleStruct->styleNew & BS_DEFPUSHBUTTON);
-			}
 			if ((styleStruct->styleOld & WS_DISABLED) != (styleStruct->styleNew & WS_DISABLED)) {
 				mButton->enabled (!(styleStruct->styleNew & WS_DISABLED));
 			}

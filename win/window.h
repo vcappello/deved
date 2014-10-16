@@ -10,6 +10,7 @@
 #include <win/control.h>
 #include <win/property.h>
 #include <win/font.h>
+#include <win/button.h>
 
 #include <memory>
 #include <string>
@@ -62,6 +63,7 @@ public:
 	Property<int> height;
 	Property<bool> visible;
 	Property<std::shared_ptr<Font>> font;
+	Property<std::shared_ptr<Button>> defaultButton;
 	EntityMap<Control> controls;
 	///@}
 

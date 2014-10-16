@@ -1,5 +1,7 @@
 #include "window_controller.h"
 
+#include "button_controller.h"
+
 namespace win {
 	
 WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
@@ -50,6 +52,10 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 			setVisible (mWindow->visible());
 		}
 	});
+
+	mWindow->defaultButton.changedEvent.add([&] {
+		updateDefaultButton();
+	});
 	
 	mWindow->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
 		auto controller = createControl (shared_from_this(), control);
@@ -68,17 +74,49 @@ WindowController::~WindowController() {
 
 void WindowController::setMenuBarController(std::shared_ptr<MenuBarController> menuBarController) {
 	mMenuBarController = menuBarController;
-	::SetMenu (mHWnd, mMenuBarController->getHMenu());
+	if (mMenuBarController) {
+		::SetMenu (mHWnd, mMenuBarController->getHMenu());
+	} else {
+		::SetMenu (mHWnd, NULL);
+	}
 }
 
-int WindowController::getDefaultId() const {
+void WindowController::addChildWindow(const std::string& name, std::shared_ptr<WindowBase> child) {
+	addResource (name, child);
+}
+
+int WindowController::getDefaultButtonId() const {
 	return mDefaultId;
 }
 
-void WindowController::setDefaultId(int value) {
-	mDefaultId = value;
-	// Redraw window
-	::InvalidateRect (mHWnd, NULL, TRUE);
+void WindowController::updateDefaultButton() {
+	if (mWindow->defaultButton()) {
+		// Set new instance
+		auto newDefaultButtonController = std::dynamic_pointer_cast<ButtonController>( findResourceByName (mWindow->defaultButton()->getName()) );
+		if (newDefaultButtonController && (mDefaultId != newDefaultButtonController->getCommandId())) {
+			// Deselect previous default button
+			if (mDefaultId != -1) {
+				auto oldDefaultButtonController = std::dynamic_pointer_cast<ButtonController>( MessageDispatcher::getInstance().getControllerById (mDefaultId) );
+				if (oldDefaultButtonController) {
+					oldDefaultButtonController->setDefault (false);
+				}
+			}
+			// Select new default button
+			mDefaultId = newDefaultButtonController->getCommandId();
+			newDefaultButtonController->setDefault (true);
+			// Redraw window
+			::InvalidateRect (mHWnd, NULL, TRUE);
+		}
+	} else {
+		// Clear current instance
+		if (mDefaultId != -1) {
+			auto oldDefaultButtonController = std::dynamic_pointer_cast<ButtonController>( MessageDispatcher::getInstance().getControllerById (mDefaultId) );
+			oldDefaultButtonController->setDefault (false);
+			mDefaultId = -1;
+			// Redraw window
+			::InvalidateRect (mHWnd, NULL, TRUE);
+		}
+	}
 }
 
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {

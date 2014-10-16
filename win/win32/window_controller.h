@@ -30,9 +30,11 @@ public:
 	std::shared_ptr<Window> getWindow() { return mWindow; }
 
 	void setMenuBarController(std::shared_ptr<MenuBarController> menuBarController);
+	void addChildWindow(const std::string& name, std::shared_ptr<WindowBase> child);
 	
-	int getDefaultId() const;
-	void setDefaultId(int value);
+	int getDefaultButtonId() const;
+	
+	void updateDefaultButton();
 	
 	/** @name IMessageHandler implementations
 	 */

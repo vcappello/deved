@@ -46,7 +46,7 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	DWORD window_style_ex = 0;
 	DWORD window_style = WS_TABSTOP | WS_CHILD;
 	
-	if (button->defaultEnter()) {
+	if (windowController->getWindow()->defaultButton() == button) {
 		window_style |= BS_DEFPUSHBUTTON;
 	}
 	if (!button->enabled()) {
@@ -79,11 +79,6 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
 	MessageDispatcher::getInstance().registerController (controller);
 
-	// Set the default ID on the WindowController
-	if (button->defaultEnter()) {
-		windowController->setDefaultId (controlId);
-	}
-	
 	// Initialize font
 	std::shared_ptr<FontResource> fontResource;
 	if (button->font()) {
@@ -92,6 +87,9 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 		fontResource = createFontResource (getSystemFont());
 	}
 	controller->setFontResource (fontResource);
+	
+	// Add the control to the container window
+	windowController->addChildWindow (button->getName(), controller);
 	
 	// Subclass window
 	controller->subclass();
@@ -149,6 +147,9 @@ std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowControll
 		fontResource = createFontResource (getSystemFont());
 	}
 	controller->setFontResource (fontResource);
+
+	// Add the control to the container window
+	windowController->addChildWindow (edit->getName(), controller);
 	
 	// Subclass window
 	controller->subclass();
@@ -283,6 +284,11 @@ std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_
 		createControl (controller, control.second);
 	}
 
+	// Default button
+	if (window->defaultButton()) {
+		controller->updateDefaultButton();
+	}
+	
 	MessageDispatcher::getInstance().registerController (controller);
 	
 	return controller;

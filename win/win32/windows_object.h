@@ -18,14 +18,20 @@ public:
 	WindowsObject();
 	virtual ~WindowsObject();
 	
-	virtual void addResource(const std::string& name, std::shared_ptr<WindowsObject> object);
-	virtual bool resourceExist(const std::string& name) const;
-	virtual std::shared_ptr<WindowsObject> getResource(const std::string& name);
-
 	virtual void destroy();
 
 protected:
 	std::map<std::string, std::shared_ptr<WindowsObject>> mResources;
+
+protected:
+	virtual void addResource(const std::string& name, std::shared_ptr<WindowsObject> object);
+	virtual void removeResource(const std::string& name);
+	virtual bool resourceExist(const std::string& name) const;
+
+	virtual std::shared_ptr<WindowsObject> getResource(const std::string& name);
+	virtual std::shared_ptr<WindowsObject> getResource(const std::string& name) const;
+
+	virtual std::shared_ptr<WindowsObject> findResourceByName(const std::string& name);
 };
 
 }

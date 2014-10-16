@@ -51,6 +51,8 @@ public:
 	void unregisterControllerById(int id);
 	
 	std::shared_ptr<IMessageHandler> getControllerByHandle(HWND hWnd);
+
+	std::shared_ptr<INotificationHandler> getControllerById(int id);
 	
 	LRESULT dispatchMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	

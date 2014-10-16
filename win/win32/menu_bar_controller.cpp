@@ -8,12 +8,12 @@ MenuBarController::MenuBarController(std::shared_ptr<MenuBar> menuBar) :
 		
 	mMenuBar->menuItems.itemAddedEvent.add([&] (std::shared_ptr<MenuItem> menuItem) {
 		auto controller = createMenuItem (shared_from_this(), menuItem);
-		mResources.insert (std::make_pair (menuItem->getName(), controller));
+		addResource (menuItem->getName(), controller);
 	});
 	
 	mMenuBar->menuItems.itemRemovedEvent.add([&] (std::shared_ptr<MenuItem> menuItem) {
-		auto object = mResources[menuItem->getName()];
-		mResources.erase (menuItem->getName());
+		auto object = getResource (menuItem->getName());
+		removeResource (menuItem->getName());
 		object->destroy();		
 	});		
 }
@@ -23,7 +23,7 @@ MenuBarController::~MenuBarController() {
 }
 
 void MenuBarController::addMenuItem(const std::string& name, std::shared_ptr<MenuItemControllerBase> menuItem) {
-	mResources.insert (std::make_pair (name, menuItem));
+	addResource (name, menuItem);
 }
 
 }

@@ -24,6 +24,9 @@ public:
 	MenuBarController(std::shared_ptr<MenuBar> menuBar);
 	virtual ~MenuBarController();
 	
+	std::shared_ptr<MenuBar> getMenuBar() { return mMenuBar; }
+	std::shared_ptr<MenuBar> getMenuBar() const { return mMenuBar; }
+	
 	/** @name IMenuItemControllerContainer implementations
 	 */
 	///@{ 

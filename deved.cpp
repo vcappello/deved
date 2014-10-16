@@ -68,13 +68,12 @@ int main() {
 		}
 		button1->font()->bold (!button1->font()->bold());
 		button2->enabled (!button2->enabled());
-		button3->defaultEnter (false);
-		button2->defaultEnter (true);
+		window->defaultButton (button2);
 	});
 	
 	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));
 	button2->enabled (false);
-	button3->defaultEnter (true); // TODO: test this after Edit control
+	window->defaultButton (button3);
 	
 	win::createWindow (window);
 	win::run();
