@@ -26,12 +26,6 @@ public:
 	explicit WindowBase(HWND hWnd);
 	virtual ~WindowBase();
 
-	Point getPosition();
-	void setPosition(const Point& value);
-
-	Size getSize();
-	void setSize(const Size& size);
-
 	std::string getText();
 	void setText(std::string& value);
 	

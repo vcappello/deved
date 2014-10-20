@@ -6,6 +6,7 @@ EditController::EditController(HWND hWnd, int commandId, std::shared_ptr<Edit> e
 	WindowBase( hWnd ),
 	mCommandId( commandId ),
 	mEdit( edit ),
+	mLayout( hWnd, edit ),
 	mOldWndProc( NULL )	{
 		
 	mEdit->text.changedEvent.add([&]{
@@ -14,38 +15,6 @@ EditController::EditController(HWND hWnd, int commandId, std::shared_ptr<Edit> e
 		}
 	});
 	
-	mEdit->left.changedEvent.add([&]{
-		Point point = getPosition();
-		if (point.x != mEdit->left()) {
-			point.x = mEdit->left();
-			setPosition (point);
-		}
-	});	
-	
-	mEdit->top.changedEvent.add([&]{
-		Point point = getPosition();
-		if (point.y != mEdit->top()) {
-			point.y = mEdit->top();
-			setPosition (point);
-		}
-	});	
-		
-	mEdit->width.changedEvent.add([&]{
-		Size size = getSize();
-		if (size.width != mEdit->width()) {
-			size.width = mEdit->width();
-			setSize (size);
-		}
-	});		
-	
-	mEdit->height.changedEvent.add([&]{
-		Size size = getSize();
-		if (size.height != mEdit->height()) {
-			size.height = mEdit->height();
-			setSize (size);
-		}
-	});	
-
 	mEdit->visible.changedEvent.add([&] {
 		if (isVisible() != mEdit->visible()) {
 			setVisible (mEdit->visible());

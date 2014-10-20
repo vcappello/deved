@@ -1,15 +1,14 @@
 #include "button_controller.h"
 #include "message_dispatcher.h"
 
-// TODO: can remove this?
-#include "window_controller.h"
-
 namespace win {
+	
 	
 ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<Button> button) :
 	WindowBase( hWnd ),
 	mCommandId( commandId ),
 	mButton( button ),
+	mLayout( hWnd, button ),
 	mOldWndProc( NULL )	{
 		
 	mButton->text.changedEvent.add([&]{
@@ -18,38 +17,6 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 		}
 	});
 	
-	mButton->left.changedEvent.add([&]{
-		Point point = getPosition();
-		if (point.x != mButton->left()) {
-			point.x = mButton->left();
-			setPosition (point);
-		}
-	});	
-	
-	mButton->top.changedEvent.add([&]{
-		Point point = getPosition();
-		if (point.y != mButton->top()) {
-			point.y = mButton->top();
-			setPosition (point);
-		}
-	});	
-		
-	mButton->width.changedEvent.add([&]{
-		Size size = getSize();
-		if (size.width != mButton->width()) {
-			size.width = mButton->width();
-			setSize (size);
-		}
-	});		
-	
-	mButton->height.changedEvent.add([&]{
-		Size size = getSize();
-		if (size.height != mButton->height()) {
-			size.height = mButton->height();
-			setSize (size);
-		}
-	});	
-
 	mButton->visible.changedEvent.add([&] {
 		if (isVisible() != mButton->visible()) {
 			setVisible (mButton->visible());

@@ -50,6 +50,7 @@ int main() {
 			name, 
 			"MenuItem "  + std::to_string (counter));
 		subMenuItem3->menuItems.add (newMenuItem);
+		button2->left (button2->left() + 10);
 	});
 	
 	button2->clickedEvent.add([&] {

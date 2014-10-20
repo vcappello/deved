@@ -10,6 +10,7 @@
 #include <win/edit.h>
 #include "window_base.h"
 #include "i_notification_handler.h"
+#include "window_layout.h"
 
 #include <memory>
 #include <windows.h>
@@ -50,6 +51,7 @@ public:
 protected:
 	int mCommandId;
 	std::shared_ptr<Edit> mEdit;
+	ControlLayout<Edit> mLayout;
 	WNDPROC mOldWndProc;
 };
 

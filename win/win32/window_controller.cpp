@@ -7,43 +7,12 @@ namespace win {
 WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 	WindowBase( hWnd ),
 	mWindow( window ),
+	mLayout( hWnd, window ),
 	mDefaultId( -1 ) {
 		
 	mWindow->title.changedEvent.add([&]{
 		if (getText() != mWindow->title()) {
 			setText (mWindow->title());
-		}
-	});
-	
-	mWindow->left.changedEvent.add([&]{
-		Point point = getPosition();
-		if (point.x != mWindow->left()) {
-			point.x = mWindow->left();
-			setPosition (point);
-		}
-	});	
-	
-	mWindow->top.changedEvent.add([&]{
-		Point point = getPosition();
-		if (point.y != mWindow->top()) {
-			point.y = mWindow->top();
-			setPosition (point);
-		}
-	});	
-		
-	mWindow->width.changedEvent.add([&]{
-		Size size = getSize();
-		if (size.width != mWindow->width()) {
-			size.width = mWindow->width();
-			setSize (size);
-		}
-	});		
-	
-	mWindow->height.changedEvent.add([&]{
-		Size size = getSize();
-		if (size.height != mWindow->height()) {
-			size.height = mWindow->height();
-			setSize (size);
 		}
 	});
 	
@@ -170,13 +139,6 @@ bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 
 LRESULT WindowController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
 	return ::DefWindowProc (hWnd, message, wParam, lParam);
-}
-
-Point WindowController::getPosition() {
-	RECT rect;
-	::GetWindowRect (mHWnd, &rect);
-	
-	return Point( rect.left, rect.top );
 }
 
 }

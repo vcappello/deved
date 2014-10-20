@@ -12,6 +12,7 @@
 #include "menu_bar_controller.h"
 #include "control_factory.h"
 #include "message_loop.h"
+#include "window_layout.h"
 
 #include <memory>
 #include <map>
@@ -46,15 +47,10 @@ public:
 	LRESULT callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	///@}
 	
-	/** @name Override WindowBase
-	 */	
-	///@{ 
-	Point getPosition();
-	///@}
-	
 protected:
 	std::shared_ptr<Window> mWindow;
 	std::shared_ptr<MenuBarController> mMenuBarController;
+	WindowLayout<Window> mLayout;
 	int mDefaultId;
 
 };
