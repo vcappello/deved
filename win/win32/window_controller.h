@@ -8,7 +8,7 @@
 #define WIN_WIN32_WINDOW_CONTROLLER_H
 
 #include <win/window.h>
-#include "window_base.h"
+#include "window_container_base.h"
 #include "menu_bar_controller.h"
 #include "control_factory.h"
 #include "message_loop.h"
@@ -21,7 +21,7 @@
 
 namespace win {
 
-class WindowController : public WindowBase,
+class WindowController : public WindowContainerBase,
                          public std::enable_shared_from_this<WindowController> {
 public:
 	WindowController(HWND hWnd, std::shared_ptr<Window> window);
@@ -31,7 +31,6 @@ public:
 	std::shared_ptr<Window> getWindow() { return mWindow; }
 
 	void setMenuBarController(std::shared_ptr<MenuBarController> menuBarController);
-	void addChildWindow(const std::string& name, std::shared_ptr<WindowBase> child);
 	
 	int getDefaultButtonId() const;
 	

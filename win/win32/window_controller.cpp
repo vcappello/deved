@@ -5,7 +5,7 @@
 namespace win {
 	
 WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
-	WindowBase( hWnd ),
+	WindowContainerBase( hWnd ),
 	mWindow( window ),
 	mLayout( hWnd, window ),
 	mDefaultId( -1 ) {
@@ -48,10 +48,6 @@ void WindowController::setMenuBarController(std::shared_ptr<MenuBarController> m
 	} else {
 		::SetMenu (mHWnd, NULL);
 	}
-}
-
-void WindowController::addChildWindow(const std::string& name, std::shared_ptr<WindowBase> child) {
-	addResource (name, child);
 }
 
 int WindowController::getDefaultButtonId() const {

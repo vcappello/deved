@@ -3,6 +3,7 @@
 #include "window_controller.h"
 #include "button_controller.h"
 #include "edit_controller.h"
+#include "group_box_controller.h"
 #include "menu_bar_controller.h"
 #include "command_menu_item_controller.h"
 #include "sub_menu_item_controller.h"
@@ -16,37 +17,44 @@ int createControlId() {
 	return controlIdCounter++;
 }
 	
-std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Control> control) {
+std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Control> control) {
 	std::shared_ptr<WindowsObject> object;
 	if (control->getType() == "Button") {
 		auto buttonControl = std::dynamic_pointer_cast<Button>(control);
 		if (!buttonControl) {
 			throw Error( "Can not convert control to 'Button'" );
 		}
-		object = createButtonControl (windowController, buttonControl);
+		object = createButtonControl (windowContainer, buttonControl);
 	} else if (control->getType() == "Edit") {
 		auto editControl = std::dynamic_pointer_cast<Edit>(control);
 		if (!editControl) {
 			throw Error( "Can not convert control to 'Edit'" );
 		}
-		object = createEditControl (windowController, editControl);
+		object = createEditControl (windowContainer, editControl);
+	} else if (control->getType() == "GroupBox") {
+		auto groupBoxControl = std::dynamic_pointer_cast<GroupBox>(control);
+		if (!groupBoxControl) {
+			throw Error( "Can not convert control to 'GroupBox'" );
+		}
+		object = createGroupBoxControl (windowContainer, groupBoxControl);
 	} else if (control->getType() == "MenuBar") {
 		auto menuBarControl = std::dynamic_pointer_cast<MenuBar>(control);
 		if (!menuBarControl) {
 			throw Error( "Can not convert control to 'MenuBar'" );
 		}
-		object = createMenuBarControl (windowController, menuBarControl);
+		object = createMenuBarControl (windowContainer, menuBarControl);
 	}
 	return object;
 }
 
-std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Button> button) {
+std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Button> button) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
 	DWORD window_style = WS_TABSTOP | WS_CHILD;
 	
-	if (windowController->getWindow()->defaultButton() == button) {
+	auto windowController = findWindowControllerFromChild (windowContainer);
+	if (windowController && windowController->getWindow()->defaultButton() == button) {
 		window_style |= BS_DEFPUSHBUTTON;
 	}
 	if (!button->enabled()) {
@@ -66,7 +74,7 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 					button->top(),
 					button->width(),
 					button->height(),
-	                windowController->getHWnd(),
+	                windowContainer->getHWnd(),
 	                (HMENU)(intptr_t)controlId,
 	                hInstance,
 	                NULL);
@@ -89,7 +97,7 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	controller->setFontResource (fontResource);
 	
 	// Add the control to the container window
-	windowController->addChildWindow (button->getName(), controller);
+	windowContainer->addChildWindow (button->getName(), controller);
 	
 	// Subclass window
 	controller->subclass();
@@ -97,7 +105,7 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	return controller;
 }
 
-std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<Edit> edit) {
+std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Edit> edit) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
@@ -126,7 +134,7 @@ std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowControll
 					edit->top(),
 					edit->width(),
 					edit->height(),
-	                windowController->getHWnd(),
+	                windowContainer->getHWnd(),
 	                (HMENU)(intptr_t)controlId,
 	                hInstance,
 	                NULL);
@@ -149,7 +157,7 @@ std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowControll
 	controller->setFontResource (fontResource);
 
 	// Add the control to the container window
-	windowController->addChildWindow (edit->getName(), controller);
+	windowContainer->addChildWindow (edit->getName(), controller);
 	
 	// Subclass window
 	controller->subclass();
@@ -157,7 +165,66 @@ std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowControll
 	return controller;	
 }
 
-std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowController> windowController, std::shared_ptr<MenuBar> menuBar) {
+std::shared_ptr<GroupBoxController> createGroupBoxControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox) {
+	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+
+	DWORD window_style_ex = 0;
+	DWORD window_style = WS_CHILD | BS_GROUPBOX;
+	
+	if (!groupBox->enabled()) {
+		window_style |= WS_DISABLED;
+	}
+	if (groupBox->visible()) {
+		window_style |= WS_VISIBLE;
+	}
+	
+	int controlId = createControlId();
+	HWND hWnd = CreateWindowEx (
+					window_style_ex,
+	                "BUTTON",
+	                groupBox->text().c_str(),
+	                window_style,
+					groupBox->left(),
+					groupBox->top(),
+					groupBox->width(),
+					groupBox->height(),
+	                windowContainer->getHWnd(),
+	                (HMENU)(intptr_t)controlId,
+	                hInstance,
+	                NULL);
+
+	if (!hWnd) {
+		throw Error( formatSystemMessage (::GetLastError()) );
+	}	
+	
+	// Create GroupBoxController instance
+	auto controller = std::make_shared<GroupBoxController>( hWnd, controlId, groupBox );
+	MessageDispatcher::getInstance().registerController (controller);
+
+	// Initialize font
+	std::shared_ptr<FontResource> fontResource;
+	if (groupBox->font()) {
+		fontResource = createFontResource (groupBox->font());
+	} else {
+		fontResource = createFontResource (getSystemFont());
+	}
+	controller->setFontResource (fontResource);
+	
+	// Add the control to the container window
+	windowContainer->addChildWindow (groupBox->getName(), controller);
+	
+	// Add owned controls
+	for (auto control : groupBox->controls) {
+		createControl (controller, control.second);
+	}
+	
+	// Subclass window
+	controller->subclass();
+	
+	return controller;	
+}
+
+std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<MenuBar> menuBar) {
 	auto controller = std::make_shared<MenuBarController>( menuBar );
 	
 	// Create children menu items	
@@ -165,7 +232,10 @@ std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowCo
 		createMenuItem (controller, menuItem.second);
 	}
 	
-	windowController->setMenuBarController (controller);
+	auto windowController = findWindowControllerFromChild (windowContainer);
+	if (windowController) {
+		windowController->setMenuBarController (controller);
+	}
 	
 	return controller;
 }
@@ -292,6 +362,25 @@ std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_
 	MessageDispatcher::getInstance().registerController (controller);
 	
 	return controller;
+}
+
+std::shared_ptr<WindowController> findWindowControllerFromChild(std::shared_ptr<WindowBase> childController) {
+	auto windowController = std::dynamic_pointer_cast<WindowController>( childController );
+	if (windowController) {
+		return windowController; 
+	}
+	
+	HWND hWndRoot = ::GetAncestor( childController->getHWnd(), GA_ROOT );
+	if (!hWndRoot) {
+		return nullptr;
+	}
+	
+	windowController = std::dynamic_pointer_cast<WindowController>( MessageDispatcher::getInstance().getControllerByHandle(hWndRoot) );
+	if (windowController) {
+		return windowController; 
+	}
+	
+	return nullptr;
 }
 
 HFONT createHFont(std::shared_ptr<Font> font) {

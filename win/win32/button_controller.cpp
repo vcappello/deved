@@ -3,7 +3,6 @@
 
 namespace win {
 	
-	
 ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<Button> button) :
 	WindowBase( hWnd ),
 	mCommandId( commandId ),

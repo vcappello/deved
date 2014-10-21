@@ -29,7 +29,18 @@ public:
 		height( height ),
 		visible( true ),
 		enabled( true ) {
-	}		
+	}
+	GroupBox(const std::string& name, const std::string& text, int left, int top, int width, int height, std::initializer_list<std::shared_ptr<Control>> initList) :
+		Control( name ),
+		text( text ),
+		left( left ),
+		top( top ),
+		width( width ),
+		height( height ),
+		visible( true ),
+		enabled( true ),
+		controls( initList ) {
+	}	
 	virtual ~GroupBox() {
 	}
 	

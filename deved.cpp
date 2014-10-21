@@ -10,6 +10,7 @@
 #include <win/window.h>
 #include <win/button.h>
 #include <win/edit.h>
+#include <win/group_box.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>
@@ -22,14 +23,16 @@ int main() {
 	std::shared_ptr<win::Edit> edit1;
 	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
 	std::shared_ptr<win::SubMenuItem> subMenuItem3;
-	auto window = std::shared_ptr<win::Window>( new win::Window( "Window1", "My window", 10, 10, 300, 200, {
-		std::shared_ptr<win::MenuBar>( new win::MenuBar( "MenuBar1", { 
-				std::shared_ptr<win::SubMenuItem>( new win::SubMenuItem( "SubMenuItem1", "File", {
+	using children_t = std::initializer_list<std::shared_ptr<win::Control>>;
+	using menu_items_t = std::initializer_list<std::shared_ptr<win::MenuItem>>;
+	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 250, children_t({
+		std::make_shared<win::MenuBar>( "MenuBar1", menu_items_t({ 
+				std::make_shared<win::SubMenuItem>( "SubMenuItem1", "File", menu_items_t({
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem1", "New" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem2", "Open" ),
 					commandMenuItem3 = std::make_shared<win::CommandMenuItem>( "CommandMenuItem3", "Save" )
 				})),
-				std::shared_ptr<win::SubMenuItem>( new win::SubMenuItem( "SubMenuItem2", "Edit", { 
+				std::make_shared<win::SubMenuItem>( "SubMenuItem2", "Edit", menu_items_t({ 
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem4", "Cut" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem5", "Copy" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem6", "Paste" ),
@@ -39,7 +42,10 @@ int main() {
 		button1 = std::make_shared<win::Button>("Button1", "Add menu item", 10, 10, 200, 30),
 		button2 = std::make_shared<win::Button>("Button2", "Delete menu item", 10, 40, 200, 30),
 		button3 = std::make_shared<win::Button>("Button3", "Disable menu item", 10, 70, 200, 30),
-		edit1 = std::make_shared<win::Edit>("Edit1", "Type some text", 10, 100, 200, 30)
+		edit1 = std::make_shared<win::Edit>("Edit1", "Type some text", 10, 100, 200, 30),
+		std::make_shared<win::GroupBox>("GroupBox1", "GroupBox", 220, 10, 200, 90, children_t({
+			std::make_shared<win::Edit>("Edit2", "Type some text", 10, 30, 150, 30)
+		}))
 	}));
 
 	int counter = 0;
