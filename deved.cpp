@@ -23,8 +23,10 @@ int main() {
 	std::shared_ptr<win::Edit> edit1;
 	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
 	std::shared_ptr<win::SubMenuItem> subMenuItem3;
+	
 	using children_t = std::initializer_list<std::shared_ptr<win::Control>>;
 	using menu_items_t = std::initializer_list<std::shared_ptr<win::MenuItem>>;
+	
 	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 250, children_t({
 		std::make_shared<win::MenuBar>( "MenuBar1", menu_items_t({ 
 				std::make_shared<win::SubMenuItem>( "SubMenuItem1", "File", menu_items_t({
@@ -43,8 +45,9 @@ int main() {
 		button2 = std::make_shared<win::Button>("Button2", "Delete menu item", 10, 40, 200, 30),
 		button3 = std::make_shared<win::Button>("Button3", "Disable menu item", 10, 70, 200, 30),
 		edit1 = std::make_shared<win::Edit>("Edit1", "Type some text", 10, 100, 200, 30),
-		std::make_shared<win::GroupBox>("GroupBox1", "GroupBox", 220, 10, 200, 90, children_t({
-			std::make_shared<win::Edit>("Edit2", "Type some text", 10, 30, 150, 30)
+		std::make_shared<win::GroupBox>("GroupBox1", "GroupBox", 220, 10, 200, 110, children_t({
+			std::make_shared<win::Edit>("Edit2", "Type some text", 10, 30, 150, 30),
+			std::make_shared<win::Edit>("Edit3", "Type some text", 10, 70, 150, 30)
 		}))
 	}));
 

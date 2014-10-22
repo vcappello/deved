@@ -109,7 +109,7 @@ std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowContaine
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
-	DWORD window_style = WS_TABSTOP | WS_CHILD;
+	DWORD window_style = WS_TABSTOP | WS_CHILD | ES_AUTOHSCROLL;
 	
 	if (edit->multiline()) {
 		window_style |= ES_MULTILINE;
@@ -169,7 +169,7 @@ std::shared_ptr<GroupBoxController> createGroupBoxControl(std::shared_ptr<Window
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
-	DWORD window_style = WS_CHILD | BS_GROUPBOX;
+	DWORD window_style = WS_CHILD | WS_TABSTOP | BS_GROUPBOX;
 	
 	if (!groupBox->enabled()) {
 		window_style |= WS_DISABLED;

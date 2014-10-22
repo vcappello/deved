@@ -61,6 +61,17 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 			mGroupBox->text(text);
 			break;
 		}
+		case WM_SETFOCUS:
+		{
+			// FIXME: need to manage tab order for children controls, for now windows
+			// defaults DialogProc skip GroupBox used as container
+			
+			//~ HWND hWndFirstChild = ::GetWindow (mHWnd, GW_CHILD);
+			//~ if (hWndFirstChild) {
+				//~ ::SetFocus (hWndFirstChild);
+			//~ }
+			break;
+		}
 		case WM_SETFONT:
 		{
 			HFONT hFont = reinterpret_cast<HFONT>( wParam );
