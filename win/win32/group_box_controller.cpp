@@ -29,7 +29,7 @@ GroupBoxController::GroupBoxController(HWND hWnd, int commandId, std::shared_ptr
 	});
 	
 	mGroupBox->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
-		auto controller = createControl (shared_from_this(), control);
+		auto controller = createController (shared_from_this(), control);
 		mResources.insert (std::make_pair (control->getName(), controller));
 	});
 	
@@ -54,6 +54,7 @@ void GroupBoxController::subclass() {
 }
 
 bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
+	bool handled = false;
 	switch (message) {
 		case WM_SETTEXT:
 		{
@@ -61,15 +62,18 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 			mGroupBox->text(text);
 			break;
 		}
-		case WM_SETFOCUS:
+		case WM_ERASEBKGND:
 		{
-			// FIXME: need to manage tab order for children controls, for now windows
-			// defaults DialogProc skip GroupBox used as container
-			
-			//~ HWND hWndFirstChild = ::GetWindow (mHWnd, GW_CHILD);
-			//~ if (hWndFirstChild) {
-				//~ ::SetFocus (hWndFirstChild);
-			//~ }
+			RECT    rect;
+
+			HDC hDC = reinterpret_cast<HDC>(wParam);
+
+			// Erase the group box's background.
+			::GetClientRect (mHWnd, &rect);
+			::FillRect (hDC, &rect, reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1));
+
+			lResult = TRUE;
+			handled = true;
 			break;
 		}
 		case WM_SETFONT:
@@ -106,7 +110,7 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 			}
 		}		
 	}
-	return false;
+	return handled;
 }
 
 LRESULT GroupBoxController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {

@@ -27,7 +27,7 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 	});
 	
 	mWindow->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
-		auto controller = createControl (shared_from_this(), control);
+		auto controller = createController (shared_from_this(), control);
 		mResources.insert (std::make_pair (control->getName(), controller));
 	});
 	

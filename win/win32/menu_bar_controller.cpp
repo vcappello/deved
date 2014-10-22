@@ -7,7 +7,7 @@ MenuBarController::MenuBarController(std::shared_ptr<MenuBar> menuBar) :
 	mHMenu = ::CreateMenu();
 		
 	mMenuBar->menuItems.itemAddedEvent.add([&] (std::shared_ptr<MenuItem> menuItem) {
-		auto controller = createMenuItem (shared_from_this(), menuItem);
+		auto controller = createMenuItemController (shared_from_this(), menuItem);
 		addResource (menuItem->getName(), controller);
 	});
 	

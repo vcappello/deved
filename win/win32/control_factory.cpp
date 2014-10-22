@@ -17,37 +17,36 @@ int createControlId() {
 	return controlIdCounter++;
 }
 	
-std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Control> control) {
+template<class T>
+std::shared_ptr<T> castControl(std::shared_ptr<Control> control) {
+	auto castedControl = std::dynamic_pointer_cast<T>(control);
+	if (!castedControl) {
+		throw Error( "Can not create control '" + control->getName() + "'" );
+	}
+	return castedControl;
+}
+
+std::shared_ptr<WindowsObject> createController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Control> control) {
 	std::shared_ptr<WindowsObject> object;
 	if (control->getType() == "Button") {
-		auto buttonControl = std::dynamic_pointer_cast<Button>(control);
-		if (!buttonControl) {
-			throw Error( "Can not convert control to 'Button'" );
-		}
-		object = createButtonControl (windowContainer, buttonControl);
+		auto buttonControl = castControl<Button>(control);
+		object = createButtonController (windowContainer, buttonControl);
 	} else if (control->getType() == "Edit") {
-		auto editControl = std::dynamic_pointer_cast<Edit>(control);
-		if (!editControl) {
-			throw Error( "Can not convert control to 'Edit'" );
-		}
-		object = createEditControl (windowContainer, editControl);
+		auto editControl = castControl<Edit>(control);
+		object = createEditController (windowContainer, editControl);
 	} else if (control->getType() == "GroupBox") {
-		auto groupBoxControl = std::dynamic_pointer_cast<GroupBox>(control);
-		if (!groupBoxControl) {
-			throw Error( "Can not convert control to 'GroupBox'" );
-		}
-		object = createGroupBoxControl (windowContainer, groupBoxControl);
+		auto groupBoxControl = castControl<GroupBox>(control);
+		object = createGroupBoxController (windowContainer, groupBoxControl);
 	} else if (control->getType() == "MenuBar") {
-		auto menuBarControl = std::dynamic_pointer_cast<MenuBar>(control);
-		if (!menuBarControl) {
-			throw Error( "Can not convert control to 'MenuBar'" );
-		}
-		object = createMenuBarControl (windowContainer, menuBarControl);
+		auto menuBarControl = castControl<MenuBar>(control);
+		object = createMenuBarController (windowContainer, menuBarControl);
+	} else {
+		throw Error( "Can not create control '" + control->getName() + "' unknown type '" + control->getType() + "'" );
 	}
 	return object;
 }
 
-std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Button> button) {
+std::shared_ptr<ButtonController> createButtonController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Button> button) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
@@ -105,7 +104,7 @@ std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowCont
 	return controller;
 }
 
-std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Edit> edit) {
+std::shared_ptr<EditController> createEditController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Edit> edit) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
@@ -165,7 +164,7 @@ std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowContaine
 	return controller;	
 }
 
-std::shared_ptr<GroupBoxController> createGroupBoxControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox) {
+std::shared_ptr<GroupBoxController> createGroupBoxController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = WS_EX_CONTROLPARENT; // For allow the TAB key to iterate over children controls
@@ -215,7 +214,7 @@ std::shared_ptr<GroupBoxController> createGroupBoxControl(std::shared_ptr<Window
 	
 	// Add owned controls
 	for (auto control : groupBox->controls) {
-		createControl (controller, control.second);
+		createController (controller, control.second);
 	}
 	
 	// Subclass window
@@ -224,12 +223,12 @@ std::shared_ptr<GroupBoxController> createGroupBoxControl(std::shared_ptr<Window
 	return controller;	
 }
 
-std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<MenuBar> menuBar) {
+std::shared_ptr<MenuBarController> createMenuBarController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<MenuBar> menuBar) {
 	auto controller = std::make_shared<MenuBarController>( menuBar );
 	
 	// Create children menu items	
 	for (auto menuItem : menuBar->menuItems) {
-		createMenuItem (controller, menuItem.second);
+		createMenuItemController (controller, menuItem.second);
 	}
 	
 	auto windowController = findWindowControllerFromChild (windowContainer);
@@ -240,7 +239,7 @@ std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowCo
 	return controller;
 }
 
-std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem) {
+std::shared_ptr<MenuItemControllerBase> createMenuItemController(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem) {
 	std::shared_ptr<MenuItemControllerBase> menuItemControllerBase;
 	if (menuItem->getType() == "CommandMenuItem") {
 		
@@ -248,7 +247,7 @@ std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItem
 		if (!commandMenuItem) {
 			throw Error( "Can not convert control to 'CommandMenuItem'" );
 		}			
-		menuItemControllerBase = createCommandMenuItem (menuItemControllerContainer, commandMenuItem);
+		menuItemControllerBase = createCommandMenuItemController (menuItemControllerContainer, commandMenuItem);
 		
 	} else if (menuItem->getType() == "SubMenuItem") {
 		
@@ -256,14 +255,14 @@ std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItem
 		if (!subMenuItem) {
 			throw Error( "Can not convert control to 'SubMenuItem'" );
 		}				
-		menuItemControllerBase = createSubMenuItem (menuItemControllerContainer, subMenuItem);
+		menuItemControllerBase = createSubMenuItemController (menuItemControllerContainer, subMenuItem);
 		
 	}
 	
 	return menuItemControllerBase;
 }
 
-std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
+std::shared_ptr<CommandMenuItemController> createCommandMenuItemController(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem) {
 	// Get a new control ID for the menu item
 	int controlId = createControlId();
 	
@@ -301,7 +300,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr
 	return controller;
 }
 
-std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem) {
+std::shared_ptr<SubMenuItemController> createSubMenuItemController(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem) {
 	// Get a new control ID for the menu item
 	int controlId = createControlId();
 
@@ -332,7 +331,7 @@ std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuIt
 	
 	// Create children menu items
 	for (auto menuItem : subMenuItem->menuItems) {
-		createMenuItem (controller, menuItem.second);
+		createMenuItemController (controller, menuItem.second);
 	}
 	
 	return controller;
@@ -351,7 +350,7 @@ std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_
 	
 	// Add owned controls
 	for (auto control : window->controls) {
-		createControl (controller, control.second);
+		createController (controller, control.second);
 	}
 
 	// Default button

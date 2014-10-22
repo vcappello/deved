@@ -41,22 +41,21 @@ class SubMenuItemController;
 class FontResource; 
 ///@}
 
-// TODO: need to refactor, rename this functions *Controller	
-std::shared_ptr<WindowsObject> createControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Control> control);
+std::shared_ptr<WindowsObject> createController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Control> control);
 
-std::shared_ptr<ButtonController> createButtonControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Button> button);
+std::shared_ptr<ButtonController> createButtonController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Button> button);
 
-std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Edit> edit);
+std::shared_ptr<EditController> createEditController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Edit> edit);
 
-std::shared_ptr<GroupBoxController> createGroupBoxControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox);
+std::shared_ptr<GroupBoxController> createGroupBoxController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox);
 
-std::shared_ptr<MenuBarController> createMenuBarControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<MenuBar> menuBar);
+std::shared_ptr<MenuBarController> createMenuBarController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<MenuBar> menuBar);
 
-std::shared_ptr<MenuItemControllerBase> createMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem);
+std::shared_ptr<MenuItemControllerBase> createMenuItemController(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<MenuItem> menuItem);
 
-std::shared_ptr<CommandMenuItemController> createCommandMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
+std::shared_ptr<CommandMenuItemController> createCommandMenuItemController(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<CommandMenuItem> commandMenuItem);
 
-std::shared_ptr<SubMenuItemController> createSubMenuItem(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
+std::shared_ptr<SubMenuItemController> createSubMenuItemController(std::shared_ptr<IMenuItemControllerContainer> menuItemControllerContainer, std::shared_ptr<SubMenuItem> subMenuItem);
 
 std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_ptr<Window> window);
 
