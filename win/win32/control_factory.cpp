@@ -168,7 +168,7 @@ std::shared_ptr<EditController> createEditControl(std::shared_ptr<WindowContaine
 std::shared_ptr<GroupBoxController> createGroupBoxControl(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
-	DWORD window_style_ex = 0;
+	DWORD window_style_ex = WS_EX_CONTROLPARENT; // For allow the TAB key to iterate over children controls
 	DWORD window_style = WS_CHILD | WS_TABSTOP | BS_GROUPBOX;
 	
 	if (!groupBox->enabled()) {
