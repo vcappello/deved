@@ -11,6 +11,7 @@
 #include <win/control.h>
 #include <win/button.h>
 #include <win/edit.h>
+#include <win/label.h>
 #include <win/group_box.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
@@ -32,6 +33,7 @@ class WindowsObject;
 class WindowController; 
 class ButtonController; 
 class EditController;
+class LabelController;
 class GroupBoxController;	
 class MenuBarController;
 class IMenuItemControllerContainer; 
@@ -46,6 +48,8 @@ std::shared_ptr<WindowsObject> createController(std::shared_ptr<WindowContainerB
 std::shared_ptr<ButtonController> createButtonController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Button> button);
 
 std::shared_ptr<EditController> createEditController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Edit> edit);
+
+std::shared_ptr<LabelController> createLabelController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Label> label);
 
 std::shared_ptr<GroupBoxController> createGroupBoxController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox);
 

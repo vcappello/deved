@@ -101,7 +101,7 @@ void WindowBase::setExStyleBit(DWORD flag, bool value) {
 	if (value) {
 		style |= flag;
 	} else {
-		style &= (~flag);
+		style &= ~flag;
 	}
 	
 	::SetWindowLong (mHWnd, GWL_EXSTYLE, style);

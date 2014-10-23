@@ -3,6 +3,7 @@
 #include "window_controller.h"
 #include "button_controller.h"
 #include "edit_controller.h"
+#include "label_controller.h"
 #include "group_box_controller.h"
 #include "menu_bar_controller.h"
 #include "command_menu_item_controller.h"
@@ -34,6 +35,9 @@ std::shared_ptr<WindowsObject> createController(std::shared_ptr<WindowContainerB
 	} else if (control->getType() == "Edit") {
 		auto editControl = castControl<Edit>(control);
 		object = createEditController (windowContainer, editControl);
+	} else if (control->getType() == "Label") {
+		auto labelControl = castControl<Label>(control);
+		object = createLabelController (windowContainer, labelControl); 
 	} else if (control->getType() == "GroupBox") {
 		auto groupBoxControl = castControl<GroupBox>(control);
 		object = createGroupBoxController (windowContainer, groupBoxControl);
@@ -157,6 +161,63 @@ std::shared_ptr<EditController> createEditController(std::shared_ptr<WindowConta
 
 	// Add the control to the container window
 	windowContainer->addChildWindow (edit->getName(), controller);
+	
+	// Subclass window
+	controller->subclass();
+	
+	return controller;	
+}
+
+std::shared_ptr<LabelController> createLabelController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Label> label) {
+	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+
+	DWORD window_style_ex = 0;
+	DWORD window_style = WS_TABSTOP | WS_CHILD | ES_AUTOHSCROLL;
+	
+	if (!label->enabled()) {
+		window_style |= WS_DISABLED;
+	}
+	if (label->visible()) {
+		window_style |= WS_VISIBLE;
+	}
+	if (label->border()) {
+		window_style_ex |= WS_EX_CLIENTEDGE;
+	}
+	
+	int controlId = createControlId();
+	HWND hWnd = CreateWindowEx (
+					window_style_ex,
+	                "STATIC",
+	                label->text().c_str(),
+	                window_style,
+					label->left(),
+					label->top(),
+					label->width(),
+					label->height(),
+	                windowContainer->getHWnd(),
+	                (HMENU)(intptr_t)controlId,
+	                hInstance,
+	                NULL);
+
+	if (!hWnd) {
+		throw Error( formatSystemMessage (::GetLastError()) );
+	}	
+	
+	// Create EditController instance
+	auto controller = std::make_shared<LabelController>( hWnd, controlId, label );
+	MessageDispatcher::getInstance().registerController (controller);
+	
+	// Initialize font
+	std::shared_ptr<FontResource> fontResource;
+	if (label->font()) {
+		fontResource = createFontResource (label->font());
+	} else {
+		fontResource = createFontResource (getSystemFont());
+	}
+	controller->setFontResource (fontResource);
+
+	// Add the control to the container window
+	windowContainer->addChildWindow (label->getName(), controller);
 	
 	// Subclass window
 	controller->subclass();

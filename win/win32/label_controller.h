@@ -4,10 +4,10 @@
  * refer to the file LICENSE.txt.
  */
 
-#ifndef WIN_WIN32_EDIT_CONTROLLER_H
-#define WIN_WIN32_EDIT_CONTROLLER_H
+#ifndef WIN_WIN32_LABEL_CONTROLLER_H
+#define WIN_WIN32_LABEL_CONTROLLER_H
 
-#include <win/edit.h>
+#include <win/label.h>
 #include "window_base.h"
 #include "i_notification_handler.h"
 #include "window_layout.h"
@@ -17,17 +17,14 @@
 
 namespace win {
 
-class EditController : public WindowBase, 
+class LabelController : public WindowBase, 
                        public INotificationHandler {
 public:
-	EditController(HWND hWnd, int commandId, std::shared_ptr<Edit> edit);
-	virtual ~EditController();
+	explicit LabelController(HWND hWnd, int commandId, std::shared_ptr<Label> label);
+	virtual ~LabelController();
 
-	std::shared_ptr<Edit> getEdit() { return mEdit; }
+	std::shared_ptr<Label> getLabel() { return mLabel; }
 
-	bool isMultiline();
-	void setMultiline(bool value);
-	
 	void subclass();
 	
 	/** @name IMessageHandler implementations
@@ -50,11 +47,11 @@ public:
 	
 protected:
 	int mCommandId;
-	std::shared_ptr<Edit> mEdit;
-	ControlLayout<Edit> mLayout;
+	std::shared_ptr<Label> mLabel;
+	ControlLayout<Label> mLayout;
 	WNDPROC mOldWndProc;
 };
 
 }
 
-#endif // WIN_WIN32_EDIT_CONTROLLER_H
+#endif // WIN_WIN32_LABEL_CONTROLLER_H

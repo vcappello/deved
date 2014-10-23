@@ -10,6 +10,7 @@
 #include <win/window.h>
 #include <win/button.h>
 #include <win/edit.h>
+#include <win/label.h>
 #include <win/group_box.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
@@ -21,6 +22,7 @@ int main() {
 	std::shared_ptr<win::Button> button2;
 	std::shared_ptr<win::Button> button3;
 	std::shared_ptr<win::Edit> edit1;
+	std::shared_ptr<win::Label> label1;
 	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
 	std::shared_ptr<win::SubMenuItem> subMenuItem3;
 	
@@ -46,8 +48,10 @@ int main() {
 		button3 = std::make_shared<win::Button>("Button3", "Disable menu item", 10, 70, 200, 30),
 		edit1 = std::make_shared<win::Edit>("Edit1", "Type some text", 10, 100, 200, 30),
 		std::make_shared<win::GroupBox>("GroupBox1", "GroupBox", 220, 10, 200, 110, children_t({
-			std::make_shared<win::Edit>("Edit2", "Type some text", 10, 30, 150, 30),
-			std::make_shared<win::Edit>("Edit3", "Type some text", 10, 70, 150, 30)
+			label1 = std::make_shared<win::Label>("Label1", "One", 10, 30, 30, 30),
+			std::make_shared<win::Edit>("Edit2", "Type some text", 40, 30, 150, 30),
+			std::make_shared<win::Label>("Label2", "two", 10, 70, 30, 30),
+			std::make_shared<win::Edit>("Edit3", "Type some text", 40, 70, 150, 30)
 		}))
 	}));
 
@@ -79,6 +83,7 @@ int main() {
 		button1->font()->bold (!button1->font()->bold());
 		button2->enabled (!button2->enabled());
 		window->defaultButton (button2);
+		label1->border (!label1->border());
 	});
 	
 	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));
