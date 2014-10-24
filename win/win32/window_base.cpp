@@ -49,6 +49,10 @@ bool WindowBase::hasBorder() {
 
 void WindowBase::setBorder(bool value) {
 	setExStyleBit (WS_EX_CLIENTEDGE, value);
+	
+	// Invalidate style cache
+	::SetWindowPos (mHWnd, NULL, 0, 0, 0, 0, 
+		SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
 
 std::shared_ptr<FontResource> WindowBase::getFontResource() {
@@ -105,6 +109,10 @@ void WindowBase::setExStyleBit(DWORD flag, bool value) {
 	}
 	
 	::SetWindowLong (mHWnd, GWL_EXSTYLE, style);
+	// ...important: Certain window data is cached, so changes you make using SetWindowLong 
+	// will not take effect until you call the SetWindowPos function. Specifically, if you 
+	// change any of the frame styles, you must call SetWindowPos with the SWP_FRAMECHANGED 
+	// flag for the cache to be updated properly.
 }
 
 HWND WindowBase::getTopLevelHWnd() {

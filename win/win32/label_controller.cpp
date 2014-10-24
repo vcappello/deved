@@ -1,7 +1,5 @@
 #include "label_controller.h"
 
-#include <iostream>
-
 namespace win {
 	
 LabelController::LabelController(HWND hWnd, int commandId, std::shared_ptr<Label> label) :
@@ -30,9 +28,7 @@ LabelController::LabelController(HWND hWnd, int commandId, std::shared_ptr<Label
 	});		
 
 	mLabel->border.changedEvent.add([&] {
-		std::cout << "mLabel->border.changedEvent" << std::endl;
 		if (hasBorder() != mLabel->border()) {
-			std::cout << "hasBorder() != mLabel->border(): " << hasBorder() << " != " << mLabel->border() << std::endl;
 			setBorder (mLabel->border());
 		}
 	});
