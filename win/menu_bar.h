@@ -9,7 +9,7 @@
 
 #include <win/control.h>
 #include <win/property.h>
-#include <win/entity.h>
+#include <win/entity_map.h>
 #include <win/menu_item.h>
 
 #include <memory>

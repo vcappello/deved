@@ -10,6 +10,7 @@
 #include <win/control.h>
 #include <win/property.h>
 #include <win/font.h>
+#include <win/entity_map.h>
 
 namespace win {
 

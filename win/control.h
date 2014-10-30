@@ -8,16 +8,16 @@
 #define WIN_CONTROL_H
 
 #include <win/property.h>
-#include <win/entity.h>
+#include <win/i_entity.h>
 
 #include <string>
 
 namespace win {
 	
 /**
- * Base class for all controls
+ * Base class for all control entities
  */
-class Control : public Entity {
+class Control : public IEntity {
 public:
 	explicit Control(const std::string& name) :
 		name( name ) {
@@ -25,11 +25,14 @@ public:
 	virtual ~Control() {
 	}
 	
-	// Entity implementations
+	/** @name IEntity implementations
+	 */
+	///@{ 	
 	virtual std::string getName() const { return name(); }
 	
 	// virtual std::string getType() const = 0; // Not implemented
-
+	///@}
+	
 public:
 	Property<std::string> name;
 };

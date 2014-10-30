@@ -11,6 +11,7 @@
 #include <win/property.h>
 #include <win/font.h>
 #include <win/button.h>
+#include <win/entity_map.h>
 
 #include <memory>
 #include <string>

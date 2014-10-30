@@ -7,7 +7,7 @@
 #ifndef WIN_FONT_H
 #define WIN_FONT_H
 
-#include <win/entity.h>
+#include <win/i_entity.h>
 #include <win/property.h>
 
 #include <memory>
@@ -16,7 +16,7 @@
 
 namespace win {
 
-class Font : public Entity {
+class Font : public IEntity {
 public:
 	explicit Font(const std::string& name) :
 		name( name ),
@@ -45,7 +45,7 @@ public:
 	virtual ~Font() {
 	}
 	
-	/** @name Entity implementations
+	/** @name IEntity implementations
 	 */
 	///@{ 	
 	virtual std::string getType() const { return "Font"; }

@@ -8,6 +8,7 @@
 #define WIN_SUB_MENU_ITEM_H
 
 #include <win/menu_item.h>
+#include <win/entity_map.h>
 
 #include <memory>
 

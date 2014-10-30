@@ -17,20 +17,9 @@
 
 namespace win {
 
-class Entity {
-public:
-	Entity() {
-	}
-	virtual ~Entity() {
-	}
-	
-	virtual std::string getType() const = 0;
-	
-	virtual std::string getName() const = 0;
-	
-public:
-};
-
+/**
+ * A generic container of IEntity inherited objects
+ */
 template<class T>
 class EntityMap {
 public:

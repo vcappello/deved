@@ -7,14 +7,14 @@
 #ifndef WIN_MENU_ITEM_H
 #define WIN_MENU_ITEM_H
 
-#include <win/entity.h>
+#include <win/i_entity.h>
 #include <win/property.h>
 
 #include <string>
 
 namespace win {
 
-class MenuItem : public Entity {
+class MenuItem : public IEntity {
 public:
 	explicit MenuItem(const std::string& name) :
 		name( name ) {
@@ -22,7 +22,7 @@ public:
 	virtual ~MenuItem() {
 	}
 	
-	/** @name Entity implementations
+	/** @name IEntity implementations
 	 */
 	///@{
 	virtual std::string getName() const { return name(); }
