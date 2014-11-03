@@ -12,6 +12,7 @@
 #include <win/edit.h>
 #include <win/label.h>
 #include <win/group_box.h>
+#include <win/list_box.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>

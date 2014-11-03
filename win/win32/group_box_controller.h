@@ -12,6 +12,7 @@
 #include "i_notification_handler.h"
 #include "window_layout.h"
 #include "control_factory.h"
+#include "subclass_handler.h"
 
 #include <memory>
 #include <windows.h>
@@ -22,7 +23,7 @@ class GroupBoxController : public WindowContainerBase,
                            public INotificationHandler,
                            public std::enable_shared_from_this<GroupBoxController> {
 public:
-	explicit GroupBoxController(HWND hWnd, int commandId, std::shared_ptr<GroupBox> groupBox);
+	GroupBoxController(HWND hWnd, int commandId, std::shared_ptr<GroupBox> groupBox);
 	virtual ~GroupBoxController();
 
 	std::shared_ptr<GroupBox> getGroupBox() { return mGroupBox; }
@@ -51,7 +52,7 @@ protected:
 	int mCommandId;
 	std::shared_ptr<GroupBox> mGroupBox;
 	ControlLayout<GroupBox> mLayout;
-	WNDPROC mOldWndProc;
+	std::unique_ptr<SubclassHandler> mSubclassHandler;
 };
 
 }

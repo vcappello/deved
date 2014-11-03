@@ -1,5 +1,4 @@
 #include "group_box_controller.h"
-#include "message_dispatcher.h"
 
 namespace win {
 	
@@ -7,8 +6,7 @@ GroupBoxController::GroupBoxController(HWND hWnd, int commandId, std::shared_ptr
 	WindowContainerBase( hWnd ),
 	mCommandId( commandId ),
 	mGroupBox( groupBox ),
-	mLayout( hWnd, groupBox ),
-	mOldWndProc( NULL )	{
+	mLayout( hWnd, groupBox ) {
 		
 	mGroupBox->text.changedEvent.add([&]{
 		if (getText() != mGroupBox->text()) {
@@ -41,16 +39,10 @@ GroupBoxController::GroupBoxController(HWND hWnd, int commandId, std::shared_ptr
 }
 
 GroupBoxController::~GroupBoxController() {
-	// Remove subclassing
-	if (mOldWndProc) {
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( mOldWndProc ));
-	}
 }
 
 void GroupBoxController::subclass() {
-	mOldWndProc = reinterpret_cast<WNDPROC>( 
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( 
-			MessageDispatcher::uniqueWndProc )) );
+	mSubclassHandler = SubclassHandler::create (mHWnd);
 }
 
 bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
@@ -114,7 +106,10 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 }
 
 LRESULT GroupBoxController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	return ::CallWindowProc (mOldWndProc, hWnd, message, wParam, lParam);
+	if (mSubclassHandler) {
+		return mSubclassHandler->callDefWindowProc (hWnd, message, wParam, lParam);
+	}
+	return 0;
 }
 
 void GroupBoxController::handleCommand(WPARAM wParam, LPARAM lParam) {

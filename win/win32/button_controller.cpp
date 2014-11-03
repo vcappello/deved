@@ -1,5 +1,4 @@
 #include "button_controller.h"
-#include "message_dispatcher.h"
 
 namespace win {
 	
@@ -7,8 +6,7 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 	WindowBase( hWnd ),
 	mCommandId( commandId ),
 	mButton( button ),
-	mLayout( hWnd, button ),
-	mOldWndProc( NULL )	{
+	mLayout( hWnd, button )	{
 		
 	mButton->text.changedEvent.add([&]{
 		if (getText() != mButton->text()) {
@@ -30,10 +28,6 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 }
 
 ButtonController::~ButtonController() {
-	// Remove subclassing
-	if (mOldWndProc) {
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( mOldWndProc ));
-	}
 }
 
 bool ButtonController::isDefault() {
@@ -45,9 +39,7 @@ void ButtonController::setDefault(bool value) {
 }
 
 void ButtonController::subclass() {
-	mOldWndProc = reinterpret_cast<WNDPROC>( 
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( 
-			MessageDispatcher::uniqueWndProc )) );
+	mSubclassHandler = SubclassHandler::create (mHWnd);
 }
 
 bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
@@ -96,7 +88,10 @@ bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 }
 
 LRESULT ButtonController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	return ::CallWindowProc (mOldWndProc, hWnd, message, wParam, lParam);
+	if (mSubclassHandler) {
+		return mSubclassHandler->callDefWindowProc (hWnd, message, wParam, lParam);
+	}
+	return 0;
 }
 
 void ButtonController::handleCommand(WPARAM wParam, LPARAM lParam) {

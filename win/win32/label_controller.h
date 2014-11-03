@@ -11,6 +11,7 @@
 #include "window_base.h"
 #include "i_notification_handler.h"
 #include "window_layout.h"
+#include "subclass_handler.h"
 
 #include <memory>
 #include <windows.h>
@@ -20,7 +21,7 @@ namespace win {
 class LabelController : public WindowBase, 
                        public INotificationHandler {
 public:
-	explicit LabelController(HWND hWnd, int commandId, std::shared_ptr<Label> label);
+	LabelController(HWND hWnd, int commandId, std::shared_ptr<Label> label);
 	virtual ~LabelController();
 
 	std::shared_ptr<Label> getLabel() { return mLabel; }
@@ -49,7 +50,7 @@ protected:
 	int mCommandId;
 	std::shared_ptr<Label> mLabel;
 	ControlLayout<Label> mLayout;
-	WNDPROC mOldWndProc;
+	std::unique_ptr<SubclassHandler> mSubclassHandler;
 };
 
 }

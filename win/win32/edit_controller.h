@@ -11,6 +11,7 @@
 #include "window_base.h"
 #include "i_notification_handler.h"
 #include "window_layout.h"
+#include "subclass_handler.h"
 
 #include <memory>
 #include <windows.h>
@@ -52,7 +53,7 @@ protected:
 	int mCommandId;
 	std::shared_ptr<Edit> mEdit;
 	ControlLayout<Edit> mLayout;
-	WNDPROC mOldWndProc;
+	std::unique_ptr<SubclassHandler> mSubclassHandler;
 };
 
 }

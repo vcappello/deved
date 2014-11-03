@@ -29,7 +29,7 @@ public:
 	virtual ~MenuBar() {
 	}
 	
-	/** @name Entity implementations
+	/** @name IEntity implementations
 	 */
 	///@{ 	
 	virtual std::string getType() const { return "MenuBar"; }

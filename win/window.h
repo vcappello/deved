@@ -47,7 +47,7 @@ public:
 	virtual ~Window() {
 	}
 	
-	/** @name Entity implementations
+	/** @name IEntity implementations
 	 */
 	///@{ 	
 	virtual std::string getType() const { return "Window"; }

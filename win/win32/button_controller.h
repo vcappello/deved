@@ -11,6 +11,7 @@
 #include "window_base.h"
 #include "i_notification_handler.h"
 #include "window_layout.h"
+#include "subclass_handler.h"
 
 #include <memory>
 #include <windows.h>
@@ -20,7 +21,7 @@ namespace win {
 class ButtonController : public WindowBase, 
                          public INotificationHandler {
 public:
-	explicit ButtonController(HWND hWnd, int commandId, std::shared_ptr<Button> button);
+	ButtonController(HWND hWnd, int commandId, std::shared_ptr<Button> button);
 	virtual ~ButtonController();
 
 	std::shared_ptr<Button> getButton() { return mButton; }
@@ -52,7 +53,7 @@ protected:
 	int mCommandId;
 	std::shared_ptr<Button> mButton;
 	ControlLayout<Button> mLayout;
-	WNDPROC mOldWndProc;
+	std::unique_ptr<SubclassHandler> mSubclassHandler;
 };
 
 }

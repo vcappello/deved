@@ -37,7 +37,7 @@ public:
 	virtual ~Edit() {
 	}
 	
-	/** @name Entity implementations
+	/** @name IEntity implementations
 	 */
 	///@{ 
 	virtual std::string getType() const { return "Edit"; }

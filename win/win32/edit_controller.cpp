@@ -6,8 +6,7 @@ EditController::EditController(HWND hWnd, int commandId, std::shared_ptr<Edit> e
 	WindowBase( hWnd ),
 	mCommandId( commandId ),
 	mEdit( edit ),
-	mLayout( hWnd, edit ),
-	mOldWndProc( NULL )	{
+	mLayout( hWnd, edit ) {
 		
 	mEdit->text.changedEvent.add([&]{
 		if (getText() != mEdit->text()) {
@@ -41,10 +40,6 @@ EditController::EditController(HWND hWnd, int commandId, std::shared_ptr<Edit> e
 }
 
 EditController::~EditController() {
-	// Remove subclassing
-	if (mOldWndProc) {
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( mOldWndProc ));
-	}
 }
 
 bool EditController::isMultiline() {
@@ -56,9 +51,7 @@ void EditController::setMultiline(bool value) {
 }
 
 void EditController::subclass() {
-	mOldWndProc = reinterpret_cast<WNDPROC>( 
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( 
-			MessageDispatcher::uniqueWndProc )) );
+	mSubclassHandler = SubclassHandler::create (mHWnd);
 }
 
 bool EditController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
@@ -116,7 +109,10 @@ bool EditController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, L
 }
 
 LRESULT EditController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	return ::CallWindowProc (mOldWndProc, hWnd, message, wParam, lParam);
+	if (mSubclassHandler) {
+		return mSubclassHandler->callDefWindowProc (hWnd, message, wParam, lParam);
+	}
+	return 0;
 }
 
 void EditController::handleCommand(WPARAM wParam, LPARAM lParam) {

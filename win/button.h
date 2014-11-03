@@ -33,7 +33,7 @@ public:
 	virtual ~Button() {
 	}
 	
-	/** @name Entity implementations
+	/** @name IEntity implementations
 	 */
 	///@{ 
 	virtual std::string getType() const { return "Button"; }

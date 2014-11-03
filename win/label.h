@@ -35,7 +35,7 @@ public:
 	virtual ~Label() {
 	}
 	
-	/** @name Entity implementations
+	/** @name IEntity implementations
 	 */
 	///@{ 
 	virtual std::string getType() const { return "Label"; }

@@ -6,8 +6,7 @@ LabelController::LabelController(HWND hWnd, int commandId, std::shared_ptr<Label
 	WindowBase( hWnd ),
 	mCommandId( commandId ),
 	mLabel( label ),
-	mLayout( hWnd, label ),
-	mOldWndProc( NULL )	{
+	mLayout( hWnd, label )	{
 		
 	mLabel->text.changedEvent.add([&]{
 		if (getText() != mLabel->text()) {
@@ -35,16 +34,10 @@ LabelController::LabelController(HWND hWnd, int commandId, std::shared_ptr<Label
 }
 
 LabelController::~LabelController() {
-	// Remove subclassing
-	if (mOldWndProc) {
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( mOldWndProc ));
-	}
 }
 
 void LabelController::subclass() {
-	mOldWndProc = reinterpret_cast<WNDPROC>( 
-		SetWindowLongPtr (mHWnd, GWLP_WNDPROC, reinterpret_cast<LONG_PTR>( 
-			MessageDispatcher::uniqueWndProc )) );
+	mSubclassHandler = SubclassHandler::create (mHWnd);
 }
 
 bool LabelController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
@@ -99,7 +92,10 @@ bool LabelController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, 
 }
 
 LRESULT LabelController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
-	return ::CallWindowProc (mOldWndProc, hWnd, message, wParam, lParam);
+	if (mSubclassHandler) {
+		return mSubclassHandler->callDefWindowProc (hWnd, message, wParam, lParam);
+	}
+	return 0;
 }
 
 void LabelController::handleCommand(WPARAM wParam, LPARAM lParam) {
