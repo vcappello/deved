@@ -13,6 +13,7 @@
 #include <win/label.h>
 #include <win/group_box.h>
 #include <win/list_box.h>
+#include <win/text_list_item.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>
@@ -29,8 +30,9 @@ int main() {
 	
 	using children_t = std::initializer_list<std::shared_ptr<win::Control>>;
 	using menu_items_t = std::initializer_list<std::shared_ptr<win::MenuItem>>;
+	using list_items_t = std::initializer_list<std::shared_ptr<win::ListItem>>;
 	
-	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 250, children_t({
+	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 350, children_t({
 		std::make_shared<win::MenuBar>( "MenuBar1", menu_items_t({ 
 				std::make_shared<win::SubMenuItem>( "SubMenuItem1", "File", menu_items_t({
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem1", "New" ),
@@ -53,6 +55,10 @@ int main() {
 			std::make_shared<win::Edit>("Edit2", "Type some text", 40, 30, 150, 30),
 			std::make_shared<win::Label>("Label2", "two", 10, 70, 30, 30),
 			std::make_shared<win::Edit>("Edit3", "Type some text", 40, 70, 150, 30)
+		})),
+		std::make_shared<win::ListBox>("ListBox1", 10, 150, 200, 100, list_items_t({
+			std::make_shared<win::TextListItem>("ListItem1", "foo"),
+			std::make_shared<win::TextListItem>("ListItem2", "bar"),
 		}))
 	}));
 

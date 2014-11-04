@@ -13,6 +13,7 @@
 #include <win/edit.h>
 #include <win/label.h>
 #include <win/group_box.h>
+#include <win/list_box.h>
 #include <win/menu_bar.h>
 #include <win/command_menu_item.h>
 #include <win/sub_menu_item.h>
@@ -34,7 +35,8 @@ class WindowController;
 class ButtonController; 
 class EditController;
 class LabelController;
-class GroupBoxController;	
+class GroupBoxController;
+class ListBoxController;
 class MenuBarController;
 class IMenuItemControllerContainer; 
 class MenuItemControllerBase; 
@@ -52,6 +54,8 @@ std::shared_ptr<EditController> createEditController(std::shared_ptr<WindowConta
 std::shared_ptr<LabelController> createLabelController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Label> label);
 
 std::shared_ptr<GroupBoxController> createGroupBoxController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<GroupBox> groupBox);
+
+std::shared_ptr<ListBoxController> createListBoxController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<ListBox> listBox);
 
 std::shared_ptr<MenuBarController> createMenuBarController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<MenuBar> menuBar);
 

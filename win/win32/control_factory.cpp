@@ -5,6 +5,7 @@
 #include "edit_controller.h"
 #include "label_controller.h"
 #include "group_box_controller.h"
+#include "list_box_controller.h"
 #include "menu_bar_controller.h"
 #include "command_menu_item_controller.h"
 #include "sub_menu_item_controller.h"
@@ -41,6 +42,9 @@ std::shared_ptr<WindowsObject> createController(std::shared_ptr<WindowContainerB
 	} else if (control->getType() == "GroupBox") {
 		auto groupBoxControl = castControl<GroupBox>(control);
 		object = createGroupBoxController (windowContainer, groupBoxControl);
+	} else if (control->getType() == "ListBox") {
+		auto listBoxControl = castControl<ListBox>(control);
+		object = createListBoxController (windowContainer, listBoxControl);		
 	} else if (control->getType() == "MenuBar") {
 		auto menuBarControl = castControl<MenuBar>(control);
 		object = createMenuBarController (windowContainer, menuBarControl);
@@ -282,6 +286,65 @@ std::shared_ptr<GroupBoxController> createGroupBoxController(std::shared_ptr<Win
 	controller->subclass();
 	
 	return controller;	
+}
+
+std::shared_ptr<ListBoxController> createListBoxController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<ListBox> listBox) {
+	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+
+	DWORD window_style_ex = WS_EX_CLIENTEDGE;
+	DWORD window_style = WS_CHILD | WS_TABSTOP | WS_VSCROLL | LBS_NOTIFY;
+	
+	if (!listBox->enabled()) {
+		window_style |= WS_DISABLED;
+	}
+	if (listBox->visible()) {
+		window_style |= WS_VISIBLE;
+	}
+	
+	int controlId = createControlId();
+	HWND hWnd = CreateWindowEx (
+					window_style_ex,
+	                "LISTBOX",
+	                NULL,
+	                window_style,
+					listBox->left(),
+					listBox->top(),
+					listBox->width(),
+					listBox->height(),
+	                windowContainer->getHWnd(),
+	                (HMENU)(intptr_t)controlId,
+	                hInstance,
+	                NULL);
+
+	if (!hWnd) {
+		throw Error( formatSystemMessage (::GetLastError()) );
+	}	
+	
+	// Create GroupBoxController instance
+	auto controller = std::make_shared<ListBoxController>( hWnd, controlId, listBox );
+	MessageDispatcher::getInstance().registerController (controller);
+
+	// Initialize font
+	std::shared_ptr<FontResource> fontResource;
+	if (listBox->font()) {
+		fontResource = createFontResource (listBox->font());
+	} else {
+		fontResource = createFontResource (getSystemFont());
+	}
+	controller->setFontResource (fontResource);
+	
+	// Add the control to the container window
+	windowContainer->addChildWindow (listBox->getName(), controller);
+	
+	// Add list items
+	for (auto listItem : listBox->listItems) {
+		// TODO: implement this!
+	}
+	
+	// Subclass window
+	controller->subclass();
+	
+	return controller;		
 }
 
 std::shared_ptr<MenuBarController> createMenuBarController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<MenuBar> menuBar) {
