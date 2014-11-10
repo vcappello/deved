@@ -23,22 +23,14 @@ public:
 		enabled( true ) {
 	}
 	ListBox(const std::string& name, int left, int top, int width, int height) :
-		Control( name ),
+		ListBox( name ),
 		left( left ),
 		top( top ),
 		width( width ),
-		height( height ),
-		visible( true ),
-		enabled( true ) {
+		height( height ) {
 	}
 	ListBox(const std::string& name, int left, int top, int width, int height, std::initializer_list<std::shared_ptr<ListItem>> initList) :
-		Control( name ),
-		left( left ),
-		top( top ),
-		width( width ),
-		height( height ),
-		visible( true ),
-		enabled( true ),
+		ListBox( name, left, top, width, height ),
 		listItems( initList ) {
 	}	
 	virtual ~ListBox() {

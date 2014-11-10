@@ -8,10 +8,12 @@
 #define WIN_WIN32_LIST_BOX_CONTROLLER_H
 
 #include <win/list_box.h>
+#include <win/error.h>
 #include "window_base.h"
 #include "i_notification_handler.h"
 #include "window_layout.h"
 #include "subclass_handler.h"
+#include "list_item_controller.h"
 
 #include <memory>
 #include <windows.h>
@@ -19,8 +21,8 @@
 namespace win {
 
 class ListBoxController : public WindowBase, 
-                           public INotificationHandler,
-                           public std::enable_shared_from_this<ListBoxController> {
+                          public INotificationHandler,
+                          public std::enable_shared_from_this<ListBoxController> {
 public:
 	ListBoxController(HWND hWnd, int commandId, std::shared_ptr<ListBox> listBox);
 	virtual ~ListBoxController();
@@ -28,7 +30,7 @@ public:
 	std::shared_ptr<ListBox> getListBox() { return mListBox; }
 
 	void subclass();
-	
+
 	/** @name IMessageHandler implementations
 	 */
 	///@{ 	
@@ -52,6 +54,15 @@ protected:
 	std::shared_ptr<ListBox> mListBox;
 	ControlLayout<ListBox> mLayout;
 	std::unique_ptr<SubclassHandler> mSubclassHandler;
+
+	using listItemKeyT = ListItem*;
+	std::map<listItemKeyT, std::shared_ptr<ListItemController>> mListItemControllers;
+
+protected:
+	int getItemsCount();
+	listItemKeyT getItemKey(int index);
+
+	void rebuildIndexes();
 };
 
 }

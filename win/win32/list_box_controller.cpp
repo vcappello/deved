@@ -86,5 +86,30 @@ LRESULT ListBoxController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wPa
 void ListBoxController::handleCommand(WPARAM wParam, LPARAM lParam) {
 }
 
+int ListBoxController::getItemsCount() {
+	int itemsCount = ::SendMessage (mHWnd, LB_GETCOUNT, 0, 0);
+	if (itemsCount == LB_ERR) {
+		throw Error( "Can not retrieve items count (LB_GETCOUNT)" );
+	}
+	
+	return itemsCount;
+}
+
+ListBoxController::listItemKeyT ListBoxController::getItemKey(int index) {
+	LRESULT key = ::SendMessage (mHWnd, LB_GETITEMDATA, index, 0);
+	if (key == LB_ERR) {
+		throw Error( "Can not retrieve item key (LB_GETITEMDATA)" );
+	}
+	
+	return reinterpret_cast<listItemKeyT>( key );
+}
+
+void ListBoxController::rebuildIndexes() {
+	for (int i = 0; i < getItemsCount(); i++) {
+		listItemKeyT key = getItemKey (i);
+		mListItemControllers[key]->setIndex (i);
+	}
+}
+
 }
 
