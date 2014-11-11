@@ -15,9 +15,9 @@
 
 namespace win {
 
-std::unique_ptr<ListItemController> createListItem(std::shared_ptr<ListBoxController> container, std::shared_ptr<ListItem> listItem);
+std::shared_ptr<ListItemController> createListItemController(std::shared_ptr<ListBoxController> container, std::shared_ptr<ListItem> listItem);
 
-std::unique_ptr<TextListItemController> createTextListItem(std::shared_ptr<ListBoxController> container, std::shared_ptr<TextListItem> textListItem);
+std::shared_ptr<TextListItemController> createTextListItemController(std::shared_ptr<ListBoxController> container, std::shared_ptr<TextListItem> textListItem);
 	
 }
 

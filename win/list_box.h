@@ -17,22 +17,25 @@ namespace win {
 
 class ListBox : public Control {
 public:
-	explicit ListBox(const std::string& name) :
+	using listItemsT = std::initializer_list<std::shared_ptr<win::ListItem>>;
+
+public:
+	ListBox(const std::string& name, int left, int top, int width, int height, listItemsT initList) :
 		Control( name ),
-		visible( true ),
-		enabled( true ) {
-	}
-	ListBox(const std::string& name, int left, int top, int width, int height) :
-		ListBox( name ),
 		left( left ),
 		top( top ),
 		width( width ),
-		height( height ) {
-	}
-	ListBox(const std::string& name, int left, int top, int width, int height, std::initializer_list<std::shared_ptr<ListItem>> initList) :
-		ListBox( name, left, top, width, height ),
+		height( height ),
+		visible( true ),
+		enabled( true ),
 		listItems( initList ) {
-	}	
+	}
+	ListBox(const std::string& name, int left, int top, int width, int height) :
+		ListBox( name, left, top, width, height, listItemsT{} ) {
+	}
+	explicit ListBox(const std::string& name) :
+		ListBox( name, 0, 0, 0, 0 ) {
+	}
 	virtual ~ListBox() {
 	}
 	

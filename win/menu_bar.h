@@ -18,6 +18,7 @@ namespace win {
 
 class MenuBar : public Control {
 public:
+	// TODO: use delegating constructor
 	explicit MenuBar(const std::string& name) :
 		Control( name ) {
 	}

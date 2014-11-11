@@ -16,6 +16,7 @@ namespace win {
 
 class SubMenuItem : public MenuItem {
 public:
+	// TODO: use delegating constructor
 	explicit SubMenuItem(const std::string& name) :
 		MenuItem( name ) {
 	}

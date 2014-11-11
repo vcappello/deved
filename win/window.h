@@ -21,6 +21,7 @@ namespace win {
 
 class Window : public Control {
 public:
+	// TODO: use delegating constructor
 	explicit Window(const std::string& name) :
 		Control( name ),
 		visible( true ) {

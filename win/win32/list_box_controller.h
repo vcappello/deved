@@ -24,11 +24,16 @@ class ListBoxController : public WindowBase,
                           public INotificationHandler,
                           public std::enable_shared_from_this<ListBoxController> {
 public:
+	using listItemKeyT = ListItem*;
+	
+public:
 	ListBoxController(HWND hWnd, int commandId, std::shared_ptr<ListBox> listBox);
 	virtual ~ListBoxController();
 
 	std::shared_ptr<ListBox> getListBox() { return mListBox; }
-
+	
+	void addListItemController(std::shared_ptr<ListItemController> listItemController);
+	
 	void subclass();
 
 	/** @name IMessageHandler implementations
@@ -54,8 +59,6 @@ protected:
 	std::shared_ptr<ListBox> mListBox;
 	ControlLayout<ListBox> mLayout;
 	std::unique_ptr<SubclassHandler> mSubclassHandler;
-
-	using listItemKeyT = ListItem*;
 	std::map<listItemKeyT, std::shared_ptr<ListItemController>> mListItemControllers;
 
 protected:

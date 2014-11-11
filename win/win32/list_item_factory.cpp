@@ -2,28 +2,28 @@
 
 namespace win {
 
-std::unique_ptr<ListItemController> createListItem(std::shared_ptr<ListBoxController> container, std::shared_ptr<ListItem> listItem) {
-	std::unique_ptr<ListItemController> listItemController;
+std::shared_ptr<ListItemController> createListItemController(std::shared_ptr<ListBoxController> container, std::shared_ptr<ListItem> listItem) {
+	std::shared_ptr<ListItemController> controller;
 	if (listItem->getType() == "TextListItem") {
 		auto textListItem = std::dynamic_pointer_cast<TextListItem>( listItem );
 		if (!textListItem) {
 			throw Error( "Can not create list-item '" + listItem->getName() + "'" );
 		}
-		listItemController = createTextListItem (container, textListItem);
+		controller = createTextListItemController (container, textListItem);
 	} else {
 		throw Error( "Can not create list-item '" + listItem->getName() + "' unknown type '" + listItem->getType() + "'" );
 	}
 	
-	return listItem;
+	return controller;
 }
 
-std::unique_ptr<TextListItemController> createTextListItem(std::shared_ptr<ListBoxController> container, std::shared_ptr<TextListItem> textListItem) {
-	int index = ::SendMessage (container->getHWnd(), LB_ADDSTRING, 0, textListItem->text());
+std::shared_ptr<TextListItemController> createTextListItemController(std::shared_ptr<ListBoxController> container, std::shared_ptr<TextListItem> textListItem) {
+	int index = ::SendMessage (container->getHWnd(), LB_ADDSTRING, 0, reinterpret_cast<WPARAM>( textListItem->text().c_str() ));
 	if (index == LB_ERR) {
 		throw Error( "Can not create list-item (LB_ADDSTRING)" );
 	}
 	
-	std::unique_ptr<TextListItemController> controller( new TextListItemController( index, containe->getHWnd(), textListItem ) );
+	std::shared_ptr<TextListItemController> controller = std::make_shared<TextListItemController>( index, container->getHWnd(), textListItem );
 	return controller;
 }
 	

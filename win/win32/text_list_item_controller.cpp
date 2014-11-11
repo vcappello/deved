@@ -20,5 +20,9 @@ std::string TextListItemController::getText() const {
 	return mTextListItem->text();
 }
 	
+std::shared_ptr<ListItem> TextListItemController::getListItem() const {
+	return mTextListItem;
+}
+
 }
 

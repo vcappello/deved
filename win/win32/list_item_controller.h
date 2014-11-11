@@ -11,6 +11,7 @@
 #include <win/error.h>
 
 #include <string>
+#include <memory>
 #include <windows.h>
 
 namespace win {
@@ -23,7 +24,9 @@ public:
 	int getIndex() const { return mIndex; }
 	void setIndex(int value) { mIndex = value; }
 	
-	virtual std::string getText() = 0;
+	virtual std::string getText() const = 0;
+	
+	virtual std::shared_ptr<ListItem> getListItem() const = 0;
 	
 protected:
 	int mIndex;

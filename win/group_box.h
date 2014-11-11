@@ -16,6 +16,7 @@ namespace win {
 
 class GroupBox : public Control {
 public:
+	// TODO: use delegating constructor
 	explicit GroupBox(const std::string& name) :
 		Control( name ),
 		visible( true ),

@@ -28,6 +28,7 @@ std::string ListItemController::getListItemText() {
 }
 
 void ListItemController::setListItemText(const std::string& value) {
+	// TODO: preserve selection, if the item that is changing is selected
 	LRESULT result = ::SendMessage (mHWndListBox, LB_DELETESTRING, mIndex, 0);
 	if (result == LB_ERR) {
 		throw Error( "Can not set list item text (LB_DELETESTRING)" );

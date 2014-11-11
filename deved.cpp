@@ -27,10 +27,10 @@ int main() {
 	std::shared_ptr<win::Label> label1;
 	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
 	std::shared_ptr<win::SubMenuItem> subMenuItem3;
+	std::shared_ptr<win::TextListItem> listItem1;
 	
 	using children_t = std::initializer_list<std::shared_ptr<win::Control>>;
 	using menu_items_t = std::initializer_list<std::shared_ptr<win::MenuItem>>;
-	using list_items_t = std::initializer_list<std::shared_ptr<win::ListItem>>;
 	
 	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 350, children_t({
 		std::make_shared<win::MenuBar>( "MenuBar1", menu_items_t({ 
@@ -56,8 +56,8 @@ int main() {
 			std::make_shared<win::Label>("Label2", "two", 10, 70, 30, 30),
 			std::make_shared<win::Edit>("Edit3", "Type some text", 40, 70, 150, 30)
 		})),
-		std::make_shared<win::ListBox>("ListBox1", 10, 150, 200, 100, list_items_t({
-			std::make_shared<win::TextListItem>("ListItem1", "foo"),
+		std::make_shared<win::ListBox>("ListBox1", 10, 150, 200, 100, win::ListBox::listItemsT({
+			listItem1 = std::make_shared<win::TextListItem>("ListItem1", "foo"),
 			std::make_shared<win::TextListItem>("ListItem2", "bar"),
 		}))
 	}));
@@ -91,6 +91,7 @@ int main() {
 		button2->enabled (!button2->enabled());
 		window->defaultButton (button2);
 		label1->border (!label1->border());
+		listItem1->text ("foo " + std::to_string (counter));
 	});
 	
 	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));

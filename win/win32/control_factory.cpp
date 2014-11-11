@@ -11,6 +11,7 @@
 #include "sub_menu_item_controller.h"
 #include "message_dispatcher.h"
 #include "font_resource.h"
+#include "list_item_factory.h"
 
 namespace win {
 
@@ -338,7 +339,8 @@ std::shared_ptr<ListBoxController> createListBoxController(std::shared_ptr<Windo
 	
 	// Add list items
 	for (auto listItem : listBox->listItems) {
-		// TODO: implement this!
+		auto listItemController = createListItemController (controller, listItem.second);
+		controller->addListItemController (listItemController);
 	}
 	
 	// Subclass window

@@ -1,5 +1,7 @@
 #include "list_box_controller.h"
 
+#include "list_item_factory.h"
+
 namespace win {
 	
 ListBoxController::ListBoxController(HWND hWnd, int commandId, std::shared_ptr<ListBox> listBox) :
@@ -21,15 +23,20 @@ ListBoxController::ListBoxController(HWND hWnd, int commandId, std::shared_ptr<L
 	});
 	
 	mListBox->listItems.itemAddedEvent.add([&] (std::shared_ptr<ListItem> listItem) {
-		// TODO: implement this!
+		auto listItemController = createListItemController (shared_from_this(), listItem);
+		addListItemController (listItemController);
 	});
 	
 	mListBox->listItems.itemRemovedEvent.add([&] (std::shared_ptr<ListItem> listItem) {
-		// TODO: implement this!
+		mListItemControllers.erase (listItem.get());
 	});	
 }
 
 ListBoxController::~ListBoxController() {
+}
+
+void ListBoxController::addListItemController(std::shared_ptr<ListItemController> listItemController) {
+	mListItemControllers.insert (std::make_pair( listItemController->getListItem().get(), listItemController ));
 }
 
 void ListBoxController::subclass() {

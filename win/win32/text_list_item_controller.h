@@ -23,6 +23,8 @@ public:
 
 	virtual std::string getText() const;
 	
+	virtual std::shared_ptr<ListItem> getListItem() const;
+
 protected:
 	std::shared_ptr<TextListItem> mTextListItem;
 };
