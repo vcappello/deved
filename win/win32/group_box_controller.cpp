@@ -28,12 +28,12 @@ GroupBoxController::GroupBoxController(HWND hWnd, int commandId, std::shared_ptr
 	
 	mGroupBox->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
 		auto controller = createController (shared_from_this(), control);
-		mResources.insert (std::make_pair (control->getName(), controller));
+		mResources.insert (std::make_pair (control.get(), controller));
 	});
 	
 	mGroupBox->controls.itemRemovedEvent.add([&] (std::shared_ptr<Control> control) {
-		auto object = mResources[control->getName()];
-		mResources.erase (control->getName());
+		auto object = mResources[control.get()];
+		mResources.erase (control.get());
 		object->destroy();
 	});	
 }

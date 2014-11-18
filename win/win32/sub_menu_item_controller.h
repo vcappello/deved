@@ -35,7 +35,7 @@ public:
 	///@{ 
 	HMENU getHMenu() { return mHMenu; }
 	
-	void addMenuItem(const std::string& name, std::shared_ptr<MenuItemControllerBase> menuItem);
+	void addMenuItem(std::shared_ptr<MenuItemControllerBase> menuItemController);
 	///@}	
 	
 public:

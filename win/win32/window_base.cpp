@@ -56,15 +56,15 @@ void WindowBase::setBorder(bool value) {
 }
 
 std::shared_ptr<FontResource> WindowBase::getFontResource() {
-	return std::dynamic_pointer_cast<FontResource>(mResources[mCurrentFontResourceName]);
+	return std::dynamic_pointer_cast<FontResource>(mResources[mCurrentFontResourceInstId]);
 }
 
 void WindowBase::setFontResource(std::shared_ptr<FontResource> fontResource) {
 	::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(fontResource->getHFont()), TRUE);
 
-	if (!resourceExist (fontResource->getFont()->name())) {
-		mCurrentFontResourceName = fontResource->getFont()->name();
-		addResource (mCurrentFontResourceName, fontResource);
+	if (!resourceExist (fontResource->getFont().get())) {
+		mCurrentFontResourceInstId = fontResource->getFont().get();
+		addResource (mCurrentFontResourceInstId, fontResource);
 		
 		fontResource->changedEvent.add([&]{ 
 			auto resource = getFontResource();

@@ -16,12 +16,12 @@ SubMenuItemController::SubMenuItemController(HMENU hMenuParent, int commandId, s
 	
 	mSubMenuItem->menuItems.itemAddedEvent.add([&] (std::shared_ptr<MenuItem> menuItem) {
 		auto controller = createMenuItemController (shared_from_this(), menuItem);
-		addResource (menuItem->getName(), controller);
+		addResource (menuItem.get(), controller);
 	});
 	
 	mSubMenuItem->menuItems.itemRemovedEvent.add([&] (std::shared_ptr<MenuItem> menuItem) {
-		auto object = getResource (menuItem->getName());
-		removeResource (menuItem->getName());
+		auto object = getResource (menuItem.get());
+		removeResource (menuItem.get());
 		object->destroy();			
 	});		
 }
@@ -33,8 +33,8 @@ SubMenuItemController::~SubMenuItemController() {
 	::DestroyMenu (mHMenu);
 }
 
-void SubMenuItemController::addMenuItem(const std::string& name, std::shared_ptr<MenuItemControllerBase> menuItem) {
-	addResource (name, menuItem);
+void SubMenuItemController::addMenuItem(std::shared_ptr<MenuItemControllerBase> menuItemController) {
+	addResource (menuItemController->getMenuItem().get(), menuItemController);
 }
 
 }

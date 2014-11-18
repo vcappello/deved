@@ -16,6 +16,9 @@ namespace win {
  */
 class IEntity {
 public:
+	using InstanceIdType = IEntity*;
+
+public:
 	virtual ~IEntity() {
 	}
 	

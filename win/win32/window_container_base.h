@@ -17,7 +17,7 @@ public:
 	explicit WindowContainerBase(HWND hWnd);
 	virtual ~WindowContainerBase();
 
-	void addChildWindow(const std::string& name, std::shared_ptr<WindowBase> child);
+	void addChildWindow(const WindowsObject::InstanceIdType& id, std::shared_ptr<WindowBase> child);
 
 protected:
 };

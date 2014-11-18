@@ -7,6 +7,8 @@
 #ifndef WIN_WIN32_WINDOWS_OBJECT_H
 #define WIN_WIN32_WINDOWS_OBJECT_H
 
+#include <win/i_entity.h>
+
 #include <map>
 #include <string>
 #include <memory>
@@ -15,23 +17,26 @@ namespace win {
 
 class WindowsObject {
 public:
+	using InstanceIdType = IEntity*;
+
+public:
 	WindowsObject();
 	virtual ~WindowsObject();
 	
 	virtual void destroy();
 
 protected:
-	std::map<std::string, std::shared_ptr<WindowsObject>> mResources;
+	std::map<InstanceIdType, std::shared_ptr<WindowsObject>> mResources;
 
 protected:
-	virtual void addResource(const std::string& name, std::shared_ptr<WindowsObject> object);
-	virtual void removeResource(const std::string& name);
-	virtual bool resourceExist(const std::string& name) const;
+	virtual void addResource(const InstanceIdType& id, std::shared_ptr<WindowsObject> object);
+	virtual void removeResource(const InstanceIdType& id);
+	virtual bool resourceExist(const InstanceIdType& id) const;
 
-	virtual std::shared_ptr<WindowsObject> getResource(const std::string& name);
-	virtual std::shared_ptr<WindowsObject> getResource(const std::string& name) const;
+	virtual std::shared_ptr<WindowsObject> getResource(const InstanceIdType& id);
+	virtual std::shared_ptr<WindowsObject> getResource(const InstanceIdType& id) const;
 
-	virtual std::shared_ptr<WindowsObject> findResourceByName(const std::string& name);
+	virtual std::shared_ptr<WindowsObject> findResourceById(const InstanceIdType& id);
 };
 
 }

@@ -8,7 +8,7 @@
 #define WIN_SUB_MENU_ITEM_H
 
 #include <win/menu_item.h>
-#include <win/entity_map.h>
+#include <win/entity_vector.h>
 
 #include <memory>
 
@@ -16,23 +16,20 @@ namespace win {
 
 class SubMenuItem : public MenuItem {
 public:
-	// TODO: use delegating constructor
-	explicit SubMenuItem(const std::string& name) :
-		MenuItem( name ) {
-	}
-	SubMenuItem(const std::string& name, std::initializer_list<std::shared_ptr<MenuItem>> initList) :
-		MenuItem( name ),
-		menuItems( initList ) {
-	}	
-	SubMenuItem(const std::string& name, const std::string& text) :
-		MenuItem( name ),
-		text( text ) {
-	}
+	using menuItemsT = std::initializer_list<std::shared_ptr<win::MenuItem>>;
+
+public:
 	SubMenuItem(const std::string& name, const std::string& text, std::initializer_list<std::shared_ptr<MenuItem>> initList) :
 		MenuItem( name ),
 		text( text ),
 		menuItems( initList ) {
 	}	
+	SubMenuItem(const std::string& name, const std::string& text) :
+		SubMenuItem( name, text, menuItemsT{ } ) {
+	}
+	explicit SubMenuItem(const std::string& name) :
+		SubMenuItem( name, std::string("") ) {
+	}
 	virtual ~SubMenuItem() {
 	}
 	
@@ -47,7 +44,7 @@ public:
 	 */
 	///@{
 	Property<std::string> text;	
-	EntityMap<MenuItem> menuItems;	
+	EntityVector<MenuItem> menuItems;	
 	///@}
 };
 

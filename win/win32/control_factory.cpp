@@ -105,7 +105,7 @@ std::shared_ptr<ButtonController> createButtonController(std::shared_ptr<WindowC
 	controller->setFontResource (fontResource);
 	
 	// Add the control to the container window
-	windowContainer->addChildWindow (button->getName(), controller);
+	windowContainer->addChildWindow (button.get(), controller);
 	
 	// Subclass window
 	controller->subclass();
@@ -165,7 +165,7 @@ std::shared_ptr<EditController> createEditController(std::shared_ptr<WindowConta
 	controller->setFontResource (fontResource);
 
 	// Add the control to the container window
-	windowContainer->addChildWindow (edit->getName(), controller);
+	windowContainer->addChildWindow (edit.get(), controller);
 	
 	// Subclass window
 	controller->subclass();
@@ -222,7 +222,7 @@ std::shared_ptr<LabelController> createLabelController(std::shared_ptr<WindowCon
 	controller->setFontResource (fontResource);
 
 	// Add the control to the container window
-	windowContainer->addChildWindow (label->getName(), controller);
+	windowContainer->addChildWindow (label.get(), controller);
 	
 	// Subclass window
 	controller->subclass();
@@ -276,7 +276,7 @@ std::shared_ptr<GroupBoxController> createGroupBoxController(std::shared_ptr<Win
 	controller->setFontResource (fontResource);
 	
 	// Add the control to the container window
-	windowContainer->addChildWindow (groupBox->getName(), controller);
+	windowContainer->addChildWindow (groupBox.get(), controller);
 	
 	// Add owned controls
 	for (auto control : groupBox->controls) {
@@ -335,11 +335,11 @@ std::shared_ptr<ListBoxController> createListBoxController(std::shared_ptr<Windo
 	controller->setFontResource (fontResource);
 	
 	// Add the control to the container window
-	windowContainer->addChildWindow (listBox->getName(), controller);
+	windowContainer->addChildWindow (listBox.get(), controller);
 	
 	// Add list items
 	for (auto listItem : listBox->listItems) {
-		auto listItemController = createListItemController (controller, listItem.second);
+		auto listItemController = createListItemController (controller, listItem);
 		controller->addListItemController (listItemController);
 	}
 	
@@ -418,7 +418,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItemController(std::
 	auto controller = std::make_shared<CommandMenuItemController>( menuItemControllerContainer->getHMenu(), controlId, commandMenuItem );
 	
 	// Add menu item to the parent container
-	menuItemControllerContainer->addMenuItem (commandMenuItem->name(), controller);
+	menuItemControllerContainer->addMenuItem (controller);
 
 	// Register the controller for notifications handling
 	MessageDispatcher::getInstance().registerController (controller);
@@ -453,11 +453,11 @@ std::shared_ptr<SubMenuItemController> createSubMenuItemController(std::shared_p
 	}
 	
 	// Add menu item to the parent container
-	menuItemControllerContainer->addMenuItem (subMenuItem->name(), controller);
+	menuItemControllerContainer->addMenuItem (controller);
 	
 	// Create children menu items
 	for (auto menuItem : subMenuItem->menuItems) {
-		createMenuItemController (controller, menuItem.second);
+		createMenuItemController (controller, menuItem);
 	}
 	
 	return controller;

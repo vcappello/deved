@@ -30,16 +30,17 @@ int main() {
 	std::shared_ptr<win::TextListItem> listItem1;
 	
 	using children_t = std::initializer_list<std::shared_ptr<win::Control>>;
+	// TODO: remove this
 	using menu_items_t = std::initializer_list<std::shared_ptr<win::MenuItem>>;
 	
 	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 350, children_t({
 		std::make_shared<win::MenuBar>( "MenuBar1", menu_items_t({ 
-				std::make_shared<win::SubMenuItem>( "SubMenuItem1", "File", menu_items_t({
+				std::make_shared<win::SubMenuItem>( "SubMenuItem1", "File", win::SubMenuItem::menuItemsT({
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem1", "New" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem2", "Open" ),
 					commandMenuItem3 = std::make_shared<win::CommandMenuItem>( "CommandMenuItem3", "Save" )
 				})),
-				std::make_shared<win::SubMenuItem>( "SubMenuItem2", "Edit", menu_items_t({ 
+				std::make_shared<win::SubMenuItem>( "SubMenuItem2", "Edit", win::SubMenuItem::menuItemsT({ 
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem4", "Cut" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem5", "Copy" ),
 					std::make_shared<win::CommandMenuItem>( "CommandMenuItem6", "Paste" ),
@@ -57,8 +58,8 @@ int main() {
 			std::make_shared<win::Edit>("Edit3", "Type some text", 40, 70, 150, 30)
 		})),
 		std::make_shared<win::ListBox>("ListBox1", 10, 150, 200, 100, win::ListBox::listItemsT({
-			listItem1 = std::make_shared<win::TextListItem>("ListItem1", "foo"),
-			std::make_shared<win::TextListItem>("ListItem2", "bar"),
+			listItem1 = std::make_shared<win::TextListItem>("ListItem2", "foo"),
+			std::make_shared<win::TextListItem>("ListItem1", "bar"),
 		}))
 	}));
 

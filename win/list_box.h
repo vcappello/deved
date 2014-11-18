@@ -10,7 +10,7 @@
 #include <win/control.h>
 #include <win/property.h>
 #include <win/font.h>
-#include <win/entity_map.h>
+#include <win/entity_vector.h>
 #include <win/list_item.h>
 
 namespace win {
@@ -56,7 +56,7 @@ public:
 	Property<bool> visible;
 	Property<bool> enabled;
 	Property<std::shared_ptr<Font>> font;
-	EntityMap<ListItem> listItems;
+	EntityVector<ListItem> listItems;
 	Property<std::shared_ptr<ListItem>> selectedItem;
 	///@}
 

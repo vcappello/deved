@@ -67,7 +67,7 @@ public:
 	
 protected:
 	HWND mHWnd;
-	std::string mCurrentFontResourceName;
+	WindowsObject::InstanceIdType mCurrentFontResourceInstId;
 };
 
 }

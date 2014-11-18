@@ -8,9 +8,9 @@ WindowContainerBase::WindowContainerBase(HWND hWnd) :
 
 WindowContainerBase::~WindowContainerBase() {
 }
-	
-void WindowContainerBase::addChildWindow(const std::string& name, std::shared_ptr<WindowBase> child) {
-	addResource (name, child);
+
+void WindowContainerBase::addChildWindow(const WindowsObject::InstanceIdType& id, std::shared_ptr<WindowBase> child) {
+	addResource (id, child);
 }
 
 }

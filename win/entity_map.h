@@ -4,8 +4,8 @@
  * refer to the file LICENSE.txt.
  */
 
-#ifndef WIN_ENTITY_H
-#define WIN_ENTITY_H
+#ifndef WIN_ENTITY_MAP_H
+#define WIN_ENTITY_MAP_H
 
 #include <win/event.h>
 #include <win/error.h>
@@ -90,5 +90,5 @@ protected:
 
 }
 
-#endif // WIN_ENTITY_H
+#endif // WIN_ENTITY_MAP_H
 

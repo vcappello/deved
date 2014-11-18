@@ -23,7 +23,7 @@ public:
 	
 	virtual HMENU getHMenu() = 0;
 
-	virtual void addMenuItem(const std::string& name, std::shared_ptr<MenuItemControllerBase> menuItem) = 0;
+	virtual void addMenuItem(std::shared_ptr<MenuItemControllerBase> menuItem) = 0;
 
 public:
 };

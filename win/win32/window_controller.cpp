@@ -28,12 +28,12 @@ WindowController::WindowController(HWND hWnd, std::shared_ptr<Window> window) :
 	
 	mWindow->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
 		auto controller = createController (shared_from_this(), control);
-		mResources.insert (std::make_pair (control->getName(), controller));
+		mResources.insert (std::make_pair (control.get(), controller));
 	});
 	
 	mWindow->controls.itemRemovedEvent.add([&] (std::shared_ptr<Control> control) {
-		auto object = mResources[control->getName()];
-		mResources.erase (control->getName());
+		auto object = mResources[control.get()];
+		mResources.erase (control.get());
 		object->destroy();
 	});	
 }
@@ -57,7 +57,7 @@ int WindowController::getDefaultButtonId() const {
 void WindowController::updateDefaultButton() {
 	if (mWindow->defaultButton()) {
 		// Set new instance
-		auto newDefaultButtonController = std::dynamic_pointer_cast<ButtonController>( findResourceByName (mWindow->defaultButton()->getName()) );
+		auto newDefaultButtonController = std::dynamic_pointer_cast<ButtonController>( findResourceById (mWindow->defaultButton().get()) );
 		if (newDefaultButtonController && (mDefaultId != newDefaultButtonController->getCommandId())) {
 			// Deselect previous default button
 			if (mDefaultId != -1) {
