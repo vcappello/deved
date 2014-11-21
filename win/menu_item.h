@@ -16,6 +16,8 @@ namespace win {
 
 class MenuItem : public IEntity {
 public:
+	MenuItem() {
+	}	
 	explicit MenuItem(const std::string& name) :
 		name( name ) {
 	}

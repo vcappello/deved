@@ -26,6 +26,7 @@ void createWindow(std::shared_ptr<Window> window) {
 	wcex.hCursor        	= ::LoadCursor (NULL, IDC_ARROW);
 	wcex.hbrBackground  	= (HBRUSH)(COLOR_BTNFACE + 1);
 	wcex.lpszMenuName   	= NULL;
+	// TODO: since the name now is not mandatory use another key!
 	wcex.lpszClassName  	= window->name().c_str();
 	wcex.hIconSm        	= ::LoadIcon (hInstance, IDI_APPLICATION);
 	wcex.style          	= CS_HREDRAW | CS_VREDRAW;

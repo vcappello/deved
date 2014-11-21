@@ -15,15 +15,14 @@ namespace win {
 
 class CommandMenuItem : public MenuItem {
 public:
-	explicit CommandMenuItem(const std::string& name) :
-		MenuItem( name ),
-		enabled( true ) {
-	}
 	CommandMenuItem(const std::string& name, const std::string& text) :
 		MenuItem( name ),
 		text( text ),
 		enabled( true ) {
 	}	
+	explicit CommandMenuItem(const std::string& text) :
+		CommandMenuItem( "", text ) {
+	}
 	virtual ~CommandMenuItem() {
 	}
 	

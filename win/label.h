@@ -15,12 +15,6 @@ namespace win {
 
 class Label : public Control {
 public:
-	explicit Label(const std::string& name) :
-		Control( name ),
-		visible( true ),
-		enabled( true ),
-		border( false ) {
-	}
 	Label(const std::string& name, const std::string& text, int left, int top, int width, int height) :
 		Control( name ),
 		text( text ),
@@ -31,7 +25,13 @@ public:
 		visible( true ),
 		enabled( true ),
 		border( false ) {
+	}
+	Label(const std::string& text, int left, int top, int width, int height) :
+		Label( "", text, left, top, width, height ) {
 	}		
+	explicit Label(const std::string& text) :
+		Label( text, 0, 0, 0, 0 ) {
+	}	
 	virtual ~Label() {
 	}
 	

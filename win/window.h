@@ -11,7 +11,7 @@
 #include <win/property.h>
 #include <win/font.h>
 #include <win/button.h>
-#include <win/entity_map.h>
+#include <win/entity_vector.h>
 
 #include <memory>
 #include <string>
@@ -21,21 +21,10 @@ namespace win {
 
 class Window : public Control {
 public:
-	// TODO: use delegating constructor
-	explicit Window(const std::string& name) :
-		Control( name ),
-		visible( true ) {
-	}
-	Window(const std::string& name, const std::string& title, int left, int top, int width, int height) :
-		Control( name ),
-		title( title ),
-		left( left ),
-		top( top ),
-		width( width ),
-		height( height ),
-		visible( true ) {
-	}
-	Window(const std::string& name, const std::string& title, int left, int top, int width, int height, std::initializer_list<std::shared_ptr<Control>> initList) :
+	using ControlsType = std::initializer_list<std::shared_ptr<Control>>;
+	
+public:
+	Window(const std::string& name, const std::string& title, int left, int top, int width, int height, ControlsType initList) :
 		Control( name ),
 		title( title ),
 		left( left ),
@@ -45,6 +34,18 @@ public:
 		visible( true ),
 		controls( initList ) {
 	}		
+	Window(const std::string& name, const std::string& title, int left, int top, int width, int height) :
+		Window( name, title, left, top, width, height, ControlsType{ } ) {
+	}
+	Window(const std::string& title, int left, int top, int width, int height, ControlsType initList) :
+		Window( "", title, left, top, width, height, initList ) {
+	}
+	Window(const std::string& title, int left, int top, int width, int height) :
+		Window( title, left, top, width, height, ControlsType{ } ) {
+	}
+	explicit Window(const std::string& title) :
+		Window( title, 0, 0, 0, 0 ) {
+	}
 	virtual ~Window() {
 	}
 	
@@ -66,7 +67,7 @@ public:
 	Property<bool> visible;
 	Property<std::shared_ptr<Font>> font;
 	Property<std::shared_ptr<Button>> defaultButton;
-	EntityMap<Control> controls;
+	EntityVector<Control> controls;
 	///@}
 
 };

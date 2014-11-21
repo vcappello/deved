@@ -19,6 +19,8 @@ namespace win {
  */
 class ListItem : public IEntity {
 public:
+	ListItem() {
+	}	
 	explicit ListItem(const std::string& name) :
 		name( name ) {
 	}

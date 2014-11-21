@@ -15,13 +15,6 @@ namespace win {
 
 class Edit : public Control {
 public:
-	explicit Edit(const std::string& name) :
-		Control( name ),
-		visible( true ),
-		enabled( true ),
-		multiline( false ),
-		border( true ) {
-	}
 	Edit(const std::string& name, const std::string& text, int left, int top, int width, int height) :
 		Control( name ),
 		text( text ),
@@ -33,7 +26,13 @@ public:
 		enabled( true ),
 		multiline( false ),
 		border( true ) {
-	}		
+	}
+	Edit(const std::string& text, int left, int top, int width, int height) :
+		Edit( "", text, left, top, width, height ) {
+	}	
+	explicit Edit(const std::string& text) :
+		Edit( text, 0, 0, 0, 0 ) {
+	}	
 	virtual ~Edit() {
 	}
 	

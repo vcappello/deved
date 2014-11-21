@@ -9,6 +9,7 @@
 
 namespace win {
 
+// TODO: move from here! put on win32?
 class Point {
 public:
 	Point() {}

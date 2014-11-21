@@ -19,6 +19,8 @@ namespace win {
  */
 class Control : public IEntity {
 public:
+	Control() {
+	}
 	explicit Control(const std::string& name) :
 		name( name ) {
 	}
@@ -34,7 +36,11 @@ public:
 	///@}
 	
 public:
+	/** @name Properties
+	 */
+	///@{ 
 	Property<std::string> name;
+	///@}
 };
 
 }

@@ -9,7 +9,7 @@
 
 #include <win/control.h>
 #include <win/property.h>
-#include <win/entity_map.h>
+#include <win/entity_vector.h>
 #include <win/menu_item.h>
 
 #include <memory>
@@ -18,15 +18,21 @@ namespace win {
 
 class MenuBar : public Control {
 public:
-	// TODO: use delegating constructor
-	explicit MenuBar(const std::string& name) :
-		Control( name ) {
-	}
-	MenuBar(const std::string& name, std::initializer_list<std::shared_ptr<MenuItem>> initList) :
+	using MenuItemsType = std::initializer_list<std::shared_ptr<win::MenuItem>>;
+
+public:
+	MenuBar(const std::string& name, MenuItemsType initList) :
 		Control( name ),
 		menuItems( initList ) {
 		
-	}	
+	}
+	MenuBar(MenuItemsType initList) :
+		MenuBar( "", initList ) {
+		
+	}
+	explicit MenuBar() :
+		MenuBar( MenuItemsType{ } ) {
+	}
 	virtual ~MenuBar() {
 	}
 	
@@ -40,7 +46,7 @@ public:
 	/** @name Properties
 	 */
 	///@{ 	
-	EntityMap<MenuItem> menuItems;
+	EntityVector<MenuItem> menuItems;
 	///@}
 };
 

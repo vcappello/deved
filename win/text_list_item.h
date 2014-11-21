@@ -16,12 +16,12 @@ namespace win {
  */
 class TextListItem : public ListItem {
 public:
-	explicit TextListItem(const std::string& name) :
-		ListItem( name ) {
-	}
 	TextListItem(const std::string& name, const std::string& text) :
 		ListItem( name ),
 		text( text ) {
+	}	
+	explicit TextListItem(const std::string& text) :
+		TextListItem( "", text ) {
 	}
 	virtual ~TextListItem() {
 	}

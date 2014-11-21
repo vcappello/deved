@@ -15,11 +15,6 @@ namespace win {
 
 class Button : public Control {
 public:
-	explicit Button(const std::string& name) :
-		Control( name ),
-		visible( true ),
-		enabled( true ) {
-	}
 	Button(const std::string& name, const std::string& text, int left, int top, int width, int height) :
 		Control( name ),
 		text( text ),
@@ -29,7 +24,13 @@ public:
 		height( height ),
 		visible( true ),
 		enabled( true ) {
-	}		
+	}
+	Button(const std::string& text, int left, int top, int width, int height) :
+		Button( "", text, left, top, width, height ) {
+	}
+	explicit Button(const std::string& text) :
+		Button( text, 0, 0, 0, 0 ) {
+	}
 	virtual ~Button() {
 	}
 	

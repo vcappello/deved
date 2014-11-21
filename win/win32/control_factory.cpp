@@ -280,7 +280,7 @@ std::shared_ptr<GroupBoxController> createGroupBoxController(std::shared_ptr<Win
 	
 	// Add owned controls
 	for (auto control : groupBox->controls) {
-		createController (controller, control.second);
+		createController (controller, control);
 	}
 	
 	// Subclass window
@@ -354,7 +354,7 @@ std::shared_ptr<MenuBarController> createMenuBarController(std::shared_ptr<Windo
 	
 	// Create children menu items	
 	for (auto menuItem : menuBar->menuItems) {
-		createMenuItemController (controller, menuItem.second);
+		createMenuItemController (controller, menuItem);
 	}
 	
 	auto windowController = findWindowControllerFromChild (windowContainer);
@@ -476,7 +476,7 @@ std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_
 	
 	// Add owned controls
 	for (auto control : window->controls) {
-		createController (controller, control.second);
+		createController (controller, control);
 	}
 
 	// Default button

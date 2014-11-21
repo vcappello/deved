@@ -4,9 +4,6 @@
  * refer to the file LICENSE.txt.
  */
 
-#include <memory>
-#include <string>
-
 #include <win/window.h>
 #include <win/button.h>
 #include <win/edit.h>
@@ -19,6 +16,10 @@
 #include <win/sub_menu_item.h>
 #include <win/create_window.h>
 
+#include <memory>
+#include <string>
+#include <iostream>
+
 int main() {
 	std::shared_ptr<win::Button> button1;
 	std::shared_ptr<win::Button> button2;
@@ -29,37 +30,34 @@ int main() {
 	std::shared_ptr<win::SubMenuItem> subMenuItem3;
 	std::shared_ptr<win::TextListItem> listItem1;
 	
-	using children_t = std::initializer_list<std::shared_ptr<win::Control>>;
-	// TODO: remove this
-	using menu_items_t = std::initializer_list<std::shared_ptr<win::MenuItem>>;
-	
-	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 350, children_t({
-		std::make_shared<win::MenuBar>( "MenuBar1", menu_items_t({ 
-				std::make_shared<win::SubMenuItem>( "SubMenuItem1", "File", win::SubMenuItem::menuItemsT({
-					std::make_shared<win::CommandMenuItem>( "CommandMenuItem1", "New" ),
-					std::make_shared<win::CommandMenuItem>( "CommandMenuItem2", "Open" ),
-					commandMenuItem3 = std::make_shared<win::CommandMenuItem>( "CommandMenuItem3", "Save" )
+	// For the moment must specify a Window name, this is used as WindowClass name
+	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 350, win::Window::ControlsType({
+		std::make_shared<win::MenuBar>( win::MenuBar::MenuItemsType({ 
+				std::make_shared<win::SubMenuItem>( "File", win::SubMenuItem::MenuItemsType({
+					std::make_shared<win::CommandMenuItem>( "New" ),
+					std::make_shared<win::CommandMenuItem>( "Open" ),
+					commandMenuItem3 = std::make_shared<win::CommandMenuItem>( "Save" )
 				})),
-				std::make_shared<win::SubMenuItem>( "SubMenuItem2", "Edit", win::SubMenuItem::menuItemsT({ 
-					std::make_shared<win::CommandMenuItem>( "CommandMenuItem4", "Cut" ),
-					std::make_shared<win::CommandMenuItem>( "CommandMenuItem5", "Copy" ),
-					std::make_shared<win::CommandMenuItem>( "CommandMenuItem6", "Paste" ),
-					subMenuItem3 = std::make_shared<win::SubMenuItem>( "SubMenuItem3", "Dynamic items" )
+				std::make_shared<win::SubMenuItem>( "Edit", win::SubMenuItem::MenuItemsType({ 
+					std::make_shared<win::CommandMenuItem>( "Cut" ),
+					std::make_shared<win::CommandMenuItem>( "Copy" ),
+					std::make_shared<win::CommandMenuItem>( "Paste" ),
+					subMenuItem3 = std::make_shared<win::SubMenuItem>( "Dynamic items" )
 				}))
 		})),
-		button1 = std::make_shared<win::Button>("Button1", "Add menu item", 10, 10, 200, 30),
-		button2 = std::make_shared<win::Button>("Button2", "Delete menu item", 10, 40, 200, 30),
-		button3 = std::make_shared<win::Button>("Button3", "Disable menu item", 10, 70, 200, 30),
-		edit1 = std::make_shared<win::Edit>("Edit1", "Type some text", 10, 100, 200, 30),
-		std::make_shared<win::GroupBox>("GroupBox1", "GroupBox", 220, 10, 200, 110, children_t({
-			label1 = std::make_shared<win::Label>("Label1", "One", 10, 30, 30, 30),
-			std::make_shared<win::Edit>("Edit2", "Type some text", 40, 30, 150, 30),
-			std::make_shared<win::Label>("Label2", "two", 10, 70, 30, 30),
-			std::make_shared<win::Edit>("Edit3", "Type some text", 40, 70, 150, 30)
+		button1 = std::make_shared<win::Button>( "Add menu item", 10, 10, 200, 30 ),
+		button2 = std::make_shared<win::Button>( "Delete menu item", 10, 40, 200, 30 ),
+		button3 = std::make_shared<win::Button>( "Disable menu item", 10, 70, 200, 30 ),
+		edit1 = std::make_shared<win::Edit>( "Type some text", 10, 100, 200, 30 ),
+		std::make_shared<win::GroupBox>( "GroupBox", 220, 10, 200, 110, win::GroupBox::ControlsType({
+			label1 = std::make_shared<win::Label>( "One", 10, 30, 30, 30 ),
+			std::make_shared<win::Edit>( "Type some text", 40, 30, 150, 30 ),
+			std::make_shared<win::Label>( "Two", 10, 70, 30, 30 ),
+			std::make_shared<win::Edit>( "Type some text", 40, 70, 150, 30 )
 		})),
-		std::make_shared<win::ListBox>("ListBox1", 10, 150, 200, 100, win::ListBox::listItemsT({
-			listItem1 = std::make_shared<win::TextListItem>("ListItem2", "foo"),
-			std::make_shared<win::TextListItem>("ListItem1", "bar"),
+		std::make_shared<win::ListBox>( 10, 150, 200, 100, win::ListBox::ListItemsType({
+			listItem1 = std::make_shared<win::TextListItem>( "foo" ),
+			std::make_shared<win::TextListItem>( "bar"),
 		}))
 	}));
 
@@ -99,6 +97,7 @@ int main() {
 	button2->enabled (false);
 	window->defaultButton (button3);
 	
+	std::cout << "Create window" << std::endl;
 	win::createWindow (window);
 	win::run();
 

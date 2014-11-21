@@ -16,19 +16,19 @@ namespace win {
 
 class SubMenuItem : public MenuItem {
 public:
-	using menuItemsT = std::initializer_list<std::shared_ptr<win::MenuItem>>;
+	using MenuItemsType = std::initializer_list<std::shared_ptr<win::MenuItem>>;
 
 public:
-	SubMenuItem(const std::string& name, const std::string& text, std::initializer_list<std::shared_ptr<MenuItem>> initList) :
+	SubMenuItem(const std::string& name, const std::string& text, MenuItemsType initList) :
 		MenuItem( name ),
 		text( text ),
 		menuItems( initList ) {
-	}	
-	SubMenuItem(const std::string& name, const std::string& text) :
-		SubMenuItem( name, text, menuItemsT{ } ) {
 	}
-	explicit SubMenuItem(const std::string& name) :
-		SubMenuItem( name, std::string("") ) {
+	SubMenuItem(const std::string& text, MenuItemsType initList) :
+		SubMenuItem( "", text, initList ) {
+	}
+	explicit SubMenuItem(const std::string& text) :
+		SubMenuItem( text, MenuItemsType{ } ) {
 	}
 	virtual ~SubMenuItem() {
 	}

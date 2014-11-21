@@ -18,22 +18,6 @@ namespace win {
 
 class Font : public IEntity {
 public:
-	explicit Font(const std::string& name) :
-		name( name ),
-		fontName( "" ),
-		size( 0 ),
-		bold( false ), 
-		italic( false ),
-		underline( false ) {
-	}
-	Font(const std::string& name, const std::string& fontName, int size) :
-		name( name ),
-		fontName( fontName ),
-		size( size ),
-		bold( false ), 
-		italic( false ),
-		underline( false ) {
-	}
 	Font(const std::string& name, const std::string& fontName, int size, bool bold, bool italic, bool underline) :
 		name( name ),
 		fontName( fontName ),
@@ -41,7 +25,19 @@ public:
 		bold( bold ), 
 		italic( italic ),
 		underline( underline ) {
-	}		
+	}
+	Font(const std::string& fontName, int size, bool bold, bool italic, bool underline) :
+		Font( "", fontName, size, bold, italic, underline ) {
+	}	
+	Font(const std::string& name, const std::string& fontName, int size) :
+		Font( name, fontName, size, false, false, false ) {
+	}	
+	Font(const std::string& fontName, int size) :
+		Font( fontName, size, false, false, false ) {
+	}	
+	explicit Font(const std::string& fontName) :
+		Font( fontName, 0 ) {
+	}
 	virtual ~Font() {
 	}
 	

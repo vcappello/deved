@@ -17,10 +17,10 @@ namespace win {
 
 class ListBox : public Control {
 public:
-	using listItemsT = std::initializer_list<std::shared_ptr<win::ListItem>>;
+	using ListItemsType = std::initializer_list<std::shared_ptr<win::ListItem>>;
 
 public:
-	ListBox(const std::string& name, int left, int top, int width, int height, listItemsT initList) :
+	ListBox(const std::string& name, int left, int top, int width, int height, ListItemsType initList) :
 		Control( name ),
 		left( left ),
 		top( top ),
@@ -31,10 +31,16 @@ public:
 		listItems( initList ) {
 	}
 	ListBox(const std::string& name, int left, int top, int width, int height) :
-		ListBox( name, left, top, width, height, listItemsT{} ) {
+		ListBox( name, left, top, width, height, ListItemsType{ } ) {
 	}
-	explicit ListBox(const std::string& name) :
-		ListBox( name, 0, 0, 0, 0 ) {
+	ListBox(int left, int top, int width, int height, ListItemsType initList) :
+		ListBox( "", left, top, width, height, initList ) {
+	}	
+	ListBox(int left, int top, int width, int height) :
+		ListBox( "", left, top, width, height, ListItemsType{ } ) {
+	}	
+	ListBox() :
+		ListBox( 0, 0, 0, 0 ) {
 	}
 	virtual ~ListBox() {
 	}
