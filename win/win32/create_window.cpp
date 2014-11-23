@@ -7,12 +7,23 @@
 #include "message_dispatcher.h"
 #include "message_loop.h"
 
+#include <sstream>
+#include <iomanip>
 #include <windows.h>
 
 namespace win {
 
+template<class T>
+std::string toHex(T num) {
+	std::stringstream ss;
+	ss << std::hex << num;
+	return ss.str();
+}
+
 void createWindow(std::shared_ptr<Window> window) {
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
+	
+	std::string className = "win::Window_" + toHex(window.get());
 	
 	// Register class
 	WNDCLASSEX wcex;
@@ -26,8 +37,7 @@ void createWindow(std::shared_ptr<Window> window) {
 	wcex.hCursor        	= ::LoadCursor (NULL, IDC_ARROW);
 	wcex.hbrBackground  	= (HBRUSH)(COLOR_BTNFACE + 1);
 	wcex.lpszMenuName   	= NULL;
-	// TODO: since the name now is not mandatory use another key!
-	wcex.lpszClassName  	= window->name().c_str();
+	wcex.lpszClassName  	= className.c_str();
 	wcex.hIconSm        	= ::LoadIcon (hInstance, IDI_APPLICATION);
 	wcex.style          	= CS_HREDRAW | CS_VREDRAW;
 
@@ -44,7 +54,7 @@ void createWindow(std::shared_ptr<Window> window) {
 		
 	HWND hWnd = CreateWindowEx (
 					window_style_ex,
-	                window->name().c_str(),
+	                className.c_str(),
 	                window->title().c_str(),
 	                window_style,
 					window->left(),

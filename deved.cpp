@@ -31,7 +31,7 @@ int main() {
 	std::shared_ptr<win::TextListItem> listItem1;
 	
 	// For the moment must specify a Window name, this is used as WindowClass name
-	auto window = std::make_shared<win::Window>( "Window1", "My window", 10, 10, 450, 350, win::Window::ControlsType({
+	auto window = std::make_shared<win::Window>( "My window", 10, 10, 450, 350, win::Window::ControlsType({
 		std::make_shared<win::MenuBar>( win::MenuBar::MenuItemsType({ 
 				std::make_shared<win::SubMenuItem>( "File", win::SubMenuItem::MenuItemsType({
 					std::make_shared<win::CommandMenuItem>( "New" ),
