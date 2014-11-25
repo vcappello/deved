@@ -465,25 +465,6 @@ std::shared_ptr<SubMenuItemController> createSubMenuItemController(std::shared_p
 
 std::shared_ptr<WindowController> createWindowController(HWND hWnd, std::shared_ptr<Window> window) {
 	auto controller = std::make_shared<WindowController>( hWnd, window );
-	
-	std::shared_ptr<FontResource> fontResource;
-	if (window->font()) {
-		fontResource = createFontResource (window->font());
-	} else {
-		fontResource = createFontResource (getSystemFont());
-	}
-	controller->setFontResource (fontResource);
-	
-	// Add owned controls
-	for (auto control : window->controls) {
-		createController (controller, control);
-	}
-
-	// Default button
-	if (window->defaultButton()) {
-		controller->updateDefaultButton();
-	}
-	
 	MessageDispatcher::getInstance().registerController (controller);
 	
 	return controller;

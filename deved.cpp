@@ -21,83 +21,54 @@
 #include <iostream>
 
 int main() {
-	std::shared_ptr<win::Button> button1;
-	std::shared_ptr<win::Button> button2;
-	std::shared_ptr<win::Button> button3;
+
 	std::shared_ptr<win::Edit> edit1;
 	std::shared_ptr<win::Label> label1;
-	std::shared_ptr<win::CommandMenuItem> commandMenuItem3;
-	std::shared_ptr<win::SubMenuItem> subMenuItem3;
-	std::shared_ptr<win::TextListItem> listItem1;
+	std::shared_ptr<win::Button> button1;
+	std::shared_ptr<win::ListBox> listbox1;
+	std::shared_ptr<win::Button> button2;
+	std::shared_ptr<win::Button> button3;
+	std::shared_ptr<win::Button> button4;
 	
-	// For the moment must specify a Window name, this is used as WindowClass name
-	auto window = std::make_shared<win::Window>( "My window", 10, 10, 450, 350, win::Window::ControlsType({
-		std::make_shared<win::MenuBar>( win::MenuBar::MenuItemsType({ 
-				std::make_shared<win::SubMenuItem>( "File", win::SubMenuItem::MenuItemsType({
-					std::make_shared<win::CommandMenuItem>( "New" ),
-					std::make_shared<win::CommandMenuItem>( "Open" ),
-					commandMenuItem3 = std::make_shared<win::CommandMenuItem>( "Save" )
-				})),
-				std::make_shared<win::SubMenuItem>( "Edit", win::SubMenuItem::MenuItemsType({ 
-					std::make_shared<win::CommandMenuItem>( "Cut" ),
-					std::make_shared<win::CommandMenuItem>( "Copy" ),
-					std::make_shared<win::CommandMenuItem>( "Paste" ),
-					subMenuItem3 = std::make_shared<win::SubMenuItem>( "Dynamic items" )
-				}))
-		})),
-		button1 = std::make_shared<win::Button>( "Add menu item", 10, 10, 200, 30 ),
-		button2 = std::make_shared<win::Button>( "Delete menu item", 10, 40, 200, 30 ),
-		button3 = std::make_shared<win::Button>( "Disable menu item", 10, 70, 200, 30 ),
-		edit1 = std::make_shared<win::Edit>( "Type some text", 10, 100, 200, 30 ),
-		std::make_shared<win::GroupBox>( "GroupBox", 220, 10, 200, 110, win::GroupBox::ControlsType({
-			label1 = std::make_shared<win::Label>( "One", 10, 30, 30, 30 ),
-			std::make_shared<win::Edit>( "Type some text", 40, 30, 150, 30 ),
-			std::make_shared<win::Label>( "Two", 10, 70, 30, 30 ),
-			std::make_shared<win::Edit>( "Type some text", 40, 70, 150, 30 )
-		})),
-		std::make_shared<win::ListBox>( 10, 150, 200, 100, win::ListBox::ListItemsType({
-			listItem1 = std::make_shared<win::TextListItem>( "foo" ),
-			std::make_shared<win::TextListItem>( "bar"),
-		}))
+	auto window = std::make_shared<win::Window>( "My window", 60, 10, 450, 350, win::Window::ControlsType({
+		edit1 = std::make_shared<win::Edit>( "Type some text", 10, 10, 200, 30 ),
+		button1 = std::make_shared<win::Button>( "Add text", 220, 10, 100, 30 ),
+		button3 = std::make_shared<win::Button>( "Edit text", 330, 10, 100, 30 ),		
+		label1 = std::make_shared<win::Label>( "Characters: ", 10, 40, 200, 30 ),
+		listbox1 = std::make_shared<win::ListBox>( 220, 50, 210, 100),
+		button2 = std::make_shared<win::Button>( "Set text", 220, 160, 100, 30 ),
+		button4 = std::make_shared<win::Button>( "Delete item", 330, 160, 100, 30 )
 	}));
-
-	int counter = 0;
+	
+	edit1->text.changedEvent.add([&] {
+		std::string message = "Characters: " + std::to_string (edit1->text().size());
+		label1->text (message);
+	});
+	
 	button1->clickedEvent.add([&] {
-		counter++;
-		std::string name = "NewCommandMenuItem"  + std::to_string (counter);
-		auto newMenuItem = std::make_shared<win::CommandMenuItem>( 
-			name, 
-			"MenuItem "  + std::to_string (counter));
-		subMenuItem3->menuItems.add (newMenuItem);
-		button2->left (button2->left() + 10);
+		listbox1->listItems.add ( std::make_shared<win::TextListItem>( edit1->text() ));
 	});
 	
 	button2->clickedEvent.add([&] {
-		if (counter > 0) {
-			std::string name = "NewCommandMenuItem"  + std::to_string (counter);
-			subMenuItem3->menuItems.remove (name);
-			counter--;
+		if (listbox1->selectedItem()) {
+			auto selectedTextItem = std::dynamic_pointer_cast<win::TextListItem>( listbox1->selectedItem() );
+			edit1->text (selectedTextItem->text());
 		}
 	});
-
+	
 	button3->clickedEvent.add([&] {
-		if (counter > 0) {
-			std::string name = "NewCommandMenuItem"  + std::to_string (counter);
-			auto item = std::dynamic_pointer_cast<win::CommandMenuItem>( subMenuItem3->menuItems[name] );
-			item->enabled (!item->enabled());
+		if (listbox1->selectedItem()) {
+			auto selectedTextItem = std::dynamic_pointer_cast<win::TextListItem>( listbox1->selectedItem() );
+			selectedTextItem->text (edit1->text());
 		}
-		button1->font()->bold (!button1->font()->bold());
-		button2->enabled (!button2->enabled());
-		window->defaultButton (button2);
-		label1->border (!label1->border());
-		listItem1->text ("foo " + std::to_string (counter));
 	});
 	
-	button1->font (std::make_shared<win::Font>( "CustomFont", "Comic Sans MS", 9 ));
-	button2->enabled (false);
-	window->defaultButton (button3);
+	button4->clickedEvent.add([&] {
+		if (listbox1->selectedItem()) {
+			listbox1->listItems.remove (listbox1->selectedItem());
+		}
+	});
 	
-	std::cout << "Create window" << std::endl;
 	win::createWindow (window);
 	win::run();
 

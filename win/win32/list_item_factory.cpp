@@ -23,6 +23,8 @@ std::shared_ptr<TextListItemController> createTextListItemController(std::shared
 		throw Error( "Can not create list-item (LB_ADDSTRING)" );
 	}
 	
+	::SendMessage (container->getHWnd(), LB_SETITEMDATA, index, reinterpret_cast<LPARAM>(textListItem.get()));
+	
 	std::shared_ptr<TextListItemController> controller = std::make_shared<TextListItemController>( index, container->getHWnd(), textListItem );
 	return controller;
 }

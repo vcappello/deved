@@ -28,7 +28,21 @@ ListBoxController::ListBoxController(HWND hWnd, int commandId, std::shared_ptr<L
 	});
 	
 	mListBox->listItems.itemRemovedEvent.add([&] (std::shared_ptr<ListItem> listItem) {
+		// If the item to remove is the selected one then clear selection
+		if (mListBox->selectedItem() == listItem) {
+			mListBox->selectedItem (nullptr);
+		}
+		
+		auto listItemController = mListItemControllers[listItem.get()];
+		
+		LRESULT result = ::SendMessage (mHWnd, LB_DELETESTRING, listItemController->getIndex(), 0);
+		if (result == LB_ERR) {
+			throw Error( "Can not delete list item (LB_DELETESTRING)" );
+		}	
+				
 		mListItemControllers.erase (listItem.get());
+		
+		rebuildIndexes();
 	});	
 }
 
@@ -91,6 +105,31 @@ LRESULT ListBoxController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wPa
 }
 
 void ListBoxController::handleCommand(WPARAM wParam, LPARAM lParam) {
+	int notification = HIWORD(wParam);
+	switch (notification) {
+		case LBN_SELCHANGE:
+		{
+			int index = getCurrentSelection();
+			if (index != LB_ERR) {
+				listItemKeyT selectedKey = getItemKey (index);
+				mListBox->selectedItem (mListItemControllers[selectedKey]->getListItem());
+			} else {
+				mListBox->selectedItem (nullptr);
+			}
+			break;
+		}
+		case LBN_SELCANCEL:
+		{
+			mListBox->selectedItem (nullptr);
+			break;
+		}
+	}	
+}
+
+int ListBoxController::getCurrentSelection() {
+	int index = ::SendMessage (mHWnd, LB_GETCURSEL, 0, 0);
+	
+	return index;	
 }
 
 int ListBoxController::getItemsCount() {

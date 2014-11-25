@@ -44,8 +44,10 @@ WindowController::~WindowController() {
 void WindowController::setMenuBarController(std::shared_ptr<MenuBarController> menuBarController) {
 	mMenuBarController = menuBarController;
 	if (mMenuBarController) {
+		// TODO: handle error
 		::SetMenu (mHWnd, mMenuBarController->getHMenu());
 	} else {
+		// TODO: handle error
 		::SetMenu (mHWnd, NULL);
 	}
 }
@@ -87,6 +89,27 @@ void WindowController::updateDefaultButton() {
 bool WindowController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, LRESULT& lResult) {
 	
 	switch (message) {
+		case WM_CREATE:
+		{
+			std::shared_ptr<FontResource> fontResource;
+			if (mWindow->font()) {
+				fontResource = createFontResource (mWindow->font());
+			} else {
+				fontResource = createFontResource (getSystemFont());
+			}
+			setFontResource (fontResource);
+			
+			// Add owned controls
+			for (auto control : mWindow->controls) {
+				createController (shared_from_this(), control);
+			}
+
+			// Default button
+			if (mWindow->defaultButton()) {
+				updateDefaultButton();
+			}			
+			break;
+		}
 		case WM_ACTIVATE:
 		{
 			if (wParam == 0) {

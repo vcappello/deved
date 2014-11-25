@@ -16,7 +16,7 @@ std::string WindowBase::getText() {
 	std::size_t len = ::GetWindowTextLength(mHWnd) + 1;
     std::vector<char> buffer( len );
     ::GetWindowText (mHWnd, buffer.data(), len);
-    return std::string( buffer.begin(), buffer.end() );	
+    return std::string( buffer.data() );	
 }
 
 void WindowBase::setText(std::string& value) {

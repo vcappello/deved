@@ -67,7 +67,7 @@ public:
 	}
 	
 	void add(const ChildEntityType& value) {
-		// TODO: check entity ID?
+		// TODO: check entity ID before add?
 		mContainer.push_back (value);
 		
 		itemAddedEvent.fire (value);
@@ -77,19 +77,27 @@ public:
 		ChildEntityType entity = mContainer[index];
 		itemRemovedEvent.fire (entity);
 
-		mContainer.erase (index);		
+		mContainer.erase (std::begin(mContainer) + index);
 	}
 
+	void remove(const ChildEntityType& entity) {
+		auto itor = std::find_if (std::begin(mContainer), std::end(mContainer), [&](const ChildEntityType& child){
+			return entity == child;
+		});
+		if (itor == std::end (mContainer))
+			throw Error( "Can not remove item, instance not found" );
+
+		remove (itor - std::begin(mContainer));
+	}
+	
 	void remove(const std::string& name) {
 		auto itor = std::find_if (std::begin(mContainer), std::end(mContainer), [&](const ChildEntityType& child){
 			return name == child->getName();
 		});
 		if (itor == std::end (mContainer))
-			throw Error( "Can not remove, item with name '" + name + "' does not exist" );
+			throw Error( "Can not remove item, entity with name '" + name + "' does not exist" );
 
-		itemRemovedEvent.fire (*itor);
-
-		mContainer.erase (itor);
+		remove (itor - std::begin(mContainer));
 	}
 	
 	IteratorType begin() {

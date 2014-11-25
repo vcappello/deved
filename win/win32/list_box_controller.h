@@ -62,6 +62,7 @@ protected:
 	std::map<listItemKeyT, std::shared_ptr<ListItemController>> mListItemControllers;
 
 protected:
+	int getCurrentSelection();
 	int getItemsCount();
 	listItemKeyT getItemKey(int index);
 

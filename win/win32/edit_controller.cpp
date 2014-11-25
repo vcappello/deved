@@ -103,7 +103,7 @@ bool EditController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, L
 					mEdit->border (styleStruct->styleNew & WS_EX_CLIENTEDGE);
 				}
 			}
-		}		
+		}
 	}
 	return false;
 }
@@ -116,6 +116,14 @@ LRESULT EditController::callDefWindowProc(HWND hWnd, UINT message, WPARAM wParam
 }
 
 void EditController::handleCommand(WPARAM wParam, LPARAM lParam) {
+	int notification = HIWORD(wParam);
+	switch (notification) {
+		case EN_CHANGE:
+		{
+			std::string value = getText();
+			mEdit->text (value);
+		}
+	}		
 }
 	
 }

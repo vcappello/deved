@@ -26,6 +26,9 @@ LRESULT CALLBACK MessageDispatcher::uniqueWndProc(HWND hWnd, UINT message, WPARA
 		{
 			if (reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams != 0) {
 				auto window = reinterpret_cast<std::shared_ptr<Window>*>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
+				// This only create the WindowController instance, initialization
+				// is performed by the controller when it handle the WM_CREATE
+				// windows message
 				auto controller = createWindowController (hWnd, *window);
 			}
 			result = getInstance().dispatchMessage (hWnd, message, wParam, lParam);
