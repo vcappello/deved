@@ -7,11 +7,11 @@ std::shared_ptr<ListItemController> createListItemController(std::shared_ptr<Lis
 	if (listItem->getType() == "TextListItem") {
 		auto textListItem = std::dynamic_pointer_cast<TextListItem>( listItem );
 		if (!textListItem) {
-			throw Error( "Can not create list-item '" + listItem->getName() + "'" );
+			throw Error( "Can not create list-item '" + listItem->name() + "'" );
 		}
 		controller = createTextListItemController (container, textListItem);
 	} else {
-		throw Error( "Can not create list-item '" + listItem->getName() + "' unknown type '" + listItem->getType() + "'" );
+		throw Error( "Can not create list-item '" + listItem->name() + "' unknown type '" + listItem->getType() + "'" );
 	}
 	
 	return controller;

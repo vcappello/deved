@@ -18,20 +18,13 @@ namespace win {
 
 class Font : public IEntity {
 public:
-	Font(const std::string& name, const std::string& fontName, int size, bool bold, bool italic, bool underline) :
-		name( name ),
+	Font(const std::string& fontName, int size, bool bold, bool italic, bool underline) :
 		fontName( fontName ),
 		size( size ),
 		bold( bold ), 
 		italic( italic ),
 		underline( underline ) {
 	}
-	Font(const std::string& fontName, int size, bool bold, bool italic, bool underline) :
-		Font( "", fontName, size, bold, italic, underline ) {
-	}	
-	Font(const std::string& name, const std::string& fontName, int size) :
-		Font( name, fontName, size, false, false, false ) {
-	}	
 	Font(const std::string& fontName, int size) :
 		Font( fontName, size, false, false, false ) {
 	}	
@@ -45,12 +38,9 @@ public:
 	 */
 	///@{ 	
 	virtual std::string getType() const { return "Font"; }
-	
-	virtual std::string getName() const { return name(); }
 	///@}
 	
 public:
-	Property<std::string> name;
 	Property<std::string> fontName;
 	Property<int> size;
 	Property<bool> bold;

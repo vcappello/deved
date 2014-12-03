@@ -27,8 +27,6 @@ public:
 	/** @name IEntity implementations
 	 */
 	///@{
-	virtual std::string getName() const { return name(); }
-	
 	// virtual std::string getType() const { return "Menu"; } // Not implemented
 	///@}
 	

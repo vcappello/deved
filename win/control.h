@@ -30,8 +30,6 @@ public:
 	/** @name IEntity implementations
 	 */
 	///@{ 	
-	virtual std::string getName() const { return name(); }
-	
 	// virtual std::string getType() const = 0; // Not implemented
 	///@}
 	

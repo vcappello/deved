@@ -24,7 +24,7 @@ template<class T>
 std::shared_ptr<T> castControl(std::shared_ptr<Control> control) {
 	auto castedControl = std::dynamic_pointer_cast<T>(control);
 	if (!castedControl) {
-		throw Error( "Can not create control '" + control->getName() + "'" );
+		throw Error( "Can not create control '" + control->name() + "'" );
 	}
 	return castedControl;
 }
@@ -50,7 +50,7 @@ std::shared_ptr<WindowsObject> createController(std::shared_ptr<WindowContainerB
 		auto menuBarControl = castControl<MenuBar>(control);
 		object = createMenuBarController (windowContainer, menuBarControl);
 	} else {
-		throw Error( "Can not create control '" + control->getName() + "' unknown type '" + control->getType() + "'" );
+		throw Error( "Can not create control '" + control->name() + "' unknown type '" + control->getType() + "'" );
 	}
 	return object;
 }
@@ -519,7 +519,7 @@ std::shared_ptr<Font> createFont(const LOGFONT& logFont) {
 	bool italic = (logFont.lfItalic != false);
 	bool underline = (logFont.lfUnderline != false);
 
-	auto font = std::make_shared<Font>( "System", 
+	auto font = std::make_shared<Font>(
 		logFont.lfFaceName, size, bold, italic, underline );
 	
 	return font;	
