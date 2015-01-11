@@ -24,6 +24,7 @@ LRESULT CALLBACK MessageDispatcher::uniqueWndProc(HWND hWnd, UINT message, WPARA
     {
 		case WM_NCCREATE:
 		{
+			// The WM_NCCREATE is the first message sent when a window is first created
 			if (reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams != 0) {
 				auto window = reinterpret_cast<std::shared_ptr<Window>*>(reinterpret_cast<LPCREATESTRUCT>(lParam)->lpCreateParams);
 				// This only create the WindowController instance, initialization
@@ -36,8 +37,21 @@ LRESULT CALLBACK MessageDispatcher::uniqueWndProc(HWND hWnd, UINT message, WPARA
 		}
 		case WM_COMMAND:
 		{
+			// The WM_COMMAND message is sent to the parent window 
 			getInstance().dispatchMessage (hWnd, message, wParam, lParam);
 			result = getInstance().dispatchCommand (hWnd, message, wParam, lParam);
+			break;
+		}
+		case WM_CTLCOLORBTN:
+		case WM_CTLCOLOREDIT:
+		case WM_CTLCOLORLISTBOX:
+		case WM_CTLCOLORSTATIC:
+		{
+			// The WM_CTLCOLOREDIT message is sent to the parent window
+			result = getInstance().dispatchCtlColor (hWnd, message, wParam, lParam);
+			if (result == 0) {
+				result = getInstance().dispatchMessage (hWnd, message, wParam, lParam);
+			}
 			break;
 		}
 		default:
@@ -97,11 +111,11 @@ LRESULT MessageDispatcher::dispatchMessage(HWND hWnd, UINT message, WPARAM wPara
 		
 		return result;
 	} catch (std::exception& e) {
-		std::string error_message = "An unhandled exception occurred.\n";
-		error_message += e.what();
+		std::string errorMessage = "An unhandled exception occurred.\n";
+		errorMessage += e.what();
 		
 		int res = ::MessageBox(NULL,
-		                     error_message.c_str(),
+		                     errorMessage.c_str(),
 		                     "Unhandled exception",
 		                     MB_ICONERROR | MB_RETRYCANCEL);
 
@@ -117,6 +131,8 @@ LRESULT MessageDispatcher::dispatchCommand(HWND hWnd, UINT message, WPARAM wPara
 	try {
 		int commandId = LOWORD(wParam);
 		
+		// Find the real control ID when the WM_COMMAND message was notified
+		// for the default button
 		if (commandId == IDOK) {
 			// Only windows can handle default command
 			auto windowControllerItor = mMessageHandlers.find (hWnd);
@@ -131,6 +147,7 @@ LRESULT MessageDispatcher::dispatchCommand(HWND hWnd, UINT message, WPARAM wPara
 				commandId = windowController->getDefaultButtonId();
 			}
 		} 
+		// Retrieve the controller
 		auto controllerItor = mNotificationHandlers.find (commandId);
 		if (controllerItor == mNotificationHandlers.end()) {
 			return 0;
@@ -142,11 +159,11 @@ LRESULT MessageDispatcher::dispatchCommand(HWND hWnd, UINT message, WPARAM wPara
 		return 0;
 	} catch (std::exception& e) {
 		
-		std::string error_message = "An unhandled exception occurred.\n";
-		error_message += e.what();
+		std::string errorMessage = "An unhandled exception occurred.\n";
+		errorMessage += e.what();
 		
 		int res = ::MessageBox(NULL,
-		                     error_message.c_str(),
+		                     errorMessage.c_str(),
 		                     "Unhandled exception",
 		                     MB_ICONERROR | MB_RETRYCANCEL);
 
@@ -156,6 +173,20 @@ LRESULT MessageDispatcher::dispatchCommand(HWND hWnd, UINT message, WPARAM wPara
 			exit (EXIT_FAILURE);
 		}
 	}	
+}
+
+LRESULT MessageDispatcher::dispatchCtlColor(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam) {
+	auto controller = getControllerByHandle (reinterpret_cast<HWND>(lParam));
+	
+	LRESULT result = 0;
+	
+	if (!controller) {
+		return result;
+	}
+
+	controller->handleMessage (message, wParam, lParam, result);
+
+	return result;
 }
 
 }

@@ -7,6 +7,8 @@
 #ifndef WIN_WIN32_WINDOWS_OBJECT_H
 #define WIN_WIN32_WINDOWS_OBJECT_H
 
+#include "resource_item.h"
+
 #include <win/i_entity.h>
 
 #include <map>
@@ -15,7 +17,7 @@
 
 namespace win {
 
-class WindowsObject {
+class WindowsObject : public ResourceItem {
 public:
 	using InstanceIdType = IEntity*;
 
@@ -26,17 +28,17 @@ public:
 	virtual void destroy();
 
 protected:
-	std::map<InstanceIdType, std::shared_ptr<WindowsObject>> mResources;
+	std::map<InstanceIdType, std::shared_ptr<ResourceItem>> mResources;
 
 protected:
-	virtual void addResource(const InstanceIdType& id, std::shared_ptr<WindowsObject> object);
+	virtual void addResource(const InstanceIdType& id, std::shared_ptr<ResourceItem> object);
 	virtual void removeResource(const InstanceIdType& id);
 	virtual bool resourceExist(const InstanceIdType& id) const;
 
-	virtual std::shared_ptr<WindowsObject> getResource(const InstanceIdType& id);
-	virtual std::shared_ptr<WindowsObject> getResource(const InstanceIdType& id) const;
+	virtual std::shared_ptr<ResourceItem> getResource(const InstanceIdType& id);
+	virtual std::shared_ptr<ResourceItem> getResource(const InstanceIdType& id) const;
 
-	virtual std::shared_ptr<WindowsObject> findResourceById(const InstanceIdType& id);
+	virtual std::shared_ptr<ResourceItem> findResourceById(const InstanceIdType& id);
 };
 
 }

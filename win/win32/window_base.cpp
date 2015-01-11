@@ -5,7 +5,8 @@
 namespace win {
 
 WindowBase::WindowBase(HWND hWnd) :
-	mHWnd( hWnd ) {
+	mHWnd( hWnd ),
+	mCurrentFontResourceInstId( nullptr ) {
 }
 
 WindowBase::~WindowBase() {
@@ -62,6 +63,14 @@ std::shared_ptr<FontResource> WindowBase::getFontResource() {
 void WindowBase::setFontResource(std::shared_ptr<FontResource> fontResource) {
 	::SendMessage (mHWnd, WM_SETFONT, reinterpret_cast<WPARAM>(fontResource->getHFont()), TRUE);
 
+	// When the font instance change remove previous instance from the resource
+	// repository to avoid memory leaks
+	if (mCurrentFontResourceInstId && mCurrentFontResourceInstId != fontResource->getFont().get()) {
+		removeResource (mCurrentFontResourceInstId);
+		mCurrentFontResourceInstId = nullptr;
+	}
+	
+	// If the font is not stored in the resource repository, add it
 	if (!resourceExist (fontResource->getFont().get())) {
 		mCurrentFontResourceInstId = fontResource->getFont().get();
 		addResource (mCurrentFontResourceInstId, fontResource);

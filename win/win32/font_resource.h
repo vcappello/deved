@@ -7,25 +7,32 @@
 #ifndef WIN_WIN32_FONT_RESOURCE_H
 #define WIN_WIN32_FONT_RESOURCE_H
 
-#include "windows_object.h"
+#include "resource_item.h"
 #include <win/font.h>
 #include <win/event.h>
 
 #include <windows.h>
 
 namespace win {
-	
-class FontResource : public WindowsObject {
+
+/**
+ * Manage font model and font handler.
+ * When the font model was modified the class generate a new font handler.
+ */	
+class FontResource : public ResourceItem {
 public:
 	FontResource(HFONT hFont, std::shared_ptr<Font> font);
 	virtual ~FontResource();
 
 	HFONT getHFont() { return mHFont; }
+	void setHFont(HFONT hFont);
 	
 	std::shared_ptr<Font> getFont() { return mFont; }
 	
-	void updateModelFromLogFont(const LOGFONT& logFont);
-	
+	/**
+	 * Event raised when a property of the model is changed. In this case
+	 * a new font handler is generated. The parent must select the new font handler.
+	 */
 	Event<> changedEvent;
 	
 protected:
@@ -34,6 +41,7 @@ protected:
 
 protected:
 	void regenerateHFont();
+	void updateModelFromLogFont(const LOGFONT& logFont);	
 };
 
 }

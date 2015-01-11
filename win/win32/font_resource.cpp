@@ -8,6 +8,7 @@ FontResource::FontResource(HFONT hFont, std::shared_ptr<Font> font) :
 	mHFont( hFont ),
 	mFont( font ) {
 		
+	// When any font propery change create a new font handler
 	mFont->fontName.changedEvent.add ([&]{ regenerateHFont(); });
 	mFont->size.changedEvent.add ([&]{ regenerateHFont(); });
 	mFont->bold.changedEvent.add ([&]{ regenerateHFont(); });
@@ -17,6 +18,16 @@ FontResource::FontResource(HFONT hFont, std::shared_ptr<Font> font) :
 
 FontResource::~FontResource() {
 	::DeleteObject (mHFont);
+}
+
+void FontResource::setHFont(HFONT hFont) {
+	if (hFont != mHFont) {
+		LOGFONT logFont;
+		::GetObject (hFont, sizeof(logFont), &logFont);
+		
+		mHFont = hFont;
+		updateModelFromLogFont (logFont);
+	}	
 }
 
 void FontResource::updateModelFromLogFont(const LOGFONT& logFont) {

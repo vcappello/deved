@@ -65,10 +65,26 @@ bool EditController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, L
 		case WM_SETFONT:
 		{
 			HFONT hFont = reinterpret_cast<HFONT>( wParam );
-			if (hFont != getFontResource()->getHFont()) {
-				LOGFONT logFont;
-				::GetObject (hFont, sizeof(logFont), &logFont);
-				getFontResource()->updateModelFromLogFont (logFont);
+			getFontResource()->setHFont (hFont);
+			break;
+		}
+		case WM_CTLCOLOREDIT:
+		{
+			HDC hDC = reinterpret_cast<HDC>( wParam );
+			if (mEdit->textColor() != nullptr) {
+				::SetTextColor (hDC, mEdit->textColor()->value());
+			} else {
+				::SetTextColor (hDC, ::GetSysColor (COLOR_WINDOWTEXT));
+			}
+			if (mEdit->backgroundColor() != nullptr) {
+				::SetBkColor (hDC, mEdit->backgroundColor()->value());
+				mBackgroundBrush = std::unique_ptr<GdiObject<HBRUSH>>( 
+					new GdiObject<HBRUSH>( ::CreateSolidBrush(
+						mEdit->backgroundColor()->value())));
+				lResult = reinterpret_cast<LRESULT>(mBackgroundBrush->getHandle());
+			} else {
+				lResult = reinterpret_cast<LRESULT>(::GetSysColorBrush (COLOR_WINDOW));
+				return true;
 			}
 			break;
 		}

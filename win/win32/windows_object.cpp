@@ -8,7 +8,7 @@ WindowsObject::WindowsObject() {
 WindowsObject::~WindowsObject() {
 }
 
-void WindowsObject::addResource(const InstanceIdType& id, std::shared_ptr<WindowsObject> object) {
+void WindowsObject::addResource(const InstanceIdType& id, std::shared_ptr<ResourceItem> object) {
 	mResources.insert (std::make_pair( id, object ));
 }
 
@@ -20,15 +20,15 @@ bool WindowsObject::resourceExist(const InstanceIdType& id) const {
 	return mResources.find (id) != mResources.end();
 }
 
-std::shared_ptr<WindowsObject> WindowsObject::getResource(const InstanceIdType& id) {
+std::shared_ptr<ResourceItem> WindowsObject::getResource(const InstanceIdType& id) {
 	return mResources.at (id);
 }
 
-std::shared_ptr<WindowsObject> WindowsObject::getResource(const InstanceIdType& id) const {
+std::shared_ptr<ResourceItem> WindowsObject::getResource(const InstanceIdType& id) const {
 	return mResources.at (id);
 }
 
-std::shared_ptr<WindowsObject> WindowsObject::findResourceById(const InstanceIdType& id) {
+std::shared_ptr<ResourceItem> WindowsObject::findResourceById(const InstanceIdType& id) {
 	return getResource (id);
 }
 

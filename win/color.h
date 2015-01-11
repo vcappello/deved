@@ -15,7 +15,7 @@ namespace win {
 class Color : public IEntity {
 public:
 	explicit Color(uint32_t value) :
-		Color( "", value ) {
+		value( value ) {
 	}	
 	virtual ~Color() {
 	}
@@ -26,12 +26,12 @@ public:
 	virtual std::string getType() const { return "Color"; }
 	///@}
 	
-	static Color rgb(uint8_t r, uint8_t g, uint8_t b) {
-		uint32_t value = (static_cast<uint32_t>(r) << 16) | 
+	static std::shared_ptr<Color> rgb(uint8_t r, uint8_t g, uint8_t b) {
+		uint32_t value = (static_cast<uint32_t>(b) << 16) | 
 			(static_cast<uint32_t>(g) << 8) | 
-			(static_cast<uint32_t>(b);
+			(static_cast<uint32_t>(r));
 		
-		return Color(value);
+		return std::make_shared<Color>( value );
 	}
 	
 public:

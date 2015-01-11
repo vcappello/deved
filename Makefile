@@ -8,7 +8,7 @@ OUT_DIR = bin
 EXECUTABLE = $(OUT_DIR)/deved.exe
 
 # Compiler flags
-CFLAGS = -c -Wall -std=c++11 -I"C:\Program Files (x86)\Lua\5.1\include" -I. -DWIN32 -mwindows
+CFLAGS = -c -Wall -std=c++1y -I"C:\Program Files (x86)\Lua\5.1\include" -I. -DWIN32 -mwindows
 
 # Linker Flags
 LDFLAGS = -llua52 -lcomctl32 -lgdi32

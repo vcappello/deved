@@ -7,11 +7,12 @@
 #ifndef WIN_WIN32_EDIT_CONTROLLER_H
 #define WIN_WIN32_EDIT_CONTROLLER_H
 
-#include <win/edit.h>
 #include "window_base.h"
 #include "i_notification_handler.h"
 #include "window_layout.h"
 #include "subclass_handler.h"
+#include "gdi_object.h"
+#include <win/edit.h>
 
 #include <memory>
 #include <windows.h>
@@ -54,6 +55,7 @@ protected:
 	std::shared_ptr<Edit> mEdit;
 	ControlLayout<Edit> mLayout;
 	std::unique_ptr<SubclassHandler> mSubclassHandler;
+	std::unique_ptr<GdiObject<HBRUSH>> mBackgroundBrush;
 };
 
 }
