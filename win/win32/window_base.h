@@ -48,6 +48,8 @@ public:
 	void setExStyleBit(DWORD flag, bool value);
 	
 	HWND getTopLevelHWnd();
+
+	void redraw();
 	
 	/** @name IMessageHandler implementations
 	 */

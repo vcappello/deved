@@ -12,6 +12,7 @@
 #include "i_notification_handler.h"
 #include "window_layout.h"
 #include "subclass_handler.h"
+#include "gdi_object.h"
 
 #include <memory>
 #include <windows.h>
@@ -51,6 +52,7 @@ protected:
 	std::shared_ptr<Label> mLabel;
 	ControlLayout<Label> mLayout;
 	std::unique_ptr<SubclassHandler> mSubclassHandler;
+	std::unique_ptr<GdiObject<HBRUSH>> mBackgroundBrush;
 };
 
 }

@@ -128,6 +128,10 @@ HWND WindowBase::getTopLevelHWnd() {
 	return ::GetAncestor (mHWnd, GA_ROOT);
 }
 
+void WindowBase::redraw() {
+	::InvalidateRect (mHWnd, NULL, TRUE);
+}
+
 void WindowBase::destroy() {
 	MessageDispatcher::getInstance().unregisterControllerByHandle (mHWnd);
 	WindowsObject::destroy();

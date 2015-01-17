@@ -10,6 +10,7 @@
 #include <win/control.h>
 #include <win/property.h>
 #include <win/font.h>
+#include <win/color.h>
 
 namespace win {
 
@@ -53,6 +54,8 @@ public:
 	Property<bool> visible;
 	Property<bool> enabled;
 	Property<bool> border;
+	Property<std::shared_ptr<Color>> textColor;
+	Property<std::shared_ptr<Color>> backgroundColor;
 	Property<std::shared_ptr<Font>> font;
 	///@}
 };

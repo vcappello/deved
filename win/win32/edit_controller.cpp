@@ -37,6 +37,14 @@ EditController::EditController(HWND hWnd, int commandId, std::shared_ptr<Edit> e
 			setBorder (mEdit->border());
 		}
 	});
+	
+	mEdit->textColor.changedEvent.add([&] {
+		redraw();
+	});
+	
+	mEdit->backgroundColor.changedEvent.add([&] {
+		redraw();
+	});
 }
 
 EditController::~EditController() {
@@ -68,6 +76,7 @@ bool EditController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, L
 			getFontResource()->setHFont (hFont);
 			break;
 		}
+		case WM_CTLCOLORSTATIC:
 		case WM_CTLCOLOREDIT:
 		{
 			HDC hDC = reinterpret_cast<HDC>( wParam );
@@ -83,6 +92,8 @@ bool EditController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, L
 						mEdit->backgroundColor()->value())));
 				lResult = reinterpret_cast<LRESULT>(mBackgroundBrush->getHandle());
 			} else {
+				mBackgroundBrush = nullptr;
+				::SetBkColor (hDC, ::GetSysColor (COLOR_WINDOW));
 				lResult = reinterpret_cast<LRESULT>(::GetSysColorBrush (COLOR_WINDOW));
 				return true;
 			}

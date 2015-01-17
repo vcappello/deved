@@ -31,6 +31,14 @@ LabelController::LabelController(HWND hWnd, int commandId, std::shared_ptr<Label
 			setBorder (mLabel->border());
 		}
 	});
+	
+	mLabel->textColor.changedEvent.add([&] {
+		redraw();
+	});
+	
+	mLabel->backgroundColor.changedEvent.add([&] {
+		redraw();
+	});	
 }
 
 LabelController::~LabelController() {
@@ -54,6 +62,28 @@ bool LabelController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam, 
 			getFontResource()->setHFont (hFont);
 			break;
 		}
+		case WM_CTLCOLORSTATIC:
+		{
+			HDC hDC = reinterpret_cast<HDC>( wParam );
+			if (mLabel->textColor() != nullptr) {
+				::SetTextColor (hDC, mLabel->textColor()->value());
+			} else {
+				::SetTextColor (hDC, ::GetSysColor (COLOR_WINDOWTEXT));
+			}
+			if (mLabel->backgroundColor() != nullptr) {
+				::SetBkColor (hDC, mLabel->backgroundColor()->value());
+				mBackgroundBrush = std::unique_ptr<GdiObject<HBRUSH>>( 
+					new GdiObject<HBRUSH>( ::CreateSolidBrush(
+						mLabel->backgroundColor()->value())));
+				lResult = reinterpret_cast<LRESULT>(mBackgroundBrush->getHandle());
+			} else {
+				mBackgroundBrush = nullptr;
+				::SetBkColor (hDC, ::GetSysColor (COLOR_BTNFACE));
+				lResult = reinterpret_cast<LRESULT>(::GetSysColorBrush (COLOR_BTNFACE));
+				return true;
+			}
+			break;
+		}		
 		case WM_WINDOWPOSCHANGED:
 		{
 			WINDOWPOS* windowPos = reinterpret_cast<WINDOWPOS*>( lParam );

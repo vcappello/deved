@@ -44,8 +44,9 @@ int main() {
 	button2->enabled (false);
 	button4->enabled (false);
 	
-	edit1->textColor (win::Color::rgb (0xa9, 0x00, 0x00));
-	edit1->backgroundColor (win::Color::rgb (0x00, 0x00, 0xa9));
+	edit1->textColor (win::Color::rgb (0x00, 0x00, 0x00));
+	edit1->backgroundColor (win::Color::rgb (0xff, 0xff, 0xff));
+	//edit1->backgroundColor (win::Color::rgb (0x00, 0x00, 0xa9));
 	
 	listbox1->selectedItem.changedEvent.add([&] {
 		bool enabled = true;
@@ -60,6 +61,16 @@ int main() {
 	edit1->text.changedEvent.add([&] {
 		std::string message = "Characters: " + std::to_string (edit1->text().size());
 		label1->text (message);
+		
+		if (edit1->text().size() > 5) {
+			edit1->textColor (win::Color::rgb (0xff, 0xff, 0xff));
+			edit1->backgroundColor (win::Color::rgb (0xd4, 0x3f, 0x3a));
+			label1->textColor (win::Color::rgb (0xd4, 0x3f, 0x3a));
+		} else {
+			edit1->textColor (win::Color::rgb (0x00, 0x00, 0x00));
+			edit1->backgroundColor (win::Color::rgb (0xff, 0xff, 0xff));
+			label1->textColor (win::Color::rgb (0x00, 0x00, 0x00));
+		}
 	});
 	
 	button1->clickedEvent.add([&] {
