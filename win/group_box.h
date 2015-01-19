@@ -10,6 +10,7 @@
 #include <win/control.h>
 #include <win/property.h>
 #include <win/font.h>
+#include <win/color.h>
 #include <win/entity_vector.h>
 
 namespace win {
@@ -62,6 +63,8 @@ public:
 	Property<int> height;	
 	Property<bool> visible;
 	Property<bool> enabled;
+	Property<std::shared_ptr<Color>> textColor;
+	Property<std::shared_ptr<Color>> backgroundColor;
 	Property<std::shared_ptr<Font>> font;
 	EntityVector<Control> controls;
 	///@}

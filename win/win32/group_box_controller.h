@@ -13,6 +13,7 @@
 #include "window_layout.h"
 #include "control_factory.h"
 #include "subclass_handler.h"
+#include "gdi_object.h"
 
 #include <memory>
 #include <windows.h>
@@ -53,6 +54,7 @@ protected:
 	std::shared_ptr<GroupBox> mGroupBox;
 	ControlLayout<GroupBox> mLayout;
 	std::unique_ptr<SubclassHandler> mSubclassHandler;
+	std::unique_ptr<GdiObject<HBRUSH>> mBackgroundBrush;
 };
 
 }

@@ -24,7 +24,15 @@ ButtonController::ButtonController(HWND hWnd, int commandId, std::shared_ptr<But
 		if (isEnabled() != mButton->enabled()) {
 			setEnabled (mButton->enabled());
 		}
-	});		
+	});	
+	
+	mButton->textColor.changedEvent.add([&] {
+		redraw();
+	});
+	
+	mButton->backgroundColor.changedEvent.add([&] {
+		redraw();
+	});
 }
 
 ButtonController::~ButtonController() {
@@ -56,6 +64,28 @@ bool ButtonController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam,
 			getFontResource()->setHFont (hFont);
 			break;
 		}
+		case WM_CTLCOLORBTN:
+		{
+			HDC hDC = reinterpret_cast<HDC>( wParam );
+			if (mButton->textColor() != nullptr) {
+				::SetTextColor (hDC, mButton->textColor()->value());
+			} else {
+				::SetTextColor (hDC, ::GetSysColor (COLOR_WINDOWTEXT));
+			}
+			if (mButton->backgroundColor() != nullptr) {
+				::SetBkColor (hDC, mButton->backgroundColor()->value());
+				mBackgroundBrush = std::unique_ptr<GdiObject<HBRUSH>>( 
+					new GdiObject<HBRUSH>( ::CreateSolidBrush(
+						mButton->backgroundColor()->value())));
+				lResult = reinterpret_cast<LRESULT>(mBackgroundBrush->getHandle());
+			} else {
+				mBackgroundBrush = nullptr;
+				::SetBkColor (hDC, ::GetSysColor (COLOR_WINDOW));
+				lResult = reinterpret_cast<LRESULT>(::GetSysColorBrush (COLOR_WINDOW));
+				return true;
+			}
+			break;
+		}		
 		case WM_WINDOWPOSCHANGED:
 		{
 			WINDOWPOS* windowPos = reinterpret_cast<WINDOWPOS*>( lParam );

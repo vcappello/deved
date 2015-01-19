@@ -10,6 +10,7 @@
 #include <win/control.h>
 #include <win/property.h>
 #include <win/font.h>
+#include <win/color.h>
 #include <win/entity_vector.h>
 #include <win/list_item.h>
 
@@ -61,6 +62,8 @@ public:
 	Property<int> height;	
 	Property<bool> visible;
 	Property<bool> enabled;
+	Property<std::shared_ptr<Color>> textColor;
+	Property<std::shared_ptr<Color>> backgroundColor;
 	Property<std::shared_ptr<Font>> font;
 	EntityVector<ListItem> listItems;
 	Property<std::shared_ptr<ListItem>> selectedItem;

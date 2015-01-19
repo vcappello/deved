@@ -14,6 +14,7 @@
 #include "window_layout.h"
 #include "subclass_handler.h"
 #include "list_item_controller.h"
+#include "gdi_object.h"
 
 #include <memory>
 #include <windows.h>
@@ -60,6 +61,7 @@ protected:
 	ControlLayout<ListBox> mLayout;
 	std::unique_ptr<SubclassHandler> mSubclassHandler;
 	std::map<listItemKeyT, std::shared_ptr<ListItemController>> mListItemControllers;
+	std::unique_ptr<GdiObject<HBRUSH>> mBackgroundBrush;
 
 protected:
 	int getCurrentSelection();

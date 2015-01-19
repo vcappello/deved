@@ -26,6 +26,14 @@ GroupBoxController::GroupBoxController(HWND hWnd, int commandId, std::shared_ptr
 		}
 	});
 	
+	mGroupBox->textColor.changedEvent.add([&] {
+		redraw();
+	});
+	
+	mGroupBox->backgroundColor.changedEvent.add([&] {
+		redraw();
+	});
+	
 	mGroupBox->controls.itemAddedEvent.add([&] (std::shared_ptr<Control> control) {
 		auto controller = createController (shared_from_this(), control);
 		mResources.insert (std::make_pair (control.get(), controller));
@@ -74,6 +82,29 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 			getFontResource()->setHFont (hFont);
 			break;
 		}
+		case WM_CTLCOLORBTN:
+		case WM_CTLCOLORSTATIC:
+		{
+			HDC hDC = reinterpret_cast<HDC>( wParam );
+			if (mGroupBox->textColor() != nullptr) {
+				::SetTextColor (hDC, mGroupBox->textColor()->value());
+			} else {
+				::SetTextColor (hDC, ::GetSysColor (COLOR_WINDOWTEXT));
+			}
+			if (mGroupBox->backgroundColor() != nullptr) {
+				::SetBkColor (hDC, mGroupBox->backgroundColor()->value());
+				mBackgroundBrush = std::unique_ptr<GdiObject<HBRUSH>>( 
+					new GdiObject<HBRUSH>( ::CreateSolidBrush(
+						mGroupBox->backgroundColor()->value())));
+				lResult = reinterpret_cast<LRESULT>(mBackgroundBrush->getHandle());
+			} else {
+				mBackgroundBrush = nullptr;
+				::SetBkColor (hDC, ::GetSysColor (COLOR_WINDOW));
+				lResult = reinterpret_cast<LRESULT>(::GetSysColorBrush (COLOR_WINDOW));
+				return true;
+			}
+			break;
+		}				
 		case WM_WINDOWPOSCHANGED:
 		{
 			WINDOWPOS* windowPos = reinterpret_cast<WINDOWPOS*>( lParam );

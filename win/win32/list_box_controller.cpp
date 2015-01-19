@@ -22,6 +22,14 @@ ListBoxController::ListBoxController(HWND hWnd, int commandId, std::shared_ptr<L
 		}
 	});
 	
+	mListBox->textColor.changedEvent.add([&] {
+		redraw();
+	});
+	
+	mListBox->backgroundColor.changedEvent.add([&] {
+		redraw();
+	});
+	
 	mListBox->listItems.itemAddedEvent.add([&] (std::shared_ptr<ListItem> listItem) {
 		auto listItemController = createListItemController (shared_from_this(), listItem);
 		addListItemController (listItemController);
@@ -66,6 +74,28 @@ bool ListBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lParam
 			getFontResource()->setHFont (hFont);
 			break;
 		}
+		case WM_CTLCOLORLISTBOX:
+		{
+			HDC hDC = reinterpret_cast<HDC>( wParam );
+			if (mListBox->textColor() != nullptr) {
+				::SetTextColor (hDC, mListBox->textColor()->value());
+			} else {
+				::SetTextColor (hDC, ::GetSysColor (COLOR_WINDOWTEXT));
+			}
+			if (mListBox->backgroundColor() != nullptr) {
+				::SetBkColor (hDC, mListBox->backgroundColor()->value());
+				mBackgroundBrush = std::unique_ptr<GdiObject<HBRUSH>>( 
+					new GdiObject<HBRUSH>( ::CreateSolidBrush(
+						mListBox->backgroundColor()->value())));
+				lResult = reinterpret_cast<LRESULT>(mBackgroundBrush->getHandle());
+			} else {
+				mBackgroundBrush = nullptr;
+				::SetBkColor (hDC, ::GetSysColor (COLOR_WINDOW));
+				lResult = reinterpret_cast<LRESULT>(::GetSysColorBrush (COLOR_WINDOW));
+				return true;
+			}
+			break;
+		}		
 		case WM_WINDOWPOSCHANGED:
 		{
 			WINDOWPOS* windowPos = reinterpret_cast<WINDOWPOS*>( lParam );

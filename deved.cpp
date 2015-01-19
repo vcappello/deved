@@ -22,6 +22,7 @@
 
 int main() {
 
+	std::shared_ptr<win::GroupBox> groupbox1;
 	std::shared_ptr<win::Edit> edit1;
 	std::shared_ptr<win::Label> label1;
 	std::shared_ptr<win::Button> button1;
@@ -37,7 +38,8 @@ int main() {
 		label1 = std::make_shared<win::Label>( "Characters: ", 10, 40, 200, 30 ),
 		listbox1 = std::make_shared<win::ListBox>( 220, 50, 210, 100),
 		button2 = std::make_shared<win::Button>( "Read text", 220, 160, 100, 30 ),
-		button4 = std::make_shared<win::Button>( "Delete item", 330, 160, 100, 30 )
+		button4 = std::make_shared<win::Button>( "Delete item", 330, 160, 100, 30 ),
+		groupbox1 = std::make_shared<win::GroupBox>( "Group box", 10, 70, 200, 100 )
 	}));
 
 	button3->enabled (false);
@@ -46,7 +48,10 @@ int main() {
 	
 	edit1->textColor (win::Color::rgb (0x00, 0x00, 0x00));
 	edit1->backgroundColor (win::Color::rgb (0xff, 0xff, 0xff));
-	//edit1->backgroundColor (win::Color::rgb (0x00, 0x00, 0xa9));
+	
+	listbox1->backgroundColor (win::Color::rgb (0xf0, 0xad, 0x4e));
+	button1->backgroundColor (win::Color::rgb (0xf0, 0xad, 0x4e));
+	groupbox1->backgroundColor (win::Color::rgb (0xf0, 0xad, 0x4e));
 	
 	listbox1->selectedItem.changedEvent.add([&] {
 		bool enabled = true;
