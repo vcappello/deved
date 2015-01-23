@@ -31,15 +31,23 @@ int main() {
 	std::shared_ptr<win::Button> button3;
 	std::shared_ptr<win::Button> button4;
 	
-	auto window = std::make_shared<win::Window>( "My window", 60, 10, 450, 350, win::Window::ControlsType({
-		edit1 = std::make_shared<win::Edit>( "Type some text", 10, 10, 200, 30 ),
-		button1 = std::make_shared<win::Button>( "Add item", 220, 10, 100, 30 ),
-		button3 = std::make_shared<win::Button>( "Update item", 330, 10, 100, 30 ),		
-		label1 = std::make_shared<win::Label>( "Characters: ", 10, 40, 200, 30 ),
-		listbox1 = std::make_shared<win::ListBox>( 220, 50, 210, 100),
-		button2 = std::make_shared<win::Button>( "Read text", 220, 160, 100, 30 ),
-		button4 = std::make_shared<win::Button>( "Delete item", 330, 160, 100, 30 ),
-		groupbox1 = std::make_shared<win::GroupBox>( "Group box", 10, 70, 200, 100 )
+	auto window = win::Window::make ("My window", 60, 10, 450, 350, win::Window::ControlsType({
+		win::MenuBar::make({
+			win::SubMenuItem::make ("File", {
+				win::CommandMenuItem::make ("Exit")
+			}),			
+			win::SubMenuItem::make ("Help", {
+				win::CommandMenuItem::make ("About")
+			})
+		}),
+		edit1 = win::Edit::make ("Type some text", 10, 10, 200, 30),
+		button1 = win::Button::make ("Add item", 220, 10, 100, 30),
+		button3 = win::Button::make ("Update item", 330, 10, 100, 30),		
+		label1 = win::Label::make ("Characters: ", 10, 40, 200, 30),
+		listbox1 = win::ListBox::make (220, 50, 210, 100),
+		button2 = win::Button::make ("Read text", 220, 160, 100, 30),
+		button4 = win::Button::make ("Delete item", 330, 160, 100, 30),
+		groupbox1 = win::GroupBox::make ("Group box", 10, 70, 200, 100)
 	}));
 
 	button3->enabled (false);

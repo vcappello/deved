@@ -40,6 +40,19 @@ public:
 	///@}
 	
 public:
+	static std::shared_ptr<SubMenuItem> make(const std::string& name, const std::string& text, MenuItemsType initList) {
+		return std::make_shared<SubMenuItem>( name, text, initList );
+	}
+	
+	static std::shared_ptr<SubMenuItem> make(const std::string& text, MenuItemsType initList) {
+		return std::make_shared<SubMenuItem>( text, initList );
+	}
+	
+	static std::shared_ptr<SubMenuItem> make(const std::string& text) {
+		return std::make_shared<SubMenuItem>( text );
+	}
+	
+public:
 	/** @name Properties
 	 */
 	///@{

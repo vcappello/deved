@@ -42,6 +42,17 @@ public:
 	///@{ 
 	virtual std::string getType() const { return "Edit"; }
 	///@}
+
+public:
+	static std::shared_ptr<Edit> make(const std::string& name, const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<Edit>( name, text, left, top, width, height );
+	}
+	static std::shared_ptr<Edit> make(const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<Edit>( text, left, top, width, height );
+	}	
+	static std::shared_ptr<Edit> make(const std::string& text) {
+		return std::make_shared<Edit>( text );
+	}
 	
 public:
 	/** @name Properties

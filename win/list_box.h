@@ -51,7 +51,29 @@ public:
 	///@{ 
 	virtual std::string getType() const { return "ListBox"; }
 	///@}
+
+public:
+	static std::shared_ptr<ListBox> make(const std::string& name, int left, int top, int width, int height, ListItemsType initList) {
+		return std::make_shared<ListBox>( name, left, top, width, height, initList );
+	}
 	
+	static std::shared_ptr<ListBox> make(const std::string& name, int left, int top, int width, int height) {
+		return std::make_shared<ListBox>( name, left, top, width, height );
+	}
+	
+	static std::shared_ptr<ListBox> make(int left, int top, int width, int height, ListItemsType initList) {
+		return std::make_shared<ListBox>( left, top, width, height, initList );
+	}	
+	
+	static std::shared_ptr<ListBox> make(int left, int top, int width, int height) {
+		return std::make_shared<ListBox>( left, top, width, height );
+	}
+	
+	static std::shared_ptr<ListBox> make() {
+		return std::make_shared<ListBox>();
+	}
+
+
 public:
 	/** @name Properties
 	 */

@@ -40,6 +40,17 @@ public:
 	///@{ 
 	virtual std::string getType() const { return "Button"; }
 	///@}
+
+public:
+	static std::shared_ptr<Button> make(const std::string& name, const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<Button>( name, text, left, top, width, height );
+	}
+	static std::shared_ptr<Button> make(const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<Button>( text, left, top, width, height );
+	}
+	static std::shared_ptr<Button> make(const std::string& text) {
+		return std::make_shared<Button>( text );
+	}
 	
 public:
 	/** @name Properties

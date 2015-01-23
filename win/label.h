@@ -43,6 +43,19 @@ public:
 	///@}
 	
 public:
+	static std::shared_ptr<Label> make(const std::string& name, const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<Label>( name, text, left, top, width, height );
+	}
+	
+	static std::shared_ptr<Label> make(const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<Label>( text, left, top, width, height );
+	}
+	
+	static std::shared_ptr<Label> make(const std::string& text) {
+		return std::make_shared<Label>( text );
+	}
+	
+public:
 	/** @name Properties
 	 */
 	///@{ 

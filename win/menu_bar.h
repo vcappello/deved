@@ -43,6 +43,19 @@ public:
 	///@}
 	
 public:
+	static std::shared_ptr<MenuBar> make(const std::string& name, MenuItemsType initList) {
+		return std::make_shared<MenuBar>( name, initList );
+	}
+	
+	static std::shared_ptr<MenuBar> make(MenuItemsType initList) {
+		return std::make_shared<MenuBar>( initList );		
+	}
+	
+	static std::shared_ptr<MenuBar> make() {
+		return std::make_shared<MenuBar>();		
+	}
+	
+public:
 	/** @name Properties
 	 */
 	///@{ 	

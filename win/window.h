@@ -56,6 +56,27 @@ public:
 	///@}
 	
 public:
+	static std::shared_ptr<Window> make(const std::string& name, const std::string& title, int left, int top, int width, int height, ControlsType initList) {
+		return std::make_shared<win::Window>( name, title, left, top, width, height, initList );
+	}
+
+	static std::shared_ptr<Window> make(const std::string& name, const std::string& title, int left, int top, int width, int height) {
+		return std::make_shared<win::Window>( name, title, left, top, width, height );
+	}
+	
+	static std::shared_ptr<Window> make(const std::string& title, int left, int top, int width, int height, ControlsType initList) {
+		return std::make_shared<win::Window>( title, left, top, width, height, initList );
+	}
+
+	static std::shared_ptr<Window> make(const std::string& title, int left, int top, int width, int height) {
+		return std::make_shared<win::Window>( title, left, top, width, height );
+	}
+	
+	static std::shared_ptr<Window> make(const std::string& title) {
+		return std::make_shared<win::Window>( title );
+	}
+	
+public:
 	/** @name Properties
 	 */
 	///@{ 	

@@ -53,6 +53,27 @@ public:
 	///@}
 	
 public:
+	static std::shared_ptr<GroupBox> make(const std::string& name, const std::string& text, int left, int top, int width, int height, ControlsType initList) {
+		return std::make_shared<GroupBox>( name, text, left, top, width, height, initList );
+	}
+	
+	static std::shared_ptr<GroupBox> make(const std::string& name, const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<GroupBox>( name, text, left, top, width, height );
+	}	
+	
+	static std::shared_ptr<GroupBox> make(const std::string& text, int left, int top, int width, int height, ControlsType initList) {
+		return std::make_shared<GroupBox>( text, left, top, width, height, initList );
+	}
+	
+	static std::shared_ptr<GroupBox> make(const std::string& text, int left, int top, int width, int height) {
+		return std::make_shared<GroupBox>( text, left, top, width, height );
+	}
+	
+	static std::shared_ptr<GroupBox> make(const std::string& text) {
+		return std::make_shared<GroupBox>( text );
+	}
+	
+public:
 	/** @name Properties
 	 */
 	///@{ 

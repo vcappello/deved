@@ -31,6 +31,14 @@ public:
 	///@{ 
 	virtual std::string getType() const { return "CommandMenuItem"; } 
 	///@}
+
+public:
+	static std::shared_ptr<CommandMenuItem> make(const std::string& name, const std::string& text) {
+		return std::make_shared<CommandMenuItem>( name, text );
+	}	
+	static std::shared_ptr<CommandMenuItem> make(const std::string& text) {
+		return std::make_shared<CommandMenuItem>( text );
+	}
 	
 public:
 	/** @name Properties
