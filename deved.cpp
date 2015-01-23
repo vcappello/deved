@@ -87,19 +87,19 @@ int main() {
 	});
 	
 	button1->clickedEvent.add([&] {
-		listbox1->listItems.add ( std::make_shared<win::TextListItem>( edit1->text() ));
+		listbox1->listItems.add (win::TextListItem::make (edit1->text()));
 	});
 	
 	button2->clickedEvent.add([&] {
 		if (listbox1->selectedItem()) {
-			auto selectedTextItem = std::dynamic_pointer_cast<win::TextListItem>( listbox1->selectedItem() );
+			auto selectedTextItem = listbox1->getSelectedItem<win::TextListItem>();
 			edit1->text (selectedTextItem->text());
 		}
 	});
 	
 	button3->clickedEvent.add([&] {
 		if (listbox1->selectedItem()) {
-			auto selectedTextItem = std::dynamic_pointer_cast<win::TextListItem>( listbox1->selectedItem() );
+			auto selectedTextItem = listbox1->getSelectedItem<win::TextListItem>();
 			selectedTextItem->text (edit1->text());
 		}
 	});

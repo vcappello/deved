@@ -45,6 +45,16 @@ public:
 	}
 	virtual ~ListBox() {
 	}
+
+	template<class T>
+	std::shared_ptr<T> getSelectedItem() {
+		return std::dynamic_pointer_cast<T>( selectedItem() );
+	}
+
+	template<class T>
+	std::shared_ptr<T> getSelectedItem() const {
+		return std::dynamic_pointer_cast<T>( selectedItem() );
+	}
 	
 	/** @name IEntity implementations
 	 */
@@ -72,7 +82,6 @@ public:
 	static std::shared_ptr<ListBox> make() {
 		return std::make_shared<ListBox>();
 	}
-
 
 public:
 	/** @name Properties

@@ -33,6 +33,14 @@ public:
 	///@}
 	
 public:
+	static std::shared_ptr<TextListItem> make(const std::string& name, const std::string& text) {
+		return std::make_shared<TextListItem>( name, text );
+	}	
+	static std::shared_ptr<TextListItem> make(const std::string& text) {
+		return std::make_shared<TextListItem>( text );
+	}
+	
+public:
 	/** @name Properties
 	 */
 	///@{ 	
