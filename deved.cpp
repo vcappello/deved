@@ -54,12 +54,12 @@ int main() {
 	button2->enabled (false);
 	button4->enabled (false);
 	
-	edit1->textColor (win::Color::rgb (0x00, 0x00, 0x00));
-	edit1->backgroundColor (win::Color::rgb (0xff, 0xff, 0xff));
+	edit1->textColor (win::Color::makeBlack());
+	edit1->backgroundColor (win::Color::makeWhite());
 	
-	listbox1->backgroundColor (win::Color::rgb (0xf0, 0xad, 0x4e));
-	button1->backgroundColor (win::Color::rgb (0xf0, 0xad, 0x4e));
-	groupbox1->backgroundColor (win::Color::rgb (0xf0, 0xad, 0x4e));
+	listbox1->backgroundColor (win::Color::makeLightBlue());
+	button1->backgroundColor (win::Color::makeLightBlue());
+	groupbox1->backgroundColor (win::Color::makeLightBlue());
 	
 	listbox1->selectedItem.changedEvent.add([&] {
 		bool enabled = true;
