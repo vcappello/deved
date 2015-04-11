@@ -94,9 +94,10 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 		}							
 		case WM_ERASEBKGND:
 		{
+			// Manage WM_ERASEBKGND because the background does not erase
+			// correctly
 			// see: https://support.microsoft.com/it-it/kb/79982/en-us
 			HBRUSH  hBrush, hOldBrush;
-			HPEN    hPen, hOldPen;
 			RECT    rect;
 			HDC     hDC;
 
@@ -113,21 +114,11 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 
 			hOldBrush = reinterpret_cast<HBRUSH>(::SelectObject(hDC, hBrush));
 
-			// Create a background-colored pen to draw the rectangle
-			// borders
-			hPen = ::CreatePen(PS_SOLID, 1, backgroundColor);
-			hOldPen = reinterpret_cast<HPEN>(::SelectObject(hDC, hPen));
-
 			// Erase the group box's background.
 			::GetClientRect (mHWnd, &rect);
-			::Rectangle (hDC, rect.left, rect.top, rect.right, rect.bottom);
-
-			// Restore the original objects before releasing the DC.
-			::SelectObject (hDC, hOldPen);
-			::SelectObject (hDC, hOldBrush);
+			::FillRect (hDC, &rect, hBrush);
 
 			// Delete the created object.
-			::DeleteObject (hPen);
 			::DeleteObject (hBrush);
 
 			::ReleaseDC (mHWnd, hDC);
@@ -135,9 +126,6 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 			// Instruct Windows to paint the group box text and frame.
 			::InvalidateRect (mHWnd, NULL, FALSE);
 
-			// Insert code here to instruct the contents of the group box
-			// to repaint as well.
-			
 			lResult = TRUE; // Background has been erased.
 			return true;
 		}			

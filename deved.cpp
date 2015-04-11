@@ -24,6 +24,7 @@ int main()
 {
 	std::shared_ptr<win::GroupBox> groupbox1;
 	std::shared_ptr<win::Edit> edit1;
+	std::shared_ptr<win::Edit> edit2;
 	std::shared_ptr<win::Label> label1;
 	std::shared_ptr<win::Button> button1;
 	std::shared_ptr<win::ListBox> listbox1;
@@ -48,6 +49,12 @@ int main()
 		button2 = win::Button::make ("Read text", 220, 160, 100, 24),
 		button4 = win::Button::make ("Delete item", 330, 160, 100, 24),
 		groupbox1 = win::GroupBox::make ("Group box", 10, 70, 200, 100)
+		// TODO: it seems we can not add child controls to standard groupbox
+		// see: http://stackoverflow.com/a/296594/4689476
+		//~ groupbox1 = win::GroupBox::make ("Group box", 10, 70, 200, 100, win::GroupBox::ControlsType ({
+				//~ edit2 = win::Edit::make ("Type some text", 10, 20, 200, 24),
+			//~ })
+		//~ )
 	}));
 
 	button3->enabled (false);
