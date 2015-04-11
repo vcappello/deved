@@ -15,7 +15,7 @@ std::string MenuItemControllerBase::getText() {
 	char buffer[256];
 	
 	MENUITEMINFO mii;
-	mii = {0};
+	mii = {};
 	mii.cbSize = sizeof (MENUITEMINFO);
 	mii.fMask = MIIM_STRING;
 	mii.cch = 256; 
@@ -31,7 +31,7 @@ std::string MenuItemControllerBase::getText() {
 
 void MenuItemControllerBase::setText(const std::string& value) {
 	MENUITEMINFO mii;
-	mii = {0};
+	mii = {};
 	mii.cbSize = sizeof (MENUITEMINFO);
 	mii.fMask = MIIM_STRING;
 	mii.dwTypeData = (LPSTR)value.c_str();
@@ -44,7 +44,7 @@ void MenuItemControllerBase::setText(const std::string& value) {
 
 bool MenuItemControllerBase::isEnabled() {
 	MENUITEMINFO mii;
-	mii = {0};
+	mii = {};
 	mii.cbSize = sizeof (MENUITEMINFO);
 	mii.fMask = MIIM_STATE;
 	
@@ -57,7 +57,7 @@ bool MenuItemControllerBase::isEnabled() {
 
 void MenuItemControllerBase::setEnabled(bool value) {
 	MENUITEMINFO mii;
-	mii = {0};
+	mii = {};
 	mii.cbSize = sizeof (MENUITEMINFO);
 	mii.fMask = MIIM_STATE;
 	mii.fState |= value ? MFS_ENABLED : MFS_DISABLED;

@@ -61,7 +61,7 @@ public:
 
 	virtual Point getPosition() {
 		HWND hWndParent = ::GetParent(mHWnd);
-		POINT position = {0};
+		POINT position = {};
 
 		::MapWindowPoints(mHWnd, hWndParent, &position, 1);
 		

@@ -62,20 +62,6 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 			mGroupBox->text(text);
 			break;
 		}
-		case WM_ERASEBKGND:
-		{
-			RECT    rect;
-
-			HDC hDC = reinterpret_cast<HDC>(wParam);
-
-			// Erase the group box's background.
-			::GetClientRect (mHWnd, &rect);
-			::FillRect (hDC, &rect, reinterpret_cast<HBRUSH>(COLOR_BTNFACE + 1));
-
-			lResult = TRUE;
-			handled = true;
-			break;
-		}
 		case WM_SETFONT:
 		{
 			HFONT hFont = reinterpret_cast<HFONT>( wParam );
@@ -97,6 +83,7 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 					new GdiObject<HBRUSH>( ::CreateSolidBrush(
 						mGroupBox->backgroundColor()->value())));
 				lResult = reinterpret_cast<LRESULT>(mBackgroundBrush->getHandle());
+				return true;
 			} else {
 				mBackgroundBrush = nullptr;
 				::SetBkColor (hDC, ::GetSysColor (COLOR_WINDOW));
@@ -104,7 +91,56 @@ bool GroupBoxController::handleMessage(UINT message, WPARAM wParam, LPARAM lPara
 				return true;
 			}
 			break;
-		}				
+		}							
+		case WM_ERASEBKGND:
+		{
+			// see: https://support.microsoft.com/it-it/kb/79982/en-us
+			HBRUSH  hBrush, hOldBrush;
+			HPEN    hPen, hOldPen;
+			RECT    rect;
+			HDC     hDC;
+
+			hDC = ::GetDC (mHWnd);
+
+			COLORREF backgroundColor;
+			
+			if (mGroupBox->backgroundColor() != nullptr) {
+				backgroundColor = mGroupBox->backgroundColor()->value();
+			} else {
+				backgroundColor = ::GetSysColor (COLOR_WINDOW);
+			}
+			hBrush = ::CreateSolidBrush (backgroundColor);
+
+			hOldBrush = reinterpret_cast<HBRUSH>(::SelectObject(hDC, hBrush));
+
+			// Create a background-colored pen to draw the rectangle
+			// borders
+			hPen = ::CreatePen(PS_SOLID, 1, backgroundColor);
+			hOldPen = reinterpret_cast<HPEN>(::SelectObject(hDC, hPen));
+
+			// Erase the group box's background.
+			::GetClientRect (mHWnd, &rect);
+			::Rectangle (hDC, rect.left, rect.top, rect.right, rect.bottom);
+
+			// Restore the original objects before releasing the DC.
+			::SelectObject (hDC, hOldPen);
+			::SelectObject (hDC, hOldBrush);
+
+			// Delete the created object.
+			::DeleteObject (hPen);
+			::DeleteObject (hBrush);
+
+			::ReleaseDC (mHWnd, hDC);
+
+			// Instruct Windows to paint the group box text and frame.
+			::InvalidateRect (mHWnd, NULL, FALSE);
+
+			// Insert code here to instruct the contents of the group box
+			// to repaint as well.
+			
+			lResult = TRUE; // Background has been erased.
+			return true;
+		}			
 		case WM_WINDOWPOSCHANGED:
 		{
 			WINDOWPOS* windowPos = reinterpret_cast<WINDOWPOS*>( lParam );

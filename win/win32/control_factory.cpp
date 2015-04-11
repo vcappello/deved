@@ -29,6 +29,31 @@ std::shared_ptr<T> castControl(std::shared_ptr<Control> control) {
 	return castedControl;
 }
 
+class ButtonClass {
+public:
+	using ControllerType = ButtonController;
+
+	static const char* getClassName() { return "BUTTON"; }
+	
+	static std::tuple<DWORD,DWORD> getStyle(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Button> button) {
+		DWORD window_style_ex = 0;
+		DWORD window_style = WS_TABSTOP | WS_CHILD;
+		
+		auto windowController = findWindowControllerFromChild (windowContainer);
+		if (windowController && windowController->getWindow()->defaultButton() == button) {
+			window_style |= BS_DEFPUSHBUTTON;
+		}
+		if (!button->enabled()) {
+			window_style |= WS_DISABLED;
+		}
+		if (button->visible()) {
+			window_style |= WS_VISIBLE;
+		}
+		
+		return std::make_tuple (window_style, window_style_ex);
+	}
+};
+
 std::shared_ptr<WindowsObject> createController(std::shared_ptr<WindowContainerBase> windowContainer, std::shared_ptr<Control> control) {
 	std::shared_ptr<WindowsObject> object;
 	if (control->getType() == "Button") {
@@ -59,23 +84,14 @@ std::shared_ptr<ButtonController> createButtonController(std::shared_ptr<WindowC
 	HINSTANCE hInstance = ::GetModuleHandle(NULL);
 
 	DWORD window_style_ex = 0;
-	DWORD window_style = WS_TABSTOP | WS_CHILD;
+	DWORD window_style = 0;
 	
-	auto windowController = findWindowControllerFromChild (windowContainer);
-	if (windowController && windowController->getWindow()->defaultButton() == button) {
-		window_style |= BS_DEFPUSHBUTTON;
-	}
-	if (!button->enabled()) {
-		window_style |= WS_DISABLED;
-	}
-	if (button->visible()) {
-		window_style |= WS_VISIBLE;
-	}
+	std::tie( window_style, window_style_ex ) = ButtonClass::getStyle(windowContainer, button);
 	
 	int controlId = createControlId();
 	HWND hWnd = CreateWindowEx (
 					window_style_ex,
-	                "BUTTON",
+	                ButtonClass::getClassName(),
 	                button->text().c_str(),
 	                window_style,
 					button->left(),
@@ -92,7 +108,7 @@ std::shared_ptr<ButtonController> createButtonController(std::shared_ptr<WindowC
 	}	
 	
 	// Create ButtonController instance
-	auto controller = std::make_shared<ButtonController>( hWnd, controlId, button );
+	auto controller = std::make_shared<ButtonClass::ControllerType>( hWnd, controlId, button );
 	MessageDispatcher::getInstance().registerController (controller);
 
 	// Initialize font
@@ -393,7 +409,7 @@ std::shared_ptr<CommandMenuItemController> createCommandMenuItemController(std::
 	int controlId = createControlId();
 	
 	// Fill MENUITEMINFO structure
-	MENUITEMINFO mii = {0};
+	MENUITEMINFO mii = {};
 	mii.cbSize = sizeof(MENUITEMINFO);
 
 	mii.fMask = MIIM_STRING | MIIM_ID | MIIM_FTYPE; 
@@ -434,7 +450,7 @@ std::shared_ptr<SubMenuItemController> createSubMenuItemController(std::shared_p
 	auto controller = std::make_shared<SubMenuItemController>( menuItemControllerContainer->getHMenu(), controlId, subMenuItem );
 
 	// Fill MENUITEMINFO structure
-	MENUITEMINFO mii = {0};
+	MENUITEMINFO mii = {};
 	mii.cbSize = sizeof(MENUITEMINFO);
 
 	mii.fMask = MIIM_STRING | MIIM_ID | MIIM_FTYPE | MIIM_SUBMENU; 
@@ -491,7 +507,7 @@ std::shared_ptr<WindowController> findWindowControllerFromChild(std::shared_ptr<
 
 HFONT createHFont(std::shared_ptr<Font> font) {
 	LOGFONT logFont;
-	logFont = {0};
+	logFont = {};
 	
 	std::copy (font->fontName().begin(), font->fontName().end(), logFont.lfFaceName);
 	
